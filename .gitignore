@@ -42,3 +42,5 @@ www
 
 # SUBLIME
 *.sublime-*
+
+node_modules
