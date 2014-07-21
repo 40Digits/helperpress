@@ -104,6 +104,35 @@ module.exports = function (grunt) {
 		}
 	});
 
+	grunt.registerTask('setup', 'Setup and configure all the things.', function(){
+		// prompt for WP project info, write to package.json - https://github.com/dylang/grunt-prompt
+		// change theme name
+		// update style.css info for WP
+		// download WP
+		// symlink theme
+		// config WP
+		// create local DB
+		// migrate DB
+
+		// setup localhost - https://www.npmjs.org/package/grunt-localhosts - maybe extend package.json with a package.local for local URL?
+	};
+
+	grunt.registerTask('update', 'Update all the things.', function(){
+		// prompt checklist of things to update
+
+		// update WP core
+
+		// update WP plugins
+		
+		// migrate DB
+	};
+
+	grunt.registerTask('wpe_deploy', 'Deploy to WPE', function(){
+		// build
+
+		// sftp changed files between currently deployed commit and the new ones
+	};
+
 	grunt.registerTask('default',['watch']);
 
 };
