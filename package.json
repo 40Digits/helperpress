@@ -19,21 +19,22 @@
     "grunt-contrib-sass": "~0.7.3",
     "grunt-combine-media-queries": "~1.0.19",
     "grunt-githooks": "~0.3.1",
-    "grunt-autoprefixer": "~0.8.2"
+    "grunt-autoprefixer": "~0.8.2",
+    "underscore": "~1.6.0"
   },
   "devDependencies": {
     "grunt-contrib-watch": "~0.6.1"
   },
   "config": {
     "urls": {
-      // "branch": "url"
+      "branch": "url"
     },
     "wp": {
       "theme_slug": "wp-theme",
       "plugins": []
-      },
+    },
     "assets_dir": "wp-theme/assets/",
-    "css_dir": "wp-theme/", // unlike other assets, CSS gets its own dir because of WP
+    "css_dir": "wp-theme/",
     "browser_support": {
       "ie": "9"
     }

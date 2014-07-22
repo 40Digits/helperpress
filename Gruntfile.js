@@ -1,6 +1,7 @@
 module.exports = function (grunt) {
 
-	var gruntConfig = {};
+	var gruntConfig = {},
+		_ = require('underscore');
 
 	/////////
 	// CSS //
@@ -181,9 +182,10 @@ module.exports = function (grunt) {
 
 
 	// Load config
-	var packageJSON = grunt.file.readJSON('package.json'); // TODO: extend packageJSON by package.json.local file
+	var packageJSON = grunt.file.readJSON('package.json'),
+		localPackageJSON = grunt.file.readJSON('package.json.local');
 
-	gruntConfig.pkg = packageJSON;
+	gruntConfig.pkg = _.extend(packageJSON, localPackageJSON);
 	grunt.initConfig(gruntConfig);
 
 };
