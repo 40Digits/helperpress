@@ -1,7 +1,9 @@
 module.exports = function (grunt) {
 
 	var gruntConfig = {},
-		_ = require('underscore');
+
+		_ = require('underscore'),
+		subtrees = require('./grunt/subtrees.js');
 
 	/////////
 	// CSS //
@@ -124,6 +126,7 @@ module.exports = function (grunt) {
 	// TODO: Timthumb
 
 	// Watch
+	grunt.loadNpmTasks('grunt-contrib-watch');
 	gruntConfig.watch =
 		{
 			sass: {
@@ -138,9 +141,10 @@ module.exports = function (grunt) {
 
 
 	grunt.registerTask('setup', 'Setup and configure all the things.', function(){
-		// prompt for WP project info, write to package.json - https://github.com/dylang/grunt-prompt
+		// prompt for WP project info, write to package.json
 
 		// install git subtrees
+		subtrees.install( grunt.config.process('<%= pkg.config.subtrees %>') );
 		
 		// change theme dir name
 
@@ -183,7 +187,7 @@ module.exports = function (grunt) {
 
 	// Load config
 	var packageJSON = grunt.file.readJSON('package.json'),
-		localPackageJSON = grunt.file.readJSON('package.json.local');
+		localPackageJSON = grunt.file.exists('package.json.local') ? grunt.file.readJSON('package.json.local') : {};
 
 	gruntConfig.pkg = _.extend(packageJSON, localPackageJSON);
 	grunt.initConfig(gruntConfig);

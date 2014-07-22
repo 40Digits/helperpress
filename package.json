@@ -20,7 +20,10 @@
     "grunt-combine-media-queries": "~1.0.19",
     "grunt-githooks": "~0.3.1",
     "grunt-autoprefixer": "~0.8.2",
-    "underscore": "~1.6.0"
+    "underscore": "~1.6.0",
+    "grunt-contrib-concat": "~0.5.0",
+    "grunt-composer": "~0.4.0",
+    "execSync": "~1.0.1-pre"
   },
   "devDependencies": {
     "grunt-contrib-watch": "~0.6.1"
@@ -37,6 +40,13 @@
     "css_dir": "wp-theme/",
     "browser_support": {
       "ie": "9"
+    },
+    "subtrees": {
+      "40d-sass": {
+        "path": "wp-theme/assets/_src/sass",
+        "url": "git@bitbucket.org:40digits/40d-semantic-sass-structure.git",
+        "branch": "master"
+      }
     }
   }
 }
