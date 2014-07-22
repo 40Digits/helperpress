@@ -1,10 +1,10 @@
 {
   "name": "wpengine-site-boilerplate",
-  "version": "0.0.5",
+  "version": "0.1.0",
   "description": "A starting point for WordPress projects to be hosted on WPEngine",
   "main": "Gruntfile.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"TODO: Add tests \" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -16,7 +16,6 @@
     "grunt": "~0.4.5",
     "grunt-contrib-jshint": "~0.10.0",
     "grunt-contrib-uglify": "~0.5.0",
-    "grunt-contrib-watch": "~0.6.1",
     "grunt-contrib-sass": "~0.7.3",
     "grunt-combine-media-queries": "~1.0.19",
     "grunt-githooks": "~0.3.1",
@@ -27,13 +26,16 @@
   },
   "config": {
     "urls": {
-      // branch: url
+      // "branch": "url"
     },
     "wp": {
-      "theme_name": "",
+      "theme_slug": "wp-theme",
       "plugins": []
       },
-    "sass_dir": "wp-theme/assets/sass",
-    "js_dir": ""
+    "assets_dir": "wp-theme/assets/",
+    "css_dir": "wp-theme/", // unlike other assets, CSS gets its own dir because of WP
+    "browser_support": {
+      "ie": "9"
+    }
   }
 }

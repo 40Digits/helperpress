@@ -36,11 +36,20 @@ Thumbs.db
 # SASS
 .sass-cache
 
-# WORDPRESS
+# WordPress Core, Uploads & Plugins
 www
 *.log
 
-# SUBLIME
+# Sublime, because people forget this in their global .gitignore
 *.sublime-*
 
+# npm
 node_modules
+
+# Compiled Assets
+*/assets/_src/css
+*/assets/css
+*/assets/js
+
+# Local Grunt config
+package.json.local

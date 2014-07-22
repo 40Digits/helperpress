@@ -1,34 +1,27 @@
 module.exports = function (grunt) {
 
+	var gruntConfig = {};
 
-	grunt.loadNpmTasks('grunt-contrib-jshint');
-	grunt.loadNpmTasks('grunt-contrib-uglify');
-	grunt.loadNpmTasks('grunt-contrib-watch');
+	/////////
+	// CSS //
+	/////////
+
+	// SASS
 	grunt.loadNpmTasks('grunt-contrib-sass');
-	grunt.loadNpmTasks('grunt-autoprefixer');
-	grunt.loadNpmTasks('grunt-combine-media-queries');
-	grunt.loadNpmTasks('grunt-contrib-watch');
-	grunt.loadNpmTasks('grunt-githooks');
-
-	grunt.registerTask('default',['watch']);
-
-	grunt.initConfig({
-		pkg: grunt.file.readJSON("package.json"),
-
-		// Start watching SASS
-		sass: {
+	gruntConfig.sass =
+		{
 			dev: {
 				options: {
 					style: 'expanded',
 					lineNumbers: true,
-					sourcemap: false,
+					sourcemap: false, // TODO: add SASS source maps
 					compass: false
 				},
 				files: [{
 					expand: true,
 					cwd: '<%= pkg.config.sass_dir %>',
 					src: ['*.{scss,sass}'],
-					dest: '<%= pkg.config.sass_dir %>/',
+					dest: '<%= pkg.config.css_dir %>',
 					ext: '.css'
 				}]
 			},
@@ -41,14 +34,16 @@ module.exports = function (grunt) {
 					expand: true,
 					cwd: '<%= pkg.config.sass_dir %>',
 					src: ['*.{scss,sass}'],
-					dest: '<%= pkg.config.sass_dir %>/css/',
+					dest: '<%= pkg.config.css_dir %>/',
 					ext: '.css'
 				}]
 			}
-		},
+		};
 
-		// Add in prefixes where necessary
-		autoprefixer: {
+	// Autoprefixer
+	grunt.loadNpmTasks('grunt-autoprefixer');
+	gruntConfig.autoprefixer =
+		{
 			options: {
 				browsers: ['last 2 version', 'ie 9']
 			},
@@ -56,83 +51,139 @@ module.exports = function (grunt) {
 			multiple_files: {
 				expand: true,
 				flatten: true,
-				src: '<%= pkg.config.assets %>/css-source/raw/*.css',
-				dest: '<%= pkg.config.assets %>/css-source/prefix/'
+				src: '<%= pkg.config.assets %>/_src/css/raw/*.css',
+				dest: '<%= pkg.config.assets %>/_src/css/prefix/'
 			},
-		},
+		};
 
-		// Combine Media Queries
-		cmq: {
+	// Combine Media Queries
+	grunt.loadNpmTasks('grunt-combine-media-queries');
+	gruntConfig.cmq =
+		{
 			your_target: {
 				files: {
-					'<%= pkg.config.sass_dir %>/': ['<%= pkg.config.assets %>/css-source/prefix/*.css']
+					'<%= pkg.config.sass_dir %>/*.{scss,sass}': ['<%= pkg.config.assets %>/_src/css/prefix/*.css']
 				}
 			}
-		},
+		};
 
 
+	////////////////
+	// Javascript //
+	////////////////
 
-		//JS
-		githooks: {
-			all: {
-				'pre-commit': 'watch'
-			}
-		}
+	// TODO: Add Bower
 
-		jshint: {
-			all: ['gruntfile.js', '<%= pkg.config.assets %>/scripts/app/script.js'],
+	// JS Hint
+	grunt.loadNpmTasks('grunt-contrib-jshint');
+	gruntConfig.jshint =
+		{
+			all: ['gruntfile.js', '<%= pkg.config.assets %>/js/main.js'],
 			options: {
 				jshintrc: '.jshintrc'
 			}
-		},
+		};
 
-		uglify: {
+	// Uglify
+	grunt.loadNpmTasks('grunt-contrib-uglify');
+	gruntConfig.uglify =
+		{
 			my_target: {
 				files: {
-					'<%= pkg.config.assets %>/scripts/app/script.min.js': ['<%= pkg.config.assets %>/scripts/app/script.js']
+					'<%= pkg.config.assets %>/_src/js/app/script.min.js': ['<%= pkg.config.assets %>/js/main.js']
 				}
 			}
-		},
-		watch: {
+		};
+
+	// Concatenate
+	grunt.loadNpmTasks('grunt-contrib-concat');
+	gruntConfig.concat = 
+		{
+			options: {
+				separator: ';',
+			},
+			dist: {
+				src: ['src/intro.js', 'src/project.js', 'src/outro.js'],
+				dest: 'dist/built.js',
+			}
+		};
+
+
+
+	// Git
+	grunt.loadNpmTasks('grunt-githooks');
+	// TODO: add git hooks
+	//			- dont allow committing built assets
+	//			- check for php or JS errors
+	// TODO: git subtrees
+	//			- sass boilerplate
+
+	// PHP Composer
+	grunt.loadNpmTasks('grunt-composer');
+	// TODO: Timthumb
+
+	// Watch
+	gruntConfig.watch =
+		{
 			sass: {
-				files: '**/*.{scss,sass}',
+				files: '<%= pkg.config.sass_dir %>/*.{scss,sass}',
 				tasks: ['sass:dev'],
 				options: {
-					livereload: true,
+					livereload: true
 				}
 			}
-		}
-	});
+		};
+
+
 
 	grunt.registerTask('setup', 'Setup and configure all the things.', function(){
 		// prompt for WP project info, write to package.json - https://github.com/dylang/grunt-prompt
-		// change theme name
-		// update style.css info for WP
-		// download WP
+
+		// install git subtrees
+		
+		// change theme dir name
+
+		// update style.css output for WP theme config
+
+		// install WP core
+		// install WP plugins
 		// symlink theme
-		// config WP
+
 		// create local DB
 		// migrate DB
 
+		// make wp-config.php
+
 		// setup localhost - https://www.npmjs.org/package/grunt-localhosts - maybe extend package.json with a package.local for local URL?
-	};
+	});
 
 	grunt.registerTask('update', 'Update all the things.', function(){
 		// prompt checklist of things to update
 
 		// update WP core
-
 		// update WP plugins
-		
 		// migrate DB
-	};
+
+		// update git subtrees
+
+		// update composer
+	});
 
 	grunt.registerTask('wpe_deploy', 'Deploy to WPE', function(){
 		// build
 
-		// sftp changed files between currently deployed commit and the new ones
-	};
+		// test
 
-	grunt.registerTask('default',['watch']);
+		// sftp changed files between currently deployed commit and the new ones
+	});
+
+	grunt.registerTask('default', ['watch']); // TODO: this should be a main menu prompt
+
+
+	// Load config
+	var packageJSON = grunt.file.readJSON('package.json'); // TODO: extend packageJSON by package.json.local file
+
+	gruntConfig.pkg = packageJSON;
+	grunt.initConfig(gruntConfig);
 
 };
