@@ -3,7 +3,8 @@ module.exports = function (grunt) {
 	var gruntConfig = {},
 
 		_ = require('underscore'),
-		subtrees = require('./grunt/subtrees.js');
+		subtrees = require('./grunt/subtrees.js'),
+		wpCli = require('./grunt/wp-cli.js');
 
 	/////////
 	// CSS //
@@ -118,8 +119,6 @@ module.exports = function (grunt) {
 	// TODO: add git hooks
 	//			- dont allow committing built assets
 	//			- check for php or JS errors
-	// TODO: git subtrees
-	//			- sass boilerplate
 
 	// PHP Composer
 	grunt.loadNpmTasks('grunt-composer');
@@ -144,7 +143,6 @@ module.exports = function (grunt) {
 
 		// install composer packages
 		grunt.task.run('composer:update');
-		grunt.task.run('composer:install');
 
 		// install git subtrees
 		subtrees.install( grunt.config.process('<%= pkg.config.subtrees %>') );
@@ -154,7 +152,10 @@ module.exports = function (grunt) {
 		// update style.css output for WP theme config
 
 		// install WP core
+		wpCli.coreDownload( './www' );
+
 		// install WP plugins
+		wpCli.pluginBatchInstall( grunt.config.process('<%= pkg.config.wp.plugins %>') );
 
 		// symlink theme
 

@@ -34,7 +34,10 @@
     },
     "wp": {
       "theme_slug": "wp-theme",
-      "plugins": []
+      "plugins": [
+        "akismet",
+        "wordpress-seo"
+      ]
     },
     "assets_dir": "wp-theme/assets/",
     "css_dir": "wp-theme/",
