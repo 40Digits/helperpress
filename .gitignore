@@ -46,10 +46,14 @@ www
 # npm
 node_modules
 
-# Compiled Assets
-*/assets/_src/css
-*/assets/css
-*/assets/js
+# Composer
+composer_vendor
+
+# Compiled Assets & such
+wp-theme/assets/_src/css
+wp-theme/assets/css
+wp-theme/assets/js
+wp-theme/assets/scripts
 
 # Local Grunt config
 package.json.local

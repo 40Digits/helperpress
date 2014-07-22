@@ -1,0 +1,23 @@
+{
+	"name": "wpengine-site-boilerplate",
+	"repositories": [
+		{
+			"type": "vcs",
+			"url": "git://github.com/mnsami/composer-installer-plugin.git"
+		}
+	],
+	"require": {
+	    "php": ">=5.3",
+	    "mnsami/composer-custom-directory-installer": "@dev",
+		"gabrielgil/timthumb": "2.*",
+		"wp-cli/wp-cli": "dev-master"
+	},
+	"config": {
+		"vendor-dir": "composer_vendor"
+	},
+	"extra": {
+		"installer-paths": {
+			"./wp-theme/assets/scripts/timthumb/": ["gabrielgil/timthumb"]
+		}
+	}
+}

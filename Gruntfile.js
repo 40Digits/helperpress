@@ -123,7 +123,6 @@ module.exports = function (grunt) {
 
 	// PHP Composer
 	grunt.loadNpmTasks('grunt-composer');
-	// TODO: Timthumb
 
 	// Watch
 	grunt.loadNpmTasks('grunt-contrib-watch');
@@ -143,6 +142,10 @@ module.exports = function (grunt) {
 	grunt.registerTask('setup', 'Setup and configure all the things.', function(){
 		// prompt for WP project info, write to package.json
 
+		// install composer packages
+		grunt.task.run('composer:update');
+		grunt.task.run('composer:install');
+
 		// install git subtrees
 		subtrees.install( grunt.config.process('<%= pkg.config.subtrees %>') );
 		
@@ -152,6 +155,7 @@ module.exports = function (grunt) {
 
 		// install WP core
 		// install WP plugins
+
 		// symlink theme
 
 		// create local DB
