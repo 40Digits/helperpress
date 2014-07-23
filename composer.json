@@ -12,9 +12,6 @@
 		"gabrielgil/timthumb": "2.*",
 		"wp-cli/wp-cli": "dev-master"
 	},
-	"config": {
-		"vendor-dir": "composer_vendor"
-	},
 	"extra": {
 		"installer-paths": {
 			"./wp-theme/assets/scripts/timthumb/": ["gabrielgil/timthumb"]

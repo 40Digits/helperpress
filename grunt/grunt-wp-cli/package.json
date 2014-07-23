@@ -1,0 +1,45 @@
+{
+  "name": "grunt-wp-cli",
+  "description": "WP CLI grunt wrapper",
+  "version": "0.1.0",
+  "homepage": "",
+  "author": {
+    "name": "40Digits Interactive, LLC",
+    "email": "charlie@40digits.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "none"
+  },
+  "bugs": {
+    "url": ""
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "/blob/master/LICENSE-MIT"
+    }
+  ],
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "scripts": {
+    "test": "grunt test"
+  },
+  "devDependencies": {
+    "grunt-contrib-jshint": "^0.9.2",
+    "grunt-contrib-clean": "^0.5.0",
+    "grunt-contrib-nodeunit": "^0.3.3",
+    "grunt": "~0.4.5"
+  },
+  "peerDependencies": {
+    "grunt": "~0.4.5"
+  },
+  "dependencies": {
+    "execSync": "*",
+    "lodash": "~2.4.1"
+  },
+  "keywords": [
+    "gruntplugin"
+  ]
+}

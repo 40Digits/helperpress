@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "dfb43315645ad29277dc362cf50fc1b4",
+    "hash": "0a79e546fb5daeebc6073b1a58b9b55a",
     "packages": [
         {
             "name": "gabrielgil/timthumb",

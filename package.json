@@ -20,18 +20,27 @@
     "grunt-combine-media-queries": "~1.0.19",
     "grunt-githooks": "~0.3.1",
     "grunt-autoprefixer": "~0.8.2",
-    "underscore": "~1.6.0",
     "grunt-contrib-concat": "~0.5.0",
     "grunt-composer": "~0.4.0",
-    "execSync": "~1.0.1-pre"
+    "lodash": "~2.4.1",
+    "userhome": "~0.1.0",
+    "grunt-mysql-dump": "~1.0.0",
+    "grunt-contrib-symlink": "~0.3.0"
   },
   "devDependencies": {
     "grunt-contrib-watch": "~0.6.1"
   },
   "config": {
-    "urls": {
-      "branch": "url"
+    "environments": {
+      "development": {
+        "db": {
+          "database": "my-wp"
+        },
+        "wp_path": "/var/www/vhosts/my-wp",
+        "home_url": "//my-wp.dev01.40digits.net"
+      }
     },
+    "db_master": "",
     "wp": {
       "theme_slug": "wp-theme",
       "plugins": [

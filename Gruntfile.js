@@ -2,9 +2,8 @@ module.exports = function (grunt) {
 
 	var gruntConfig = {},
 
-		_ = require('underscore'),
-		subtrees = require('./grunt/subtrees.js'),
-		wpCli = require('./grunt/wp-cli.js');
+		_ = require('lodash'),
+		userhome = require('userhome');
 
 	/////////
 	// CSS //
@@ -119,12 +118,32 @@ module.exports = function (grunt) {
 	// TODO: add git hooks
 	//			- dont allow committing built assets
 	//			- check for php or JS errors
+	//			- check for passwords being commited
+
+	// Subtrees
+	grunt.loadTasks('./grunt/grunt-gitsubtrees/tasks');
+	// Subtrees are configured in package.json which is loaded before use
+
+	// MySQL 
+	grunt.loadNpmTasks('grunt-mysql-dump');
+
+	// WP
+	grunt.loadTasks('./grunt/grunt-wp-cli/tasks');
+	gruntConfig.wp_cli =
+		{
+			options: {
+				cmdPath: './vendor/wp-cli/wp-cli/bin/wp'
+			}
+		}; 
 
 	// PHP Composer
 	grunt.loadNpmTasks('grunt-composer');
 
+	// Symlink
+	grunt.loadNpmTasks('grunt-contrib-symlink');
+
 	// Watch
-	grunt.loadNpmTasks('grunt-contrib-watch');
+	grunt.loadNpmTasks('grunt-contrib-watch'); 
 	gruntConfig.watch =
 		{
 			sass: {
@@ -142,27 +161,64 @@ module.exports = function (grunt) {
 		// prompt for WP project info, write to package.json
 
 		// install composer packages
-		grunt.task.run('composer:update');
+		// grunt.task.run('composer:update');
 
 		// install git subtrees
-		subtrees.install( grunt.config.process('<%= pkg.config.subtrees %>') );
-		
-		// change theme dir name
+		// grunt.config('gitsubtrees', grunt.config.process( '<%= pkg.config.subtrees %>' ));
+		// grunt.task.run('gitsubtrees');
 
-		// update style.css output for WP theme config
+		// install git hooks
+
+		// bower
+
+		// update style.css output for WP theme config		
+		
+		// migrate DB
+		if( grunt.config.process( '<%= pkg.config.db_master %>' ).length > 0 ) {
+			var migrateOpts = {
+				database: '<%= pkg.config.environments.local.db.database %>',
+				user: '<%= pkg.config.environments.local.db.user %>',
+				pass: '<%= pkg.config.environments.local.db.pass %>',
+				host: '<%= pkg.config.environments.local.db.host %>',
+				ssh_host: '<%= pkg.config.environments.local.ssh_host %>'
+			};
+			grunt.config('db_dump', migrateOpts);
+			grunt.task.run('db_dump');
+		}
 
 		// install WP core
-		wpCli.coreDownload( './www' );
-
+		// make wp-config.php
 		// install WP plugins
-		wpCli.pluginBatchInstall( grunt.config.process('<%= pkg.config.wp.plugins %>') );
+		var wpCliOpts = {
+			install_core: './www',
+			core_config: {
+				dbname: '<%= pkg.config.environments.local.db.database %>',
+				dbuser: '<%= pkg.config.environments.local.db.user %>',
+				dbpass: '<%= pkg.config.environments.local.db.pass %>',
+				dbhost: '<%= pkg.config.environments.local.db.host %>'
+			},
+			db_create: true,
+			install_plugins: grunt.config.process( '<%= pkg.config.wp.plugins %>' )
+		};
+
+		wpCliOpts = _.extend(grunt.config('wp_cli'), wpCliOpts);
+		grunt.config('wp_cli', wpCliOpts);
+		grunt.task.run('wp_cli');
 
 		// symlink theme
 
-		// create local DB
-		// migrate DB
-
-		// make wp-config.php
+		var symLinkOpts =
+			{
+				options: {
+					overwrite: false
+				},
+				explicit: {
+					src: 'wp-theme',
+					dest: 'www/wp-content/themes/' + grunt.config.process( '<%= pkg.config.wp.theme_slug %>' )
+				}
+			};
+		grunt.config('symlink', symLinkOpts);
+		grunt.task.run('symlink');
 
 		// setup localhost - https://www.npmjs.org/package/grunt-localhosts - maybe extend package.json with a package.local for local URL?
 	});
@@ -172,7 +228,8 @@ module.exports = function (grunt) {
 
 		// update WP core
 		// update WP plugins
-		// migrate DB
+
+		// migrate DB down
 
 		// update git subtrees
 
@@ -192,9 +249,15 @@ module.exports = function (grunt) {
 
 	// Load config
 	var packageJSON = grunt.file.readJSON('package.json'),
+		userPackageJSON = grunt.file.exists( userhome('.wpe_defaults') ) ? grunt.file.readJSON( userhome('.wpe_defaults') ) : {};
 		localPackageJSON = grunt.file.exists('package.json.local') ? grunt.file.readJSON('package.json.local') : {};
 
-	gruntConfig.pkg = _.extend(packageJSON, localPackageJSON);
+	// wrap config objects for extending
+	userPackageJSON = { config: userPackageJSON };
+	localPackageJSON = { config: localPackageJSON };
+
+	gruntConfig.pkg = _.extend( packageJSON, [ userPackageJSON, localPackageJSON ] );
+	
 	grunt.initConfig(gruntConfig);
 
 };
