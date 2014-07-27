@@ -4,13 +4,18 @@
 		{
 			"type": "vcs",
 			"url": "git://github.com/mnsami/composer-installer-plugin.git"
+		},
+		{
+			"type": "vcs",
+			"url": "git://github.com/interconnectit/Search-Replace-DB.git"
 		}
 	],
 	"require": {
 	    "php": ">=5.3",
 	    "mnsami/composer-custom-directory-installer": "@dev",
 		"gabrielgil/timthumb": "2.*",
-		"wp-cli/wp-cli": "dev-master"
+		"wp-cli/wp-cli": "dev-master",
+		"interconnectit/Search-Replace-DB": "@dev"
 	},
 	"extra": {
 		"installer-paths": {

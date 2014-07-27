@@ -132,9 +132,12 @@ module.exports = function (grunt) {
 	gruntConfig.wp_cli =
 		{
 			options: {
-				cmdPath: './vendor/wp-cli/wp-cli/bin/wp'
+				cmdPath: './vendor/bin/wp'
 			}
 		}; 
+
+	// Search-Replace-DB
+	grunt.loadTasks('./grunt/grunt-search-replace-db/tasks');
 
 	// PHP Composer
 	grunt.loadNpmTasks('grunt-composer');
@@ -157,15 +160,63 @@ module.exports = function (grunt) {
 
 
 
+	grunt.registerTask('pull_db', 'Pull DB from specified environment into local DB.', function(environment){
+
+		// dump & import
+		var targetOpts = {
+				database: '<%= pkg.config.environments.' + environment + '.db.database %>',
+				user: '<%= pkg.config.environments.' + environment + '.db.user %>',
+				pass: '<%= pkg.config.environments.' + environment + '.db.pass %>',
+				host: '<%= pkg.config.environments.' + environment + '.db.host %>',
+				ssh_host: '<%= pkg.config.environments.' + environment + '.ssh_host %>',
+
+				backup_to: 'db-backups/' + environment + '.sql'
+			},
+			dumpOpts = {};
+
+		dumpOpts[environment] = targetOpts;
+
+		// dump it
+		grunt.config('db_dump', dumpOpts);
+		grunt.task.run('db_dump:' + environment);
+
+		// import it
+		grunt.task.run('db_import:' + environment);
+
+		// search and replace it
+		var searchReplaceOpts = 
+			{
+				options: {
+					globalFlags: {
+						host: '<%= pkg.config.environments.local.db.host %>',
+						name: '<%= pkg.config.environments.local.db.database %>',
+						user: '<%= pkg.config.environments.local.db.user %>',
+						pass: '<%= pkg.config.environments.local.db.pass %>'
+					},
+				},
+				home_url: {
+					search: '<%= pkg.config.environments.' + environment + '.home_url %>',
+					replace: '<%= pkg.config.environments.local.home_url %>'
+				},
+				wp_path: {
+					search: '<%= pkg.config.environments.' + environment + '.wp_path %>',
+					replace: '<%= pkg.config.environments.local.wp_path %>'
+				}
+			}; 
+
+		grunt.config('db_dump', migrateOpts);
+		grunt.task.run('db_dump');
+	});
+
 	grunt.registerTask('setup', 'Setup and configure all the things.', function(){
 		// prompt for WP project info, write to package.json
 
 		// install composer packages
-		// grunt.task.run('composer:update');
+		grunt.task.run('composer:update');
 
 		// install git subtrees
-		// grunt.config('gitsubtrees', grunt.config.process( '<%= pkg.config.subtrees %>' ));
-		// grunt.task.run('gitsubtrees');
+		grunt.config('gitsubtrees', grunt.config.process( '<%= pkg.config.subtrees %>' ));
+		grunt.task.run('gitsubtrees');
 
 		// install git hooks
 
@@ -173,21 +224,15 @@ module.exports = function (grunt) {
 
 		// update style.css output for WP theme config		
 		
-		// migrate DB
-		if( grunt.config.process( '<%= pkg.config.db_master %>' ).length > 0 ) {
-			var migrateOpts = {
-				database: '<%= pkg.config.environments.local.db.database %>',
-				user: '<%= pkg.config.environments.local.db.user %>',
-				pass: '<%= pkg.config.environments.local.db.pass %>',
-				host: '<%= pkg.config.environments.local.db.host %>',
-				ssh_host: '<%= pkg.config.environments.local.ssh_host %>'
-			};
-			grunt.config('db_dump', migrateOpts);
-			grunt.task.run('db_dump');
+		// pull db
+		var dbEnvironment = grunt.config.process( '<%= pkg.config.db_master %>' );
+		if( dbEnvironment.length > 0 ) {
+			grunt.task.run('pull_db:' + dbEnvironment);
 		}
 
 		// install WP core
 		// make wp-config.php
+		// create DB table
 		// install WP plugins
 		var wpCliOpts = {
 			install_core: './www',
@@ -205,20 +250,21 @@ module.exports = function (grunt) {
 		grunt.config('wp_cli', wpCliOpts);
 		grunt.task.run('wp_cli');
 
-		// symlink theme
 
+		// symlinks
 		var symLinkOpts =
 			{
 				options: {
 					overwrite: false
 				},
-				explicit: {
+				theme: {
 					src: 'wp-theme',
 					dest: 'www/wp-content/themes/' + grunt.config.process( '<%= pkg.config.wp.theme_slug %>' )
 				}
 			};
 		grunt.config('symlink', symLinkOpts);
 		grunt.task.run('symlink');
+
 
 		// setup localhost - https://www.npmjs.org/package/grunt-localhosts - maybe extend package.json with a package.local for local URL?
 	});
@@ -234,14 +280,6 @@ module.exports = function (grunt) {
 		// update git subtrees
 
 		// update composer
-	});
-
-	grunt.registerTask('wpe_deploy', 'Deploy to WPE', function(){
-		// build
-
-		// test
-
-		// sftp changed files between currently deployed commit and the new ones
 	});
 
 	grunt.registerTask('default', ['watch']); // TODO: this should be a main menu prompt

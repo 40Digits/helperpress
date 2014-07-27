@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "0a79e546fb5daeebc6073b1a58b9b55a",
+    "hash": "6fae1e66509122b4fe4e11b180d5220e",
     "packages": [
         {
             "name": "gabrielgil/timthumb",
@@ -38,6 +38,35 @@
             ],
             "description": "TimThumb is a simple, flexible, PHP script that resizes images.",
             "time": "2014-07-17 08:57:16"
+        },
+        {
+            "name": "interconnectit/search-replace-db",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/interconnectit/Search-Replace-DB.git",
+                "reference": "7cac361c33bdbd974963c64c006ce5203650c303"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/interconnectit/Search-Replace-DB/zipball/7cac361c33bdbd974963c64c006ce5203650c303",
+                "reference": "7cac361c33bdbd974963c64c006ce5203650c303",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "license": [
+                "GPL-3.0"
+            ],
+            "description": "A PHP search replace tool for quickly modifying a string throughout a database. Useful for changing the base URL when migrating a WordPress site from development to production.",
+            "homepage": "https://github.com/interconnectit/Search-Replace-DB",
+            "support": {
+                "issues": "https://github.com/interconnectit/Search-Replace-DB/issues",
+                "source": "https://github.com/interconnectit/Search-Replace-DB/tree/master"
+            },
+            "time": "2014-05-21 14:44:27"
         },
         {
             "name": "mnsami/composer-custom-directory-installer",
@@ -371,12 +400,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wp-cli/wp-cli.git",
-                "reference": "340ca491e30a67bba5ca35511033cf62b270b298"
+                "reference": "17071702676f4adc812c9a82aa0a850fab2d4516"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wp-cli/wp-cli/zipball/340ca491e30a67bba5ca35511033cf62b270b298",
-                "reference": "340ca491e30a67bba5ca35511033cf62b270b298",
+                "url": "https://api.github.com/repos/wp-cli/wp-cli/zipball/17071702676f4adc812c9a82aa0a850fab2d4516",
+                "reference": "17071702676f4adc812c9a82aa0a850fab2d4516",
                 "shasum": ""
             },
             "require": {
@@ -421,7 +450,7 @@
                 "cli",
                 "wordpress"
             ],
-            "time": "2014-07-21 15:19:10"
+            "time": "2014-07-25 13:19:23"
         }
     ],
     "packages-dev": [
@@ -433,7 +462,8 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "mnsami/composer-custom-directory-installer": 20,
-        "wp-cli/wp-cli": 20
+        "wp-cli/wp-cli": 20,
+        "interconnectit/search-replace-db": 20
     },
     "prefer-stable": false,
     "platform": {

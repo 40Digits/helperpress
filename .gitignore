@@ -38,7 +38,6 @@ Thumbs.db
 
 # WordPress Core, Uploads & Plugins
 www
-*.log
 
 # Sublime, because people forget this in their global .gitignore
 *.sublime-*

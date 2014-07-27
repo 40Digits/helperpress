@@ -87,9 +87,6 @@ function pluginActivate(plugin){
 
   cmd += ' ' + plugin;
 
-  if(activate)
-    cmd += ' --activate';
-
   execSync.run(cmd);
 
 }
