@@ -31,28 +31,8 @@
     "grunt-contrib-watch": "~0.6.1"
   },
   "config": {
-    "environments": {
-      "development": {
-        "db": {
-          "database": "my-wp"
-        },
-        "wp_path": "/var/www/vhosts/my-wp",
-        "home_url": "//my-wp.dev01.40digits.net"
-      }
-    },
-    "db_master": "",
-    "wp": {
-      "theme_slug": "wp-theme",
-      "plugins": [
-        "akismet",
-        "wordpress-seo"
-      ]
-    },
     "assets_dir": "wp-theme/assets/",
     "css_dir": "wp-theme/",
-    "browser_support": {
-      "ie": "9"
-    },
     "subtrees": {
       "40d-sass": {
         "path": "wp-theme/assets/_src/sass",

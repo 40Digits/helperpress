@@ -58,4 +58,4 @@ wp-theme/assets/js
 wp-theme/assets/scripts
 
 # Local Grunt config
-package.json.local
+site_config.local.json

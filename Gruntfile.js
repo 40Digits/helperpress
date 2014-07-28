@@ -260,6 +260,10 @@ module.exports = function (grunt) {
 				theme: {
 					src: 'wp-theme',
 					dest: 'www/wp-content/themes/' + grunt.config.process( '<%= pkg.config.wp.theme_slug %>' )
+				},
+				sites: {
+					src: 'www',
+					dest: '<%= pkg.config.environments.local.wp.wp_path %>'
 				}
 			};
 		grunt.config('symlink', symLinkOpts);
@@ -287,15 +291,24 @@ module.exports = function (grunt) {
 
 	// Load config
 	var packageJSON = grunt.file.readJSON('package.json'),
-		userPackageJSON = grunt.file.exists( userhome('.wpe_defaults') ) ? grunt.file.readJSON( userhome('.wpe_defaults') ) : {};
-		localPackageJSON = grunt.file.exists('package.json.local') ? grunt.file.readJSON('package.json.local') : {};
+		userDefaultsJSON = grunt.file.exists( userhome('.wpe_defaults') ) ? grunt.file.readJSON( userhome('.wpe_defaults') ) : {},
+		siteConfigJSON = grunt.file.exists('site_config.json') ? grunt.file.readJSON('site_config.json') : {},
+		siteConfigLocalJSON = grunt.file.exists('site_config.json.local') ? grunt.file.readJSON('site_config.json.local') : {};
+	
+	// function for deep extending
+	var deepExtend = function(a, b) {
+	    return _.isObject(a) && _.isObject(b) ? _.extend(a, b, deepExtend) : b;
+	};
 
 	// wrap config objects for extending
-	userPackageJSON = { config: userPackageJSON };
-	localPackageJSON = { config: localPackageJSON };
+	userDefaultsJSON = { config: userDefaultsJSON };
+	siteConfigJSON = { config: siteConfigJSON };
+	siteConfigLocalJSON = { config: siteConfigLocalJSON };
 
-	gruntConfig.pkg = _.extend( packageJSON, [ userPackageJSON, localPackageJSON ] );
+	// combine all config files
+	gruntConfig.pkg = _.extend( packageJSON, [ userDefaultsJSON, siteConfigJSON, siteConfigLocalJSON ], deepExtend );
 	
+	// kick it off
 	grunt.initConfig(gruntConfig);
 
 };

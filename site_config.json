@@ -1,0 +1,26 @@
+{
+    "environments": {
+        "development": {
+            "db": {
+                "database": "my-wp"
+            },
+            "home_url": "//my-wp.dev01.40digits.net",
+            "wp_path": "/var/www/vhosts/my-wp"
+        }
+    },
+    "db_master": "",
+    "wp": {
+        "plugins": [
+            "akismet",
+            "wordpress-seo",
+            "advanced-custom-fields"
+        ],
+        "theme": {
+            "name": "Theme Name",
+            "slug": "wp-theme"
+        }
+    },
+    "browser_support": {
+        "ie": "9"
+    }
+}
