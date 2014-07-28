@@ -57,5 +57,8 @@ wp-theme/assets/css
 wp-theme/assets/js
 wp-theme/assets/scripts
 
-# Local Grunt config
+# Local site config
 site_config.local.json
+
+# Bower
+bower_components

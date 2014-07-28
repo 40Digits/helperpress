@@ -7,6 +7,7 @@ WPEngine Site Template
 
 ## Configuration
 Before Grunt is initialized, four configuration files are loaded and combined into one giant config JSON object. The files in order of precedence (i.e. early files' settings will override latter ones):
+
 1. site_config.json.local
 2. site_config.json
 3. ~/.wpe_defaults

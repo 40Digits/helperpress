@@ -21,10 +21,6 @@ function addSubtree(id, path, branch){
 
 module.exports = function(grunt) {
 
-  // Please see the Grunt documentation for more information regarding task
-  // creation: http://gruntjs.com/creating-tasks
-
-
   grunt.registerMultiTask('gitsubtrees', 'Manage git subtrees', function() {
     // Merge task-specific and/or target-specific options with these defaults.
 

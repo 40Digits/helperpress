@@ -54,8 +54,8 @@ module.exports = function (grunt) {
 			multiple_files: {
 				expand: true,
 				flatten: true,
-				src: '<%= pkg.config.assets %>/_src/css/raw/*.css',
-				dest: '<%= pkg.config.assets %>/_src/css/prefix/'
+				src: '<%= pkg.config.assets_dir %>/_src/css/raw/*.css',
+				dest: '<%= pkg.config.assets_dir %>/_src/css/prefix/'
 			},
 		};
 
@@ -65,7 +65,7 @@ module.exports = function (grunt) {
 		{
 			your_target: {
 				files: {
-					'<%= pkg.config.sass_dir %>/*.{scss,sass}': ['<%= pkg.config.assets %>/_src/css/prefix/*.css']
+					'<%= pkg.config.sass_dir %>/*.{scss,sass}': ['<%= pkg.config.assets_dir %>/_src/css/prefix/*.css']
 				}
 			}
 		};
@@ -75,13 +75,28 @@ module.exports = function (grunt) {
 	// Javascript //
 	////////////////
 
-	// TODO: Add Bower
+	// Bower
+	grunt.loadNpmTasks('grunt-bower-task');
+	gruntConfig.bower = 
+		{
+			install: {
+				options: {
+					targetDir: 'bower_components'
+				}
+			}	
+		}
+
+	grunt.loadNpmTasks('grunt-bower-concat');
+	gruntConfig.bower_concat = 
+		{
+			dest: '<%= pkg.config.assets_dir %>/_src/js/bower.js'
+		}
 
 	// JS Hint
 	grunt.loadNpmTasks('grunt-contrib-jshint');
 	gruntConfig.jshint =
 		{
-			all: ['gruntfile.js', '<%= pkg.config.assets %>/js/main.js'],
+			all: ['gruntfile.js', '<%= pkg.config.assets_dir %>/js/main.js'],
 			options: {
 				jshintrc: '.jshintrc'
 			}
@@ -93,7 +108,7 @@ module.exports = function (grunt) {
 		{
 			my_target: {
 				files: {
-					'<%= pkg.config.assets %>/_src/js/app/script.min.js': ['<%= pkg.config.assets %>/js/main.js']
+					'<%= pkg.config.assets_dir %>/_src/js/app/script.min.js': ['<%= pkg.config.assets_dir %>/js/main.js']
 				}
 			}
 		};
@@ -221,6 +236,7 @@ module.exports = function (grunt) {
 		// install git hooks
 
 		// bower
+		grunt.task.run('bower');
 
 		// update style.css output for WP theme config		
 		
