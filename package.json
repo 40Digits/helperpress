@@ -4,7 +4,8 @@
   "description": "A starting point for WordPress projects to be hosted on WPEngine",
   "main": "Gruntfile.js",
   "scripts": {
-    "test": "echo \"TODO: Add tests \" && exit 1"
+    "test": "echo \"TODO: Add tests \" && exit 1",
+    "postinstall": "grunt setup"
   },
   "repository": {
     "type": "git",
@@ -18,7 +19,6 @@
     "grunt-contrib-uglify": "~0.5.0",
     "grunt-contrib-sass": "~0.7.3",
     "grunt-combine-media-queries": "~1.0.19",
-    "grunt-githooks": "~0.3.1",
     "grunt-autoprefixer": "~0.8.2",
     "grunt-contrib-concat": "~0.5.0",
     "grunt-composer": "~0.4.0",
@@ -28,10 +28,13 @@
     "grunt-contrib-symlink": "~0.3.0",
     "bower": "~1.3.8",
     "grunt-bower-task": "~0.4.0",
-    "grunt-bower-concat": "~0.3.0"
+    "grunt-bower-concat": "~0.3.0",
+    "execSync": "~1.0.1-pre"
   },
   "devDependencies": {
-    "grunt-contrib-watch": "~0.6.1"
+    "grunt-contrib-watch": "~0.6.1",
+    "grunt-githooks": "~0.3.1",
+    "grunt-phplint": "0.0.5"
   },
   "config": {
     "assets_dir": "wp-theme/assets/",

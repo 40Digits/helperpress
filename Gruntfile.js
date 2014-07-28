@@ -126,10 +126,27 @@ module.exports = function (grunt) {
 			}
 		};
 
+	// PHP Lint
+	grunt.loadNpmTasks('');
+	gruntConfig.phplint = 
+		{
+			// good: ["test/rsrc/*-good.php"],
+			// bad: ["test/rsrc/*-fail.php"]
+		}
 
 
 	// Git
 	grunt.loadNpmTasks('grunt-githooks');
+	gruntConfig.githooks = 
+		{
+			all: {
+				options: {
+					template: 'hooks/pre-commit.js' //
+				},
+				'pre-commit': 'jshint phplint'
+			}
+		}
+
 	// TODO: add git hooks
 	//			- dont allow committing built assets
 	//			- check for php or JS errors
@@ -137,7 +154,7 @@ module.exports = function (grunt) {
 
 	// Subtrees
 	grunt.loadTasks('./grunt/grunt-gitsubtrees/tasks');
-	// Subtrees are configured in package.json which is loaded before use
+	// Subtrees are configured in external config files
 
 	// MySQL 
 	grunt.loadNpmTasks('grunt-mysql-dump');
