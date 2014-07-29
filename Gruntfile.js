@@ -3,7 +3,12 @@ module.exports = function (grunt) {
 	var gruntConfig = {},
 
 		_ = require('lodash'),
+		_deepExtend = require('underscore-deep-extend'),
+		randomstring = require('randomstring'),
 		userhome = require('userhome');
+
+	// initialize _deepExtend into _ object
+	_.mixin({deepExtend: _deepExtend(_)});
 
 	/////////
 	// CSS //
@@ -86,10 +91,11 @@ module.exports = function (grunt) {
 			}	
 		}
 
+	// Bower concat
 	grunt.loadNpmTasks('grunt-bower-concat');
 	gruntConfig.bower_concat = 
 		{
-			dest: '<%= pkg.config.assets_dir %>/_src/js/bower.js'
+			dest: '<%= pkg.config.assets_dir %>/_src/compiled/js/bower.js'
 		}
 
 	// JS Hint
@@ -108,7 +114,7 @@ module.exports = function (grunt) {
 		{
 			my_target: {
 				files: {
-					'<%= pkg.config.assets_dir %>/_src/js/app/script.min.js': ['<%= pkg.config.assets_dir %>/js/main.js']
+					'<%= pkg.config.assets_dir %>/js/main.min.js': ['<%= pkg.config.assets_dir %>/js/main.js']
 				}
 			}
 		};
@@ -127,11 +133,11 @@ module.exports = function (grunt) {
 		};
 
 	// PHP Lint
-	grunt.loadNpmTasks('');
+	grunt.loadNpmTasks('grunt-phplint');
 	gruntConfig.phplint = 
 		{
-			// good: ["test/rsrc/*-good.php"],
-			// bad: ["test/rsrc/*-fail.php"]
+			// good: ['test/rsrc/*-good.php'],
+			// bad: ['test/rsrc/*-fail.php']
 		}
 
 
@@ -149,23 +155,49 @@ module.exports = function (grunt) {
 
 	// TODO: add git hooks
 	//			- dont allow committing built assets
-	//			- check for php or JS errors
 	//			- check for passwords being commited
 
 	// Subtrees
 	grunt.loadTasks('./grunt/grunt-gitsubtrees/tasks');
 	// Subtrees are configured in external config files
+	gruntConfig.gitsubtrees = '<%= pkg.config.subtrees %>';
 
 	// MySQL 
 	grunt.loadNpmTasks('grunt-mysql-dump');
 
 	// WP
 	grunt.loadTasks('./grunt/grunt-wp-cli/tasks');
+	
+	var wpRndPass = randomstring.generate(10); // in case we're installing it fresh
 	gruntConfig.wp_cli =
 		{
 			options: {
-				cmdPath: './vendor/bin/wp'
-			}
+				cmdPath: './vendor/bin/wp',
+				wpPath: './www'
+			},
+
+			download_core: true,
+
+			core_config: {
+				dbname: '<%= pkg.config.environments.local.db.database %>',
+				dbuser: '<%= pkg.config.environments.local.db.user %>',
+				dbpass: '<%= pkg.config.environments.local.db.pass %>',
+				dbhost: '<%= pkg.config.environments.local.db.host %>'
+			},
+
+			db_create: true,
+
+			install_core: {
+				url: '<%= pkg.config.environments.local.url %>',
+				title: '<%= pkg.config.environments.wp.theme.name %>',
+				admin_user: '40digits',
+				admin_password: wpRndPass,
+				admin_email: 'j3k.porkins@gmail.com'
+			},
+
+			install_plugins: '<%= pkg.config.wp.plugins %>',
+
+			remove_plugins: ['hello']
 		}; 
 
 	// Search-Replace-DB
@@ -176,6 +208,20 @@ module.exports = function (grunt) {
 
 	// Symlink
 	grunt.loadNpmTasks('grunt-contrib-symlink');
+	gruntConfig.symlink =
+		{
+			options: {
+				overwrite: false
+			},
+			theme: {
+				src: 'wp-theme',
+				dest: 'www/wp-content/themes/<%= pkg.config.wp.theme_slug %>'
+			},
+			sites: {
+				src: 'www',
+				dest: '<%= pkg.config.environments.local.wp.wp_path %>'
+			}
+		};
 
 	// Watch
 	grunt.loadNpmTasks('grunt-contrib-watch'); 
@@ -190,6 +236,63 @@ module.exports = function (grunt) {
 			}
 		};
 
+	// Clean
+	grunt.loadNpmTasks('grunt-contrib-clean');
+	gruntConfig.clean = 
+		{
+			build: ['bower_components', 'vendor', 'db-backup', 'www']
+		}
+
+
+	grunt.registerTask('wp_install', 'Installs WP & DB tables from scratch.', function(){
+
+		// is this a new site or does it already exist somehwere?
+		var dbEnvironment = grunt.config.process( '<%= pkg.config.db_master %>' ),
+			isBrandNew = ( dbEnvironment.length === 0 );
+
+
+		// BEFORE INSTALLING
+		//////////////////////
+
+		if(isBrandNew){
+
+			// prompt for WP project info
+
+			// update loaded config
+
+			// write to site_config.json
+
+			// update style.css output for WP theme config
+
+			// report generated pass to user
+
+		}
+
+
+		// INSTALL IT
+		///////////////
+
+		grunt.task.run([
+			'wp_cli:download_core',
+			'wp_cli:core_config',
+			'wp_cli:db_create',
+			'wp_cli:install_core',
+			'wp_cli:install_plugins',
+			'wp_cli:remove_plugins'
+		]);
+
+
+		// AFTER INSTALLING
+		/////////////////////
+
+		if(!isBrandNew){
+			
+			// pull db
+			grunt.task.run('pull_db:' + dbEnvironment);
+
+		}
+
+	});
 
 
 	grunt.registerTask('pull_db', 'Pull DB from specified environment into local DB.', function(environment){
@@ -236,87 +339,31 @@ module.exports = function (grunt) {
 				}
 			}; 
 
-		grunt.config('db_dump', migrateOpts);
+		grunt.config('db_dump', searchReplaceOpts);
 		grunt.task.run('db_dump');
+
 	});
 
-	grunt.registerTask('setup', 'Setup and configure all the things.', function(){
-		// prompt for WP project info, write to package.json
-
-		// install composer packages
-		grunt.task.run('composer:update');
-
-		// install git subtrees
-		grunt.config('gitsubtrees', grunt.config.process( '<%= pkg.config.subtrees %>' ));
-		grunt.task.run('gitsubtrees');
-
-		// install git hooks
-
-		// bower
-		grunt.task.run('bower');
-
-		// update style.css output for WP theme config		
-		
-		// pull db
-		var dbEnvironment = grunt.config.process( '<%= pkg.config.db_master %>' );
-		if( dbEnvironment.length > 0 ) {
-			grunt.task.run('pull_db:' + dbEnvironment);
-		}
-
-		// install WP core
-		// make wp-config.php
-		// create DB table
-		// install WP plugins
-		var wpCliOpts = {
-			install_core: './www',
-			core_config: {
-				dbname: '<%= pkg.config.environments.local.db.database %>',
-				dbuser: '<%= pkg.config.environments.local.db.user %>',
-				dbpass: '<%= pkg.config.environments.local.db.pass %>',
-				dbhost: '<%= pkg.config.environments.local.db.host %>'
-			},
-			db_create: true,
-			install_plugins: grunt.config.process( '<%= pkg.config.wp.plugins %>' )
-		};
-
-		wpCliOpts = _.extend(grunt.config('wp_cli'), wpCliOpts);
-		grunt.config('wp_cli', wpCliOpts);
-		grunt.task.run('wp_cli');
-
-
-		// symlinks
-		var symLinkOpts =
-			{
-				options: {
-					overwrite: false
-				},
-				theme: {
-					src: 'wp-theme',
-					dest: 'www/wp-content/themes/' + grunt.config.process( '<%= pkg.config.wp.theme_slug %>' )
-				},
-				sites: {
-					src: 'www',
-					dest: '<%= pkg.config.environments.local.wp.wp_path %>'
-				}
-			};
-		grunt.config('symlink', symLinkOpts);
-		grunt.task.run('symlink');
-
-
-		// setup localhost - https://www.npmjs.org/package/grunt-localhosts - maybe extend package.json with a package.local for local URL?
-	});
+	grunt.registerTask( 'setup', [
+		'composer:update',
+		'gitsubtrees',
+		'bower:install',
+		'wp_install',
+		'symlink'
+	]);
 
 	grunt.registerTask('update', 'Update all the things.', function(){
+
+		// update composer
+
 		// prompt checklist of things to update
 
 		// update WP core
+
 		// update WP plugins
 
 		// migrate DB down
-
-		// update git subtrees
-
-		// update composer
+		
 	});
 
 	grunt.registerTask('default', ['watch']); // TODO: this should be a main menu prompt
@@ -328,20 +375,19 @@ module.exports = function (grunt) {
 		siteConfigJSON = grunt.file.exists('site_config.json') ? grunt.file.readJSON('site_config.json') : {},
 		siteConfigLocalJSON = grunt.file.exists('site_config.json.local') ? grunt.file.readJSON('site_config.json.local') : {};
 	
-	// function for deep extending
-	var deepExtend = function(a, b) {
-	    return _.isObject(a) && _.isObject(b) ? _.extend(a, b, deepExtend) : b;
-	};
-
 	// wrap config objects for extending
 	userDefaultsJSON = { config: userDefaultsJSON };
 	siteConfigJSON = { config: siteConfigJSON };
 	siteConfigLocalJSON = { config: siteConfigLocalJSON };
 
 	// combine all config files
-	gruntConfig.pkg = _.extend( packageJSON, [ userDefaultsJSON, siteConfigJSON, siteConfigLocalJSON ], deepExtend );
+	gruntConfig.pkg = _.deepExtend( packageJSON, userDefaultsJSON, siteConfigJSON, siteConfigLocalJSON );
+
 	
 	// kick it off
 	grunt.initConfig(gruntConfig);
+
+	// KINDA HACKY TO PUT THIS HERE, but it has to be after external config is loaded:
+	grunt.config( 'gitsubtrees', grunt.config.get('gitsubtrees') );
 
 };

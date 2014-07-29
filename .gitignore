@@ -52,7 +52,7 @@ vendor
 db-backup
 
 # Compiled Assets & such
-wp-theme/assets/_src/css
+wp-theme/assets/_src/compiled
 wp-theme/assets/css
 wp-theme/assets/js
 wp-theme/assets/scripts

@@ -11,22 +11,52 @@
 var execSync = require('execSync'),
   _ = require('lodash'),
 
-  options;
+  options,
+  grunt;
 
 
 // Core
 
-function coreDownload(wpPath){
-  var cmd = options.cmdPath + ' core download';
-
-  if(typeof wpPath !== 'undefined')
-    cmd += ' --path=' + wpPath;
+function coreDownload(){
+  var cmd = options.cmdPath + ' core download --path=' + options.wpPath;
 
   execSync.run(cmd);
 }
 
+function coreInstall(flags){
+  var cmd = options.cmdPath + ' core install --path=' + options.wpPath,
+    validFlags = [
+      'url',
+      'title',
+      'admin_user',
+      'admin_password',
+      'admin_email'
+    ],
+
+    flagVal;
+
+  for(var el in flags){
+
+    if( _.indexOf(validFlags, el) === -1 ){
+      return grunt.warn('"' + el + '" is not a valid "wp core install" flag');
+    }
+
+    flagVal = grunt.config.process(flags[el]);
+
+    if( flagVal.length > 0){
+      cmd += ' --' + el + '=' + flagVal;
+    }
+
+  }
+
+  execSync.run(cmd);
+
+}
+
+// TODO; DRYify these two functions above and below
+
 function coreConfig(flags){
-  var cmd = options.cmdPath + ' core config',
+  var cmd = options.cmdPath + ' core config --path=' + options.wpPath,
     validFlags = [
       'dbname',
       'dbuser',
@@ -39,16 +69,21 @@ function coreConfig(flags){
       'extra-php',
       'skip-salts',
       'skip-check'
-    ];
+    ],
 
-  flags.forEach(function(el, i){
+    flagVal;
 
-    if( _.indexOf(validFlags, i) === -1 )
-      return grunt.warn('"' + i + '" is not a valid "wp core config" flag');
+  for(var el in flags){
 
-    cmd += ' --' + i + '=' + el;
+    if( _.indexOf(validFlags, el) === -1 )
+      return grunt.warn('"' + el + '" is not a valid "wp core config" flag');
 
-  });
+    flagVal = grunt.config.process(flags[el]);
+
+    if( flagVal.length > 0)
+      cmd += ' --' + el + '=' + flagVal;
+
+  }
 
   execSync.run(cmd);
 }
@@ -56,7 +91,7 @@ function coreConfig(flags){
 // DB
 
 function dbCreate(){
-  var cmd = options.cmdPath + ' db create';
+  var cmd = options.cmdPath + ' db create --path=' + options.wpPath;
 
   execSync.run(cmd);
   
@@ -65,7 +100,7 @@ function dbCreate(){
 // Plugins
 
 function pluginInstall(plugin, activate){
-  var cmd = options.cmdPath + ' plugin install';
+  var cmd = options.cmdPath + ' plugin install --path=' + options.wpPath;
 
   if(typeof plugin === 'undefined')
     return grunt.warn('No plugin specified.');
@@ -79,8 +114,20 @@ function pluginInstall(plugin, activate){
 
 }
 
+function pluginUninstall(plugin){
+  var cmd = options.cmdPath + ' plugin uninstall --path=' + options.wpPath;
+
+  if(typeof plugin === 'undefined')
+    return grunt.warn('No plugin specified.');
+
+  cmd += ' ' + plugin;
+
+  execSync.run(cmd);
+
+}
+
 function pluginActivate(plugin){
-  var cmd = options.cmdPath + ' plugin activate';
+  var cmd = options.cmdPath + ' plugin activate --path=' + options.wpPath;
 
   if(typeof plugin === 'undefined')
     return grunt.warn('No plugin specified.');
@@ -97,26 +144,37 @@ function pluginBatchInstall(plugins){
   });
 }
 
-module.exports = function(grunt) {
+function pluginBatchUninstall(plugins){
+  plugins.forEach(function(el){
+    pluginUninstall(el);
+  });
+}
+
+module.exports = function(gruntObj) {
+
+  grunt = gruntObj;
 
   var wp = {
-    install_core: coreDownload,
+    download_core: coreDownload,
+    install_core: coreInstall,
     core_config: coreConfig,
     db_create: dbCreate,
-    install_plugins: pluginBatchInstall
+    install_plugins: pluginBatchInstall,
+    remove_plugins: pluginBatchUninstall
   };
 
   grunt.registerMultiTask('wp_cli', 'WP CLI grunt wrapper', function() {
     // Merge task-specific and/or target-specific options with these defaults.
     options = this.options({
-      cmdPath: 'wp'
+      cmdPath: 'wp',
+      wpPath: './'
     });
 
 
     if(typeof wp[this.target] !== 'function')
-      return grunt.warn('"' + this.target + '" is not a valid wp-cli task.');
+      return grunt.warn('"' + this.target + '" is not a valid wp-cli command.');
 
-    wp[this.target](this.data);
+    wp[this.target]( grunt.config.process(this.data) );
 
   });
 

@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "6fae1e66509122b4fe4e11b180d5220e",
+    "hash": "9506dcb224fbb36e84f93a22d46290ed",
     "packages": [
         {
             "name": "gabrielgil/timthumb",
@@ -70,16 +70,16 @@
         },
         {
             "name": "mnsami/composer-custom-directory-installer",
-            "version": "dev-master",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/mnsami/composer-installer-plugin.git",
-                "reference": "d33bbab4b8d846c314ca1dc85eb11d1493f30abe"
+                "url": "https://github.com/mnsami/composer-custom-directory-installer.git",
+                "reference": "2e15bec8098ebb9fac86a111f99b89fae281ff44"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mnsami/composer-installer-plugin/zipball/d33bbab4b8d846c314ca1dc85eb11d1493f30abe",
-                "reference": "d33bbab4b8d846c314ca1dc85eb11d1493f30abe",
+                "url": "https://api.github.com/repos/mnsami/composer-custom-directory-installer/zipball/2e15bec8098ebb9fac86a111f99b89fae281ff44",
+                "reference": "2e15bec8098ebb9fac86a111f99b89fae281ff44",
                 "shasum": ""
             },
             "require": {
@@ -91,7 +91,10 @@
                 "class": [
                     "Composer\\CustomDirectoryInstaller\\LibraryPlugin",
                     "Composer\\CustomDirectoryInstaller\\PearPlugin"
-                ]
+                ],
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
             },
             "autoload": {
                 "psr-0": {
@@ -108,17 +111,16 @@
                 }
             ],
             "description": "A composer plugin, to help install packages of different types in custom paths.",
-            "homepage": "http://www.leaseweblabs.com",
             "keywords": [
                 "composer",
                 "composer-installer",
                 "composer-plugin"
             ],
             "support": {
-                "source": "https://github.com/mnsami/composer-installer-plugin/tree/master",
-                "issues": "https://github.com/mnsami/composer-installer-plugin/issues"
+                "source": "https://github.com/mnsami/composer-custom-directory-installer/tree/1.0.2",
+                "issues": "https://github.com/mnsami/composer-custom-directory-installer/issues"
             },
-            "time": "2014-04-03 15:00:52"
+            "time": "2014-07-28 20:33:27"
         },
         {
             "name": "mustache/mustache",
@@ -400,12 +402,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wp-cli/wp-cli.git",
-                "reference": "17071702676f4adc812c9a82aa0a850fab2d4516"
+                "reference": "7b062d2edd4e0ca34fb55e61e5b47023c14b2b1e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wp-cli/wp-cli/zipball/17071702676f4adc812c9a82aa0a850fab2d4516",
-                "reference": "17071702676f4adc812c9a82aa0a850fab2d4516",
+                "url": "https://api.github.com/repos/wp-cli/wp-cli/zipball/7b062d2edd4e0ca34fb55e61e5b47023c14b2b1e",
+                "reference": "7b062d2edd4e0ca34fb55e61e5b47023c14b2b1e",
                 "shasum": ""
             },
             "require": {
@@ -450,7 +452,7 @@
                 "cli",
                 "wordpress"
             ],
-            "time": "2014-07-25 13:19:23"
+            "time": "2014-07-28 14:39:16"
         }
     ],
     "packages-dev": [
@@ -461,7 +463,6 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "mnsami/composer-custom-directory-installer": 20,
         "wp-cli/wp-cli": 20,
         "interconnectit/search-replace-db": 20
     },

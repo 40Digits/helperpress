@@ -24,10 +24,10 @@ module.exports = function(grunt) {
       globalFlags: {}
     });
 
-    var cmd = 'php' + options.scriptPath,
+    var cmd = options.phpPath + ' ' + options.scriptPath,
 
       // allow global flags to be set via options
-      extendedFlags = _.extend(options.gloablFlags, this.data),
+      extendedFlags = _.extend(options.globalFlags, this.data),
 
       // the script's expected flags
       validFlags = {
@@ -88,7 +88,7 @@ module.exports = function(grunt) {
       cmd += ' --' + i;
 
       if( validFlags[flag].type === 'eq' ){
-          cmd += '=' + extendedFlags[flag];
+          cmd += '=' + grunt.config.process( extendedFlags[flag] );
       };
 
     }

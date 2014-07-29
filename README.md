@@ -51,7 +51,7 @@ See the example commented JSON object below for information about each property.
 			"ssh_host": "dev01.40digits.net",
 
 			// Database settings (using SSH)
-			// DO NOT COMMIT CREDENTIALS - use ~/.wpe_default
+			// DO NOT COMMIT CREDENTIALS - use ~/.wpe_default or site_config.json.local
 			"db": {
 
 				"host": "127.0.0.1",
@@ -84,14 +84,14 @@ See the example commented JSON object below for information about each property.
     	*/
 		"theme" {
 
-			"slug": "wp-theme", 	// Text Domain
-			"name": "My WP Theme", 	// Theme Name
-			"decription": "" 		// Description
-			"author": "", 			// Author
-			"author_uri": "", 		// Author URI
-			"version": "" 			// Version
-			"uri": "", 				// Theme URI
-			"tags": "", 			// Tags
+			"slug": "wp-theme", 		// Text Domain
+			"name": "Client's Site",	// Theme Name
+			"decription": "" 			// Description
+			"author": "", 				// Author
+			"author_uri": "", 			// Author URI
+			"version": "" 				// Version
+			"uri": "", 					// Theme URI
+			"tags": "", 				// Tags
 
 		},
 
