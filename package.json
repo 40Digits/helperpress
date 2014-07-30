@@ -31,7 +31,9 @@
     "grunt-bower-concat": "~0.3.0",
     "execSync": "~1.0.1-pre",
     "grunt-contrib-clean": "~0.6.0",
-    "underscore-deep-extend": "0.0.5"
+    "underscore-deep-extend": "0.0.5",
+    "load-grunt-tasks": "~0.6.0",
+    "glob": "~4.0.5"
   },
   "devDependencies": {
     "grunt-contrib-watch": "~0.6.1",
