@@ -61,12 +61,12 @@ module.exports = function (grunt) {
 		siteConfigLocalJSON = grunt.file.exists('site_config.json.local') ? grunt.file.readJSON('site_config.json.local') : {};
 	
 	// wrap config objects for extending
-	userDefaultsJSON = { config: userDefaultsJSON };
-	siteConfigJSON = { config: siteConfigJSON };
-	siteConfigLocalJSON = { config: siteConfigLocalJSON };
+	var wrappedUserDefaultsJSON = { config: userDefaultsJSON },
+		wrappedSiteConfigJSON = { config: siteConfigJSON },
+		wrappedSiteConfigLocalJSON = { config: siteConfigLocalJSON };
 
 	// combine all config files
-	gruntConfig.pkg = _.deepExtend( packageJSON, userDefaultsJSON, siteConfigJSON, siteConfigLocalJSON );
+	gruntConfig.pkg = _.deepExtend( packageJSON, wrappedUserDefaultsJSON, wrappedSiteConfigJSON, wrappedSiteConfigLocalJSON );
 
 
 
@@ -97,7 +97,22 @@ module.exports = function (grunt) {
 	// kick it off
 	////////////////
 
+	// load Grunt tasks defined in package.json
 	loadGruntTasks(grunt);
+
+	// load Grunt tasks in ./grunt/tasks directory
+	var configPath = './grunt/tasks/';
+	glob.sync('**/*.js', {cwd: configPath}).forEach(function(option) {
+
+		var task = require(configPath + option);
+
+		if(typeof task === 'function')
+			task(grunt);
+
+	});
+
+
+	// initialize config
 	grunt.initConfig(gruntConfig);
 
 

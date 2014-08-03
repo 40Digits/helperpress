@@ -2,8 +2,9 @@ WPEngine Site Template
 ======================
 
 ## Requirements
-1. npm (via [Homebrew](http://brew.sh/#install): `brew install node`)
+1. Node.js & npm (via [Homebrew](http://brew.sh/#install): `brew install node`)
 2. [Composer](https://getcomposer.org/doc/00-intro.md#globally-on-osx-via-homebrew-)
+
 
 ## Configuration
 Before Grunt is initialized, four configuration files are loaded and combined into one giant config JSON object. The files in order of precedence (i.e. early files' settings will override latter ones):

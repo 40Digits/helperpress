@@ -1,3 +1,8 @@
 module.exports = {
-	build: ['bower_components', 'vendor', 'db-backup', 'www']
+	built: [
+		'bower_components',
+		'vendor',
+		'db-backup',
+		'www'
+	]
 };
