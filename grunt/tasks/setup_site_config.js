@@ -1,86 +1,103 @@
 var _ = require('lodash'),
-	_deepExtend = require('underscore-deep-extend');
+	_deepExtend = require('underscore-deep-extend'),
+	grunt;
 	
-	// initialize _deepExtend into _ object
-	_.mixin({deepExtend: _deepExtend(_)});
+// initialize _deepExtend into _ object
+_.mixin({deepExtend: _deepExtend(_)});
 
 function prettyJSON(val){
-	return JSON.stringify(val, null, 2)
+	return JSON.stringify(val, null, 2);
+}
+
+function updatedLoadedConfig(newConfig){
+
+	var curPkg = grunt.config('pkg.config'),
+		pkgExtended = _.deepExtend(curPkg, newConfig);
+
+
+	grunt.config('pkg.config', curPkg);
 }
 
 
-module.exports = function(grunt) {
+function repo(options){
 
-	grunt.registerTask('setup_site_config', 'Generates config files', function(type){
+	var newContents = grunt.config('setup_site_config.repo');
 
-		var newContents,
-			curContents;
+	// create the file
+	grunt.file.write( './site_config.json', prettyJSON(newContents) );
 
-		switch(type){
+	updatedLoadedConfig(newContents);
 
-			case 'repo':
-				newContents = grunt.config('prompt_setup_repo');
+};
 
-				// create the file
-				grunt.file.write( './site_config.json', prettyJSON(newContents) );
-
-				// update config with prompt values
-				var curPkg = grunt.config('pkg.config'),
-					pkgExtended = _.deepExtend(curPkg, newContents);
+function local(options){
+	var localEnv = {},
+		curContents = grunt.file.isMatch('site_config.local.json') ? grunt.file.readJSON('site_config.local.json') : {};
 
 
-				grunt.config('pkg.config', curPkg);
+	// Local Database
+	var wpSlug = grunt.config('pkg.config.wp.theme.slug');
 
-				break;
+	if( typeof options.db.database !== 'undefined' ) {
+		localEnv.database = options.db.database;
+	} else if( wpSlug.length > 0 && typeof curContents.environments.local.database === 'undefined' ) {
 
-			case 'local':
+		// if we have a wp slug and there is no currently configured db, use that.
+		localEnv.database = wpSlug;
 
-				var localEnv = {};
+	}
+	
 
-				curContents = grunt.file.isMatch('site_config.local.json') ? grunt.file.readJSON('site_config.local.json') : {};
+	// Local wp_path
+	if( typeof options.wp_path !== 'undefined' ){
+		localEnv.wp_path = options.wp_path;
+	} else {
 
+		// let's infer it... probably CWD
+		localEnv.wp_path = process.cwd();
 
-				// Local Database
-				var promptDB = grunt.config('prompt_setup_local.database'),
-					wpSlug = grunt.config('pkg.config.wp.theme.slug');
+	}
+		
 
-				if( promptDB.length > 0 ) {
-					localEnv.database = promptDB;
-				} else if( wpSlug.length > 0 && typeof curContents.environments.local.database === 'undefined' ) {
-					localEnv.database = wpSlug;
-				}
-				
+	// Local home_url
+	if( typeof options.home_url !== 'undefined' ){
+		localEnv.home_url = optoins.home_url;
+	} else {
 
-				// also do automatic things
+		// let's infer it
+		localEnv.home_url = '//' + grunt.config('pkg.config.apache.url_scheme').replace('*', options.site_slug);
 
-				// Local wp_path
-				var promptWpPath = grunt.config('prompt_setup_local.wp_path');
-				if( promptWpPath.length > 0 )
-					localEnv.wp_path = promptWpPath;
-					
-
-				// Local home_url
-				var promptHomeUrl = grunt.config('prompt_setup_local.home_url');
-				if( promptHomeUrl.length > 0 )
-					localEnv.home_url = promptHomeUrl;
-
-
-				newContents = {
-					'environments': {
-						'local': localEnv;
-					}
-				}
-
-				var toSave = _.deepExtend(curContents, newContents);
-
-				grunt.file.write( 'site_config.local.json', prettyJSON );
-
-				break;
+	}
 
 
-			case 'user':
+	var newContents = {
+		'environments': {
+			'local': localEnv
+		}
+	};
 
-				break;
+	var toSave = _.deepExtend(curContents, newContents);
+
+	grunt.file.write( 'site_config.local.json', prettyJSON(toSave) );
+
+}
+
+
+module.exports = function(gruntObj) {
+
+	grunt = gruntObj;
+
+	var configs = {
+		repo: repo,
+		local: local
+	};
+
+	grunt.registerMultiTask('setup_site_config', 'Generates config files', function(){
+		var options = this.options();
+
+		if(typeof configs[this.target] !== 'function')
+			return grunt.warn('"setup_site_config" only handles specific targets ("repo" and "local")');
+
 
 	});
 

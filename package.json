@@ -33,7 +33,9 @@
     "grunt-contrib-clean": "~0.6.0",
     "underscore-deep-extend": "0.0.5",
     "load-grunt-tasks": "~0.6.0",
-    "glob": "~4.0.5"
+    "glob": "~4.0.5",
+    "grunt-localhosts": "0.0.7",
+    "ejs": "~1.0.0"
   },
   "devDependencies": {
     "grunt-contrib-watch": "~0.6.1",
@@ -44,13 +46,6 @@
   },
   "config": {
     "assets_dir": "wp-theme/assets/",
-    "css_dir": "wp-theme/",
-    "subtrees": {
-      "40d-sass": {
-        "path": "wp-theme/assets/_src/sass",
-        "url": "git@bitbucket.org:40digits/40d-semantic-sass-structure.git",
-        "branch": "master"
-      }
-    }
+    "css_dir": "wp-theme/"
   }
 }

@@ -1,4 +1,14 @@
+module.exports = {
+	"40d-sass": {
 
-// Subtrees are configured in external config files
+		// where to install it within the main repo
+		"path": "wp-theme/assets/_src/sass",
 
-module.exports = '<%= pkg.config.subtrees %>';
+		// repo URL
+		"url": "git@bitbucket.org:40digits/40d-semantic-sass-structure.git",
+
+		// which branch to use
+		"branch": "master"
+
+	}
+};

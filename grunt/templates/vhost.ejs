@@ -1,0 +1,11 @@
+<VirtualHost *:80>
+
+     ServerName <%= hostName %>
+
+     DocumentRoot <%= docRoot %>
+
+     CustomLog <%= logsDir %>/<%= slug %>.access.log combined
+
+     ErrorLog <%= logsDir %>/<%= slug %>.error.log
+
+</VirtualHost>

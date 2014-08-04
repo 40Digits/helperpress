@@ -4,5 +4,6 @@ module.exports = {
 		'vendor',
 		'db-backup',
 		'www'
-	]
+	],
+	wp: ['www']
 };

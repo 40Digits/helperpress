@@ -21,7 +21,7 @@ module.exports = function (grunt) {
 
 
 	grunt.registerTask( 'setup', [
-		'composer:update',
+		'composer:install',
 		'gitsubtrees',
 		'bower:install',
 		'wp_install',
@@ -81,7 +81,12 @@ module.exports = function (grunt) {
 	var configPath = './grunt/configs/';
 	glob.sync('**/*.js', {cwd: configPath}).forEach(function(option) {
 
+		// remove .js extension
 		var key = option.replace(/\.js$/,'');
+
+		// remove any directories
+		key = key.substr( key.lastIndexOf('/') + 1 );
+		
 		gruntConfig[key] = require(configPath + option);
 
 	});
@@ -115,9 +120,5 @@ module.exports = function (grunt) {
 	// initialize config
 	grunt.initConfig(gruntConfig);
 
-
-
-	// REALLY HACKY TO PUT THIS HERE, but it has to be after external config is loaded:
-	grunt.config( 'gitsubtrees', grunt.config.get('gitsubtrees') );
 
 };
