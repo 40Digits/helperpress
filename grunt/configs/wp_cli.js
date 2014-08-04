@@ -18,9 +18,9 @@ module.exports = {
 	db_create: true,
 
 	install_core: {
-		url: '<%= pkg.config.environments.local.url %>',
-		title: '<%= pkg.config.environments.wp.theme.name %>',
-		admin_user: '40digits',
+		url: '<%= pkg.config.environments.local.home_url %>',
+		title: '<%= pkg.config.wp.theme.name %>',
+		admin_user: 'j3k',
 		admin_password: wpRndPass,
 		admin_email: 'j3k.porkins@gmail.com'
 	},

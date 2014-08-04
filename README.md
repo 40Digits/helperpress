@@ -59,8 +59,8 @@ General rules:
 			// path to WP install directory
 			"wp_path": "/var/www/vhosts/my-wp",
 
-			// base URL of site
-			"home_url": "//my-wp.dev01.40digits.net"
+			// base URL of site without protocol
+			"home_url": "my-wp.dev01.40digits.net"
 		}
 
 	},

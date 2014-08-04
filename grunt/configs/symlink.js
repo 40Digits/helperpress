@@ -4,10 +4,10 @@ module.exports = {
 	},
 	theme: {
 		src: 'wp-theme',
-		dest: 'www/wp-content/themes/<%= pkg.config.wp.theme_slug %>'
+		dest: 'www/wp-content/themes/<%= pkg.config.wp.theme.slug %>'
 	},
 	sites: {
 		src: 'www',
-		dest: '<%= pkg.config.environments.local.wp.wp_path %>'
+		dest: '<%= pkg.config.apache.sites_dir %>/<%= pkg.config.wp.theme.slug %>'
 	}
 };
