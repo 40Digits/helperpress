@@ -5,6 +5,8 @@ WPEngine Site Template
 Run `npm install` in the repo directory. ![(boom)](https://dujrsrsgsd3nh.cloudfront.net/img/emoticons/boom.gif "(boom)")
 
 ## Requirements
+*This has only been tested on OS X. It will not work as-is on Windows.*
+
 1. Node.js & npm (via [Homebrew](http://brew.sh/#install): `brew install node`)
 2. [Composer](https://getcomposer.org/doc/00-intro.md#globally-on-osx-via-homebrew-)
 
@@ -29,6 +31,7 @@ General rules:
 - If the information is unique to this repository, it'll go in site_config.json or site_config.local.json
 - Never commit usernames and passwords (i.e. keep them out of package.json and site_config.json)
 - If a setting gets reused across multiple sites, such as your local environment setup or development environment creds, it'll go in ~/.wpe-defaults
+
 ```js
 {
 	"environments": {
@@ -106,15 +109,18 @@ General rules:
 
 #### Apache Config
 Everyone's Apache setup is unique, so you can describe the local environment's setup here.
+
+This onel  definitely go in the ***~/.wpe_defaults** file.
 ```js
 {
 	"apache": {
-		"scheme": "vhost",				// vhost or subdir.
-		"sites_dir": "/User/me/Sites"	// your localhost folder. subdir only.
-		"logs_dir": "/my-sites/logs",	// vhost only
-		"a2ensite": false,				// do we need to a2ensite? vhost only
-		"as_service": false,			// is Apache running as a service? vhost only
-		"url_scheme": "*.local"			// how you do local URLs. use "*" for slug placement.
+		"scheme": "vhost",							// vhost or subdir.
+		"sites_dir": "/User/me/Sites"				// your localhost folder. subdir only.
+		"vhost_dir": "/etc/apache2/extra/vhosts",	// where your vhost confs go. MUST BE WRITEABLE
+		"logs_dir": "/my-sites/logs",				// vhost only
+		"a2ensite": false,							// do we need to a2ensite? vhost only
+		"as_service": false,						// is Apache running as a service? vhost only
+		"url_scheme": "*.local"						// how you do local URLs. use "*" for slug placement.
 	}
 }
 ```

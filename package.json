@@ -34,7 +34,6 @@
     "underscore-deep-extend": "0.0.5",
     "load-grunt-tasks": "~0.6.0",
     "glob": "~4.0.5",
-    "grunt-localhosts": "0.0.7",
     "ejs": "~1.0.0"
   },
   "devDependencies": {

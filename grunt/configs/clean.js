@@ -5,5 +5,9 @@ module.exports = {
 		'db-backup',
 		'www'
 	],
-	wp: ['www']
+	wp: ['www'],
+	reset: [
+		'site_config.json',
+		'site_config.local.json'
+	]
 };

@@ -1,5 +1,7 @@
 var repoName = process.cwd().substr(process.cwd().lastIndexOf('/') + 1),
-	validationFuncs = {};
+	validationFuncs = {},
+
+	sudo = require(__dirname + '/../node_modules/apply-sudo');
 
 
 validationFuncs.notBlank = function(val){
@@ -86,11 +88,6 @@ var repo_config = {
 				message: 'Select WordPress plugins:',
 				choices: [
 					{
-						name: 'Akismet',
-						value: 'akismet',
-						checked: true
-					},
-					{
 						name: 'WordPress SEO',
 						value: 'wordpress-seo',
 						checked: true
@@ -106,7 +103,23 @@ var repo_config = {
 	}
 };
 
+var sudo_pass = {
+	options: {
+		questions: [
+			{
+				config: 'sudo_pass', 
+				type: 'password', 
+				message: 'Some tasks we\'re running need root access. Enter your sudo password:'
+			}
+		],
+		then: function(answers){
+			sudo.setPass( answers.sudo_pass );
+		}
+	}
+};
+
 module.exports = {
-	repo_config: repo_config
+	repo_config: repo_config,
+	sudo_pass: sudo_pass
 };
 

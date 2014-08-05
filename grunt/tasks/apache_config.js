@@ -2,7 +2,9 @@
 'use strict';
 
 var execSync = require('execSync'),
-	ejs = require('ejs');
+	ejs = require('ejs'),
+
+	sudo = require(__dirname + '/../node_modules/apply-sudo');
 
 module.exports = function(grunt) {
 
@@ -11,10 +13,12 @@ module.exports = function(grunt) {
 		var options = this.options(),
 			hostName = options.url_scheme.replace('*', options.site_slug);
 
+		this.requires(['prompt:sudo_pass']);
+
 		if(options.apache_scheme === 'vhost'){
 
 			// vhost setting
-			var vhostTemplate = grunt.file.read('templates/vhost.ejs'),
+			var vhostTemplate = grunt.file.read(__dirname + '/../templates/vhost.ejs'),
 				newVhostFile = options.vhost_dir + '/' + options.site_slug + '.conf',
 				vhostData = {
 					slug: options.site_slug,
@@ -25,33 +29,24 @@ module.exports = function(grunt) {
 				vhostContents = ejs.render(vhostTemplate, vhostData);
 
 			// create the vhost file
-			grunt.file.write(newFile, vhostContents);
+			grunt.file.write(newVhostFile, vhostContents);
 
 
 			// Setup local hosts file
-			var lhConfig = {
-				setSiteLh: {
-					options: {
-						rules: [{
-							ip: '127.0.0.1',
-							hostname: hostName,
-							type: 'set'
-						}]
-					}
-				}
-			}
-			grunt.task.run('localhosts:setSiteLh');
+			var lhLine = '127.0.0.1	' + hostName;
+			execSync.run( sudo.apply('echo "' + lhLine + '" >> /etc/hosts') );
+
 
 			// a2ensite if necessary
 			if(options.a2ensite){
-				execSync.run('a2ensite ' + options.site_slug);
+				execSync.run( sudo.apply('a2ensite ' + options.site_slug) );
 			}
 
 			// restart apache
 			if(options.as_service){
-				execSync.run('service apache2 reload');
+				execSync.run( sudo.apply('service apache2 reload') );
 			} else {
-				execSync.run('apachectl -e debug -k restart');
+				execSync.run( sudo.apply('apachectl -k restart') );
 			}
 
 		} else if(options.apache_scheme === 'subdir') {

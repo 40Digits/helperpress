@@ -28,6 +28,7 @@ module.exports = function(grunt) {
 		///////////////
 
 		grunt.task.run([
+			'prompt:sudo_pass',
 			'setup_site_config:local',
 			'wp_cli:download_core',
 			'wp_cli:core_config',
@@ -35,6 +36,7 @@ module.exports = function(grunt) {
 			'wp_cli:install_core',
 			'wp_cli:install_plugins',
 			'wp_cli:remove_plugins',
+			'symlink:theme',
 			'apache_config'
 		]);
 

@@ -24,8 +24,7 @@ module.exports = function (grunt) {
 		'composer:install',
 		'gitsubtrees',
 		'bower:install',
-		'wp_install',
-		'symlink'
+		'wp_install'
 	]);
 
 	grunt.registerTask('update', 'Update all the things.', function(){
@@ -42,7 +41,7 @@ module.exports = function (grunt) {
 
 	});
 
-	grunt.registerTask('default', ['watch']); // TODO: this should be a main menu prompt
+	grunt.registerTask('default', ['watch']);
 
 
 
@@ -58,7 +57,7 @@ module.exports = function (grunt) {
 	var packageJSON = grunt.file.readJSON('package.json'),
 		userDefaultsJSON = grunt.file.exists( userhome('.wpe_defaults') ) ? grunt.file.readJSON( userhome('.wpe_defaults') ) : {},
 		siteConfigJSON = grunt.file.exists('site_config.json') ? grunt.file.readJSON('site_config.json') : {},
-		siteConfigLocalJSON = grunt.file.exists('site_config.json.local') ? grunt.file.readJSON('site_config.json.local') : {};
+		siteConfigLocalJSON = grunt.file.exists('site_config.local.json') ? grunt.file.readJSON('site_config.local.json') : {};
 	
 	// wrap config objects for extending
 	var wrappedUserDefaultsJSON = { config: userDefaultsJSON },
@@ -93,6 +92,14 @@ module.exports = function (grunt) {
 
 
 
+
+
+
+	// TODO: check confs and permissions
+	//	- not running as root
+	//	- write perms on all conf dirs
+	//	- ~/.wpe_defaults created
+	//	- required configs set: apache, local db
 
 
 

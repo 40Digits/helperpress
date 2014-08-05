@@ -74,7 +74,7 @@ function local(options){
 	} else {
 
 		// let's infer it... probably CWD
-		localEnv.wp_path = process.cwd();
+		localEnv.wp_path = process.cwd() + '/www';
 
 	}
 		
