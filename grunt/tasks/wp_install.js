@@ -3,10 +3,8 @@ var fs = require('fs');
 module.exports = function(grunt) {
 	grunt.registerTask('wp_install', 'Installs WP & DB tables from scratch.', function(){
 
-		var dbEnvironment = grunt.config.process( '<%= pkg.config.db_master %>' ),
-
-			// determine if this is a new site by checking if site_config.json exists
-			isBrandNew = !fs.existsSync('./site_config.json');
+		// determine if this is a new site by checking if site_config.json exists
+		var isBrandNew = !fs.existsSync('./site_config.json');
 
 
 		// BEFORE INSTALLING
@@ -14,10 +12,12 @@ module.exports = function(grunt) {
 
 		if(isBrandNew){
 
+			// Initialize the repo
+
 			// prompt for WP project info & setup repo site_config.json file
 			grunt.task.run([
 				'prompt:repo_config',
-				'setup_site_config:repo'
+				'write_site_config:repo'
 			]);
 
 		}
@@ -29,7 +29,7 @@ module.exports = function(grunt) {
 
 		grunt.task.run([
 			'prompt:sudo_pass',
-			'setup_site_config:local',
+			'write_site_config:local',
 			'wp_cli:download_core',
 			'wp_cli:core_config',
 			'wp_cli:db_create',
@@ -54,7 +54,6 @@ module.exports = function(grunt) {
 			
 			if(dbEnvironment.length > 0 && dbEnvironment != "local"){
 
-				console.log(dbEnvironment);
 				// pull db
 				grunt.task.run('pull_db:' + dbEnvironment);
 			}

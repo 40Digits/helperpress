@@ -38,7 +38,7 @@ function updatedLoadedConfig(newConfig){
 
 function repo(options){
 
-	var newContents = grunt.config('setup_site_config.repo');
+	var newContents = grunt.config('write_site_config.repo');
 
 	// use theme slug as database name, too
 	grunt.config('pkg.config.environments.local.db.database', newContents.wp.theme.slug);
@@ -115,10 +115,10 @@ module.exports = function(gruntObj) {
 		local: local
 	};
 
-	grunt.registerMultiTask('setup_site_config', 'Generates config files', function(){
+	grunt.registerMultiTask('write_site_config', 'Generates config files', function(){
 
 		if(typeof configs[this.target] !== 'function')
-			return grunt.warn('"setup_site_config" only handles specific targets ("repo" and "local")');
+			return grunt.warn('"write_site_config" only handles specific targets ("repo" and "local")');
 
 		options[this.target] = this.data;
 

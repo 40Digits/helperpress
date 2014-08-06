@@ -22,7 +22,6 @@ module.exports = function (grunt) {
 
 	grunt.registerTask( 'setup', [
 		'composer:install',
-		'gitsubtrees',
 		'bower:install',
 		'wp_install'
 	]);

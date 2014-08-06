@@ -14,34 +14,34 @@ validationFuncs.noSpecialChars = function(val){
 }
 
 function setExtendedThemeSettings(answers){
-	return answers['_setup_site_config.deep_theme_settings'];
+	return answers['_write_site_config.deep_theme_settings'];
 }
 
 var repo_config = {
 	options: {
 		questions: [
 			{
-				config: 'setup_site_config.repo.wp.theme.slug', 
+				config: 'write_site_config.repo.wp.theme.slug', 
 				type: 'input', 
 				message: 'Enter site slug:', 
 				default: repoName,
 				validate: validationFuncs.noSpecialChars
 			},
 			{
-				config: 'setup_site_config.repo.wp.theme.name', 
+				config: 'write_site_config.repo.wp.theme.name', 
 				type: 'input', 
 				message: 'Enter site\'s nice name:',
 				validate: validationFuncs.notBlank
 			},
 			{
-				config: 'setup_site_config.repo.wp.theme.desc', 
+				config: 'write_site_config.repo.wp.theme.desc', 
 				type: 'input', 
 				message: 'Enter site\'s description:',
 				// TODO: it would be nice to generate a default based on the site's nice name
 				validate: validationFuncs.notBlank
 			},
 			{
-				config: '_setup_site_config.deep_theme_settings', 
+				config: '_write_site_config.deep_theme_settings', 
 				type: 'confirm', 
 				message: 'Would you like to setup optional theme settings?',
 				default: false
@@ -49,31 +49,31 @@ var repo_config = {
 
 			// Optional Extended Theme settings
 			{
-				config: 'setup_site_config.repo.wp.theme.author',
+				config: 'write_site_config.repo.wp.theme.author',
 				type: 'input',
 				message: 'Enter Author:',
 				when: setExtendedThemeSettings
 			},
 			{
-				config: 'setup_site_config.repo.wp.theme.author_uri',
+				config: 'write_site_config.repo.wp.theme.author_uri',
 				type: 'input',
 				message: 'Enter Author URI:',
 				when: setExtendedThemeSettings
 			},
 			{
-				config: 'setup_site_config.repo.wp.theme.version',
+				config: 'write_site_config.repo.wp.theme.version',
 				type: 'input',
 				message: 'Enter Version:',
 				when: setExtendedThemeSettings
 			},
 			{
-				config: 'setup_site_config.repo.wp.theme.uri',
+				config: 'write_site_config.repo.wp.theme.uri',
 				type: 'input',
 				message: 'Enter Theme URI:',
 				when: setExtendedThemeSettings
 			},
 			{
-				config: 'setup_site_config.repo.wp.theme.tags',
+				config: 'write_site_config.repo.wp.theme.tags',
 				type: 'input',
 				message: 'Enter Tags:',
 				when: setExtendedThemeSettings
@@ -83,7 +83,7 @@ var repo_config = {
 			// plugins
 			// value can be slug (from WP Plugins repo), path to local .zip file, or URL
 			{
-				config: 'setup_site_config.repo.wp.plugins', 
+				config: 'write_site_config.repo.wp.plugins', 
 				type: 'checkbox', 
 				message: 'Select WordPress plugins:',
 				choices: [
