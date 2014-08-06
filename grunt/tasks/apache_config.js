@@ -33,7 +33,7 @@ module.exports = function(grunt) {
 
 
 			// Setup local hosts file
-			var lhLine = '127.0.0.1	' + hostName;
+			var lhLine = '\n127.0.0.1	' + hostName;
 			execSync.run( sudo.apply('echo "' + lhLine + '" >> /etc/hosts') );
 
 

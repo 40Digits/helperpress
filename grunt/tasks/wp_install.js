@@ -51,6 +51,8 @@ module.exports = function(grunt) {
 
 
 		} else {
+
+			var dbEnvironment = grunt.config.process( '<%= pkg.config.db_master %>' );
 			
 			if(dbEnvironment.length > 0 && dbEnvironment != "local"){
 
