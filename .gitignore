@@ -43,7 +43,7 @@ www
 *.sublime-*
 
 # npm
-node_modules
+/node_modules
 
 # Composer
 vendor
