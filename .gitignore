@@ -37,7 +37,7 @@ Thumbs.db
 .sass-cache
 
 # WordPress Core, Uploads & Plugins
-www
+/www
 
 # Sublime, because people forget this in their global .gitignore
 *.sublime-*
@@ -46,19 +46,19 @@ www
 /node_modules
 
 # Composer
-vendor
-
-# DB Dumps
-db-backup
-
-# Compiled Assets & such
-wp-theme/assets/_src/compiled
-wp-theme/assets/css
-wp-theme/assets/js
-wp-theme/assets/scripts
-
-# Local site config
-site_config.local.json
+/vendor
 
 # Bower
-bower_components
+/bower_components
+
+# DB Dumps
+/db
+
+# Compiled Assets & such
+/wp-theme/assets/_src/compiled
+/wp-theme/assets/css
+/wp-theme/assets/js
+/wp-theme/assets/scripts
+
+# Local site config
+/site_config.local.json

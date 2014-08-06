@@ -24,7 +24,7 @@
     "grunt-composer": "~0.4.0",
     "lodash": "~2.4.1",
     "userhome": "~0.1.0",
-    "grunt-mysql-dump-import": "~1.0.*",
+    "grunt-mysql-dump-import": "git+https://github.com/40Digits/grunt-mysql-dump-import.git",
     "grunt-contrib-symlink": "~0.3.0",
     "bower": "~1.3.8",
     "grunt-bower-task": "~0.4.0",

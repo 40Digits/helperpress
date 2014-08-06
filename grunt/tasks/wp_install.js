@@ -58,6 +58,7 @@ module.exports = function(grunt) {
 
 				// pull db
 				grunt.task.run('pull_db:' + dbEnvironment);
+
 			}
 
 		}

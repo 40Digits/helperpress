@@ -2,7 +2,7 @@ module.exports = {
 	built: [
 		'bower_components',
 		'vendor',
-		'db-backup',
+		'db',
 		'www'
 	],
 	wp: ['www'],

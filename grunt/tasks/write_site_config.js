@@ -63,7 +63,9 @@ function local(options){
 	} else if( wpSlug.length > 0 && typeof objHasKeys(curContents, [ 'environments', 'local', 'database' ]) === 'undefined' ) {
 
 		// if we have a wp slug and there is no currently configured db, use that.
-		localEnv.database = wpSlug;
+		localEnv.db = {
+			database: wpSlug
+		};
 
 	}
 	

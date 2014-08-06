@@ -41,7 +41,8 @@ module.exports = function(grunt) {
           type: 'eq'
         },
         'pass': {
-          type: 'eq'
+          type: 'eq-blank',
+          blank: '-p ""'
         },
         'search': {
           type: 'eq'
@@ -85,11 +86,19 @@ module.exports = function(grunt) {
         continue;
       }
 
-      cmd += ' --' + i;
+      if( validFlags[flag].type === 'eq-blank' ){
 
-      if( validFlags[flag].type === 'eq' ){
-          cmd += '=' + grunt.config.process( extendedFlags[flag] );
-      };
+        cmd += ' ' + validFlags[flag].blank;
+
+      } else {
+
+        cmd += ' --' + flag;
+
+        if( validFlags[flag].type === 'eq' ){
+            cmd += '=' + grunt.config.process( extendedFlags[flag] );
+        };
+
+      }
 
     }
 

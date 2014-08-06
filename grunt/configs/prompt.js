@@ -38,7 +38,7 @@ var repo_config = {
 				type: 'input', 
 				message: 'Enter site\'s description:',
 				// TODO: it would be nice to generate a default based on the site's nice name
-				validate: validationFuncs.notBlank
+				default: 'A custom-built WordPress theme.'
 			},
 			{
 				config: '_write_site_config.deep_theme_settings', 

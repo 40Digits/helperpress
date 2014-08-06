@@ -1,38 +1,33 @@
+var _ = require('lodash');
+
 module.exports = function(grunt) {
 	grunt.registerTask('pull_db', 'Pull DB from specified environment into local DB.', function(environment){
 
 		// dump & import
 		var targetOpts = {
+				title: '<%= pkg.config.environments.' + environment + '.title %>',
+
 				database: '<%= pkg.config.environments.' + environment + '.db.database %>',
 				user: '<%= pkg.config.environments.' + environment + '.db.user %>',
 				pass: '<%= pkg.config.environments.' + environment + '.db.pass %>',
 				host: '<%= pkg.config.environments.' + environment + '.db.host %>',
-				ssh_host: '<%= pkg.config.environments.' + environment + '.ssh_host %>',
 
-				backup_to: 'db-backups/' + environment + '.sql'
-			},
-			dumpOpts = {};
-
-		dumpOpts[environment] = targetOpts;
+				ssh_host: '<%= pkg.config.environments.' + environment + '.ssh_host %>'
+			};
 
 		// dump it
-		grunt.config('db_dump', dumpOpts);
+		grunt.config('db_dump.' + environment + '.options', targetOpts);
 		grunt.task.run('db_dump:' + environment);
 
 		// import it
-		grunt.task.run('db_import:' + environment);
+
+		grunt.config('db_import.local.options.import_from', 'db/backups/<%= grunt.template.today(\'yyyy-mm-dd\') %>_' + environment + '.sql');
+		grunt.config('db_import.local.options.title', '<%= pkg.config.environments.' + environment + '.title %>');
+		grunt.task.run('db_import:local');
 
 		// search and replace it
 		var searchReplaceOpts = 
 			{
-				options: {
-					globalFlags: {
-						host: '<%= pkg.config.environments.local.db.host %>',
-						name: '<%= pkg.config.environments.local.db.database %>',
-						user: '<%= pkg.config.environments.local.db.user %>',
-						pass: '<%= pkg.config.environments.local.db.pass %>'
-					},
-				},
 				home_url: {
 					search: '<%= pkg.config.environments.' + environment + '.home_url %>',
 					replace: '<%= pkg.config.environments.local.home_url %>'
@@ -43,8 +38,11 @@ module.exports = function(grunt) {
 				}
 			}; 
 
-		grunt.config('db_dump', searchReplaceOpts);
-		grunt.task.run('db_dump');
+
+
+		var curConf = grunt.config('search_replace_db');
+		grunt.config( 'search_replace_db', _.extend(curConf, searchReplaceOpts) );
+		grunt.task.run('search_replace_db');
 
 	});
 }
