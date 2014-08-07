@@ -2,9 +2,15 @@
 
 HelperPress
 ======================
+A tool for automating much of the WordPress development workflow.
+
+- Manages syncing data between environments
+- Comes loaded with optimization Grunt tasks
+- Automates working with WP-CLI, Bower, and Composer to minimize extraneous committed code
+- Automagically configures local virtual hosts for local development
 
 ## Installation
-Run `npm install` in the repo directory. ![(boom)](https://dujrsrsgsd3nh.cloudfront.net/img/emoticons/boom.gif "(boom)")
+Run `npm install` in the repo directory. ![(boom)](https://dujrsrsgsd3nh.cloudfront.net/img/emoticons/boom.gif)
 
 ## Requirements
 *This has only been tested on OS X. It will not work as-is on Windows.*
@@ -12,6 +18,23 @@ Run `npm install` in the repo directory. ![(boom)](https://dujrsrsgsd3nh.cloudfr
 1. Node.js & npm (via [Homebrew](http://brew.sh/#install): `brew install node`)
 2. [Composer](https://getcomposer.org/doc/00-intro.md#globally-on-osx-via-homebrew-)
 
+## Grunt Tasks
+### `grunt setup`
+Called automatically after `npm install`, this is the first task that should be run to initalize every repository.
+
+- Installs Composer components
+- Installs Bower components
+- Installs and configures WordPress 
+- Migrates site data down if site_config.json already exists in the repo
+- Creates site_config.local.json
+
+### `grunt watch`
+
+- Compiles SASS
+- [more to come...]
+
+### `grunt pull_db:environment`
+Pulls down the database and runs a search and replace on it, overwriting the local database. Change `environment` to the ID of the environment from which you'd like to pull.
 
 ## Configuration
 Before Grunt is initialized, four configuration files are loaded and combined into one giant config JSON object. The files in order of precedence (i.e. early files' settings will override latter ones):
@@ -20,6 +43,15 @@ Before Grunt is initialized, four configuration files are loaded and combined in
 2. site_config.json
 3. ~/.helperpress
 4. package.json
+
+### Guide for Settings Definition Placement
+
+*To which environment(s) and repo(s) does the setting apply?*
+
+------------------------| This Repo              | All Repos
+------------------------|------------------------|------------
+**My Environment**      | site_config.local.json | ~/.helperpress
+**All Environments**    | site_config.json       | package.json
 
 ### Site Configuration Properties
 See the example commented JSON object below for information about each property. These are set in the "config" object in package.json and as root properties in all other config files. *Note that actual JSON files may not have comments in them.*
@@ -32,7 +64,7 @@ General rules:
 
 - If the information is unique to this repository, it'll go in site_config.json or site_config.local.json
 - Never commit usernames and passwords (i.e. keep them out of package.json and site_config.json)
-- If a setting gets reused across multiple sites, such as your local environment setup or development environment creds, it'll go in ~/.wpe-defaults
+- If a setting gets reused across multiple sites, such as your local environment setup or development environment creds, it'll go in ~/.helperpress
 
 ```js
 {
@@ -51,7 +83,7 @@ General rules:
 			"ssh_host": "dev01.40digits.net",
 
 			// Database settings (using SSH)
-			// DO NOT COMMIT CREDENTIALS - use ~/.wpe_default or site_config.local.json
+			// DO NOT COMMIT CREDENTIALS - use ~/.helperpress or site_config.local.json
 			"db": {
 
 				"host": "127.0.0.1",
