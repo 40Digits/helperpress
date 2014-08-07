@@ -6,6 +6,7 @@ module.exports = function(grunt) {
 		// determine if this is a new site by checking if site_config.json exists
 		var isBrandNew = !fs.existsSync('./site_config.json');
 
+		grunt.task.run('notify:prompt');
 
 		// BEFORE INSTALLING
 		//////////////////////
@@ -57,7 +58,10 @@ module.exports = function(grunt) {
 			if(dbEnvironment.length > 0 && dbEnvironment != "local"){
 
 				// pull db
-				grunt.task.run('pull_db:' + dbEnvironment);
+				grunt.task.run([
+					'pull_db:' + dbEnvironment,
+					'notify:db_migrate'
+				]);
 
 			}
 
