@@ -54,7 +54,7 @@ module.exports = function (grunt) {
 	/////////////////////////////
 
 	var packageJSON = grunt.file.readJSON('package.json'),
-		userDefaultsJSON = grunt.file.exists( userhome('.wpe_defaults') ) ? grunt.file.readJSON( userhome('.wpe_defaults') ) : {},
+		userDefaultsJSON = grunt.file.exists( userhome('.helperpress') ) ? grunt.file.readJSON( userhome('.helperpress') ) : {},
 		siteConfigJSON = grunt.file.exists('site_config.json') ? grunt.file.readJSON('site_config.json') : {},
 		siteConfigLocalJSON = grunt.file.exists('site_config.local.json') ? grunt.file.readJSON('site_config.local.json') : {};
 	
@@ -96,8 +96,8 @@ module.exports = function (grunt) {
 
 	// TODO: check confs and permissions
 	//	- not running as root
-	//	- write perms on all conf dirs
-	//	- ~/.wpe_defaults created
+	//	- write perms on all conf dirs 
+	//	- ~/.helperpress created
 	//	- required configs set: apache, local db
 
 

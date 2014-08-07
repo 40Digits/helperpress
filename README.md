@@ -1,4 +1,6 @@
-WPEngine Site Template
+![HELPeR](http://www.40digits.com/wp-content/uploads/2014/08/helperpress.png)
+
+HelperPress
 ======================
 
 ## Installation
@@ -16,7 +18,7 @@ Before Grunt is initialized, four configuration files are loaded and combined in
 
 1. site_config.local.json
 2. site_config.json
-3. ~/.wpe_defaults
+3. ~/.helperpress
 4. package.json
 
 ### Site Configuration Properties
@@ -110,7 +112,7 @@ General rules:
 #### Apache Config
 Everyone's Apache setup is unique, so you can describe the local environment's setup here.
 
-This onel  definitely go in the ***~/.wpe_defaults** file.
+This onel  definitely go in the ***~/.helperpress** file.
 ```js
 {
 	"apache": {
