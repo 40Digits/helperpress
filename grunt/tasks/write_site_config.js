@@ -59,7 +59,9 @@ function local(options){
 	var wpSlug = grunt.config('pkg.config.wp.theme.slug');
 
 	if( typeof objHasKeys(options, [ 'db', 'database' ]) !== 'undefined' ) {
+
 		localEnv.database = options.db.database;
+
 	} else if( wpSlug.length > 0 && typeof objHasKeys(curContents, [ 'environments', 'local', 'database' ]) === 'undefined' ) {
 
 		// if we have a wp slug and there is no currently configured db, use that.
@@ -72,7 +74,9 @@ function local(options){
 
 	// Local wp_path
 	if( typeof options.wp_path !== 'undefined' ){
+
 		localEnv.wp_path = options.wp_path;
+
 	} else {
 
 		// let's infer it... probably CWD
@@ -83,11 +87,31 @@ function local(options){
 
 	// Local home_url
 	if( typeof options.home_url !== 'undefined' ){
+
 		localEnv.home_url = options.home_url;
+
 	} else {
 
 		// let's infer it
 		localEnv.home_url = grunt.config('pkg.config.apache.url_scheme').replace('*', wpSlug);
+
+	}
+
+	// uploads_sync
+	var curUploadsConf = grunt.config('pkg.config.environments.local.uploads_sync');
+	if( typeof options.uploads_sync !== 'undefined' ){
+
+		localEnv.uploads_sync = options.uploads_sync;
+
+	} else if(typeof curUploadsConf === 'string' && curUploadsConf.length > 0){
+		
+		// if it's set elsewhere (likely ~/.helperpress) then save that within repo
+		localEnv.uploads_sync = curUploadsConf;
+
+	} else {
+
+		// default to rsync
+		localEnv.uploads_sync = 'rsync';
 
 	}
 

@@ -97,6 +97,15 @@ function dbCreate(){
   
 }
 
+// Rewrites
+
+function rewriteFlush(){
+  var cmd = options.cmdPath + ' rewrite flush --hard --path=' + options.wpPath;
+
+  execSync.run(cmd);
+  
+}
+
 // Plugins
 
 function pluginInstall(plugin, activate){
@@ -159,6 +168,7 @@ module.exports = function(gruntObj) {
     install_core: coreInstall,
     core_config: coreConfig,
     db_create: dbCreate,
+    rewrite_flush: rewriteFlush,
     install_plugins: pluginBatchInstall,
     remove_plugins: pluginBatchUninstall
   };

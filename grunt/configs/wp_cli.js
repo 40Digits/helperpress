@@ -25,6 +25,8 @@ module.exports = {
 		admin_email: 'j3k.porkins@gmail.com'
 	},
 
+	rewrite_flush: true,
+
 	install_plugins: '<%= pkg.config.wp.plugins %>',
 
 	remove_plugins: ['hello']

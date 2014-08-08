@@ -78,9 +78,6 @@ General rules:
 		// environment ID
 		"development": {
 
-			// Server type (currently just LAMP and WPE)
-			"type": "lamp",
-
 			// human-readable title
 			"title": "Development (Dev01)",
 
@@ -102,7 +99,15 @@ General rules:
 			"wp_path": "/var/www/vhosts/my-wp",
 
 			// base URL of site without protocol
-			"home_url": "my-wp.dev01.40digits.net"
+			"home_url": "my-wp.dev01.40digits.net",
+
+			/*
+			how HP should deploy source (uploads and databases are handled elsewhere)
+			"rsync": rsync over SSH
+			"git_push": builds, grabs remote's .git folder, rsyncs files, commits, and pushes
+			"none": don't allow deploy to run on this environment (e.g. it's handled elsewhere)
+			*/
+			"deploy_method": "rsync"
 		}
 
 	},

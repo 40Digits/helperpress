@@ -3,10 +3,25 @@ module.exports = {
 		options: {
 			message: "Your input is required to continue."
 		}
-	}
-	prompt: {
+	},
+	db_migrate_start: {
 		options: {
-			message: "DB Migration Complete"
+			message: "DB migration starting..."
+		}
+	},
+	db_migrate_complete: {
+		options: {
+			message: "DB migration complete"
+		}
+	},
+	pull_uploads_start: {
+		options: {
+			message: "Syncing down uploads..."
+		}
+	},
+	pull_uploads_complete: {
+		options: {
+			message: "Syncing uploads complete"
 		}
 	}
 };

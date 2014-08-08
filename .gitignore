@@ -54,6 +54,9 @@ Thumbs.db
 # DB Dumps
 /db
 
+# wp-content/uploads
+/uploads
+
 # Compiled Assets & such
 /wp-theme/assets/_src/compiled
 /wp-theme/assets/css

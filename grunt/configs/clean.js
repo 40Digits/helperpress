@@ -2,12 +2,16 @@ module.exports = {
 	built: [
 		'bower_components',
 		'vendor',
-		'db',
 		'www'
 	],
-	wp: ['www'],
+	wp: [
+		'www',
+		'db',
+		'uploads'
+	],
 	reset: [
 		'site_config.json',
-		'site_config.local.json'
+		'site_config.local.json',
+		'uploads'
 	]
 };

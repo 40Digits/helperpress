@@ -37,6 +37,7 @@ module.exports = function(grunt) {
 			'wp_cli:install_core',
 			'wp_cli:install_plugins',
 			'wp_cli:remove_plugins',
+			'wp_cli:rewrite_flush',
 			'symlink:theme',
 			'apache_config'
 		]);
@@ -57,10 +58,12 @@ module.exports = function(grunt) {
 			
 			if(dbEnvironment.length > 0 && dbEnvironment != "local"){
 
-				// pull db
+				// migrate data
 				grunt.task.run([
+					'notify:db_migrate_start',
 					'pull_db:' + dbEnvironment,
-					'notify:db_migrate'
+					'notify:db_migrate_complete',
+					'pull_uploads:' + dbEnvironment
 				]);
 
 			}

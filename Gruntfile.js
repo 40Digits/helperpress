@@ -80,12 +80,19 @@ module.exports = function (grunt) {
 	glob.sync('**/*.js', {cwd: configPath}).forEach(function(option) {
 
 		// remove .js extension
-		var key = option.replace(/\.js$/,'');
+		var key = option.replace(/\.js$/,''),
+			configExports;
 
 		// remove any directories
 		key = key.substr( key.lastIndexOf('/') + 1 );
 		
-		gruntConfig[key] = require(configPath + option);
+		configExports = require(configPath + option);
+
+		if(typeof configExports === 'function'){
+			gruntConfig[key] = configExports(gruntConfig);
+		}else{
+			gruntConfig[key] = configExports;
+		}
 
 	});
 
