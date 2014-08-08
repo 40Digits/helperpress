@@ -4,10 +4,12 @@ HelperPress
 ======================
 A tool for automating much of the WordPress development workflow.
 
-- Manages syncing data between environments
-- Comes loaded with optimization Grunt tasks
-- Automates working with WP-CLI, Bower, and Composer to minimize extraneous committed code
-- Automagically configures local virtual hosts for local development
+- **Environment Management** - Manages syncing data & wp-content between environments
+- **Asset Optimization** - Comes loaded with Grunt tasks that optimize CSS, Javascript, and Images.
+- **Dependency Management** - Automates working with WP-CLI, Bower, and Composer to minimize extraneous committed code and simplify update process
+- **Automatically Configure Apache & Hosts*** Automagically configures Apache virtualhosts and hosts for local development
+- **Deployment** - Build & Deploy via rsync or WPE Git Push
+- **Automatic Versioning** - pushes and merges become versioned automatically.
 
 ## Installation
 Run `npm install` in the repo directory. ![(boom)](https://dujrsrsgsd3nh.cloudfront.net/img/emoticons/boom.gif)
@@ -31,10 +33,13 @@ Called automatically after `npm install`, this is the first task that should be 
 ### `grunt watch`
 
 - Compiles SASS
-- [more to come...]
+- Starts LiveReload
 
 ### `grunt pull_db:environment`
 Pulls down the database and runs a search and replace on it, overwriting the local database. Change `environment` to the ID of the environment from which you'd like to pull.
+
+### `grunt pull_uploads:environment`
+Pulls down the wp-content/uploads directory. This will also change the `uploads_sync` setting to "rsync" in your site_config.local.json file. Change `environment` to the ID of the environment from which you'd like to pull.
 
 ## Configuration
 Before Grunt is initialized, four configuration files are loaded and combined into one giant config JSON object. The files in order of precedence (i.e. early files' settings will override latter ones):
@@ -46,12 +51,12 @@ Before Grunt is initialized, four configuration files are loaded and combined in
 
 ### Guide for Settings Definition Placement
 
-*To which environment(s) and repo(s) does the setting apply?*
+*Where should the setting apply?*          | This Repo              | All Repos
+-------------------------------------------|------------------------|-------------------
+  **This Environment**                     | site_config.local.json | ~/.helperpress
+  **All Environments**                     | site_config.json       | package.json*
 
-------------------------| This Repo              | All Repos
-------------------------|------------------------|------------
-**My Environment**      | site_config.local.json | ~/.helperpress
-**All Environments**    | site_config.json       | package.json
+######* *package.json "config" object should only be edited in the boilerplate.*
 
 ### Site Configuration Properties
 See the example commented JSON object below for information about each property. These are set in the "config" object in package.json and as root properties in all other config files. *Note that actual JSON files may not have comments in them.*
@@ -102,8 +107,15 @@ General rules:
 
 	},
 
-	// ID of environment w/ master database. This will change as we approach launch
-    "db_master": "development"
+	// ID of environment w/ master database. Used for syncing database and uploads
+    "db_master": "development",
+
+    /*
+    approach for syncing uploads.
+    "rewrite" uses Apache rewrites via .htaccess
+    "rsync" uses rsync to sync folder down
+    */
+    "uploads_sync": "rsync"
 }
 ```
 

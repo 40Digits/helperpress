@@ -42,7 +42,8 @@
     "grunt-phplint": "0.0.5",
     "randomstring": "~1.0.3",
     "grunt-prompt": "~1.1.0",
-    "grunt-notify": "~0.3.0"
+    "grunt-notify": "~0.3.0",
+    "grunt-rsync": "~0.6.2"
   },
   "config": {
     "assets_dir": "wp-theme/assets/",

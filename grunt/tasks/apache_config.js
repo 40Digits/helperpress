@@ -32,7 +32,9 @@ module.exports = function(grunt) {
 			grunt.file.write(newVhostFile, vhostContents);
 
 
-			// Setup local hosts file
+			// Point host name to localhost in hosts file
+			
+			// TODO: only add if rule not already there
 			var lhLine = '\n127.0.0.1	' + hostName;
 			execSync.run( sudo.apply('echo "' + lhLine + '" >> /etc/hosts') );
 
