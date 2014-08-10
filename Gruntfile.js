@@ -89,7 +89,7 @@ module.exports = function (grunt) {
 		configExports = require(configPath + option);
 
 		if(typeof configExports === 'function'){
-			gruntConfig[key] = configExports(gruntConfig);
+			gruntConfig[key] = configExports(grunt);
 		}else{
 			gruntConfig[key] = configExports;
 		}
