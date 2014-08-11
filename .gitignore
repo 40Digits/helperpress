@@ -44,6 +44,7 @@ Thumbs.db
 
 # npm
 /node_modules
+/grunt/node_modules/**/node_modules
 
 # Composer
 /vendor

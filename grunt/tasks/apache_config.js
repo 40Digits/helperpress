@@ -3,7 +3,8 @@
 
 var execSync = require('execSync'),
 	ejs = require('ejs'),
-
+	
+	hostExists = require(__dirname + '/../node_modules/hosts-util').hostExists,
 	sudo = require(__dirname + '/../node_modules/apply-sudo');
 
 module.exports = function(grunt) {
@@ -29,14 +30,26 @@ module.exports = function(grunt) {
 				vhostContents = ejs.render(vhostTemplate, vhostData);
 
 			// create the vhost file
+			grunt.log.subhead('Creating virtualhost file...');
 			grunt.file.write(newVhostFile, vhostContents);
 
 
 			// Point host name to localhost in hosts file
 			
-			// TODO: only add if rule not already there
-			var lhLine = '\n127.0.0.1	' + hostName;
-			execSync.run( sudo.apply('echo "' + lhLine + '" >> /etc/hosts') );
+			hostExists(hostName, '127.0.0.1', function(found){
+				grunt.log.subhead('Defining "' + hostName + '" in hosts file...');
+
+				if(found){
+					grunt.log.okln('Host already defined.');
+					return;
+				}
+
+				var lhLine = '\n127.0.0.1	' + hostName;
+				execSync.run( sudo.apply('echo "' + lhLine + '" >> /etc/hosts') );
+
+				grunt.log.okln('Host defined.');
+
+			});
 
 
 			// a2ensite if necessary
@@ -45,6 +58,7 @@ module.exports = function(grunt) {
 			}
 
 			// restart apache
+			grunt.log.subhead('Restarting Apache...');
 			if(options.as_service){
 				execSync.run( sudo.apply('service apache2 reload') );
 			} else {
