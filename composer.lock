@@ -4,8 +4,29 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "9506dcb224fbb36e84f93a22d46290ed",
+    "hash": "7628e85c0f0b159b9991c6f6b8258967",
     "packages": [
+        {
+            "name": "40digits/40d-semantic-sass-structure",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "git@bitbucket.org:40digits/40d-semantic-sass-structure.git",
+                "reference": "7efb2ba819a226ad75e2e04433e90168d98ec696"
+            },
+            "type": "library",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "40Digits Interactive, LLC",
+                    "email": "hello@40digits.com"
+                }
+            ],
+            "description": "A starting point for SASS work",
+            "time": "2014-08-11 16:25:05"
+        },
         {
             "name": "gabrielgil/timthumb",
             "version": "2.8.14",
@@ -299,17 +320,17 @@
         },
         {
             "name": "symfony/finder",
-            "version": "v2.5.2",
+            "version": "v2.5.3",
             "target-dir": "Symfony/Component/Finder",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Finder.git",
-                "reference": "576d8f69feec477067e91b6bd0367c113e76a1a0"
+                "reference": "090fe4eaff414d8f2171c7a4748ea868d530775f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Finder/zipball/576d8f69feec477067e91b6bd0367c113e76a1a0",
-                "reference": "576d8f69feec477067e91b6bd0367c113e76a1a0",
+                "url": "https://api.github.com/repos/symfony/Finder/zipball/090fe4eaff414d8f2171c7a4748ea868d530775f",
+                "reference": "090fe4eaff414d8f2171c7a4748ea868d530775f",
                 "shasum": ""
             },
             "require": {
@@ -332,19 +353,17 @@
             ],
             "authors": [
                 {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com",
-                    "homepage": "http://fabien.potencier.org",
-                    "role": "Lead Developer"
-                },
-                {
                     "name": "Symfony Community",
                     "homepage": "http://symfony.com/contributors"
+                },
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
                 }
             ],
             "description": "Symfony Finder Component",
             "homepage": "http://symfony.com",
-            "time": "2014-07-15 14:15:12"
+            "time": "2014-07-28 13:20:46"
         },
         {
             "name": "wp-cli/php-cli-tools",
@@ -398,16 +417,16 @@
         },
         {
             "name": "wp-cli/wp-cli",
-            "version": "dev-master",
+            "version": "v0.16.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wp-cli/wp-cli.git",
-                "reference": "7b062d2edd4e0ca34fb55e61e5b47023c14b2b1e"
+                "reference": "1e363d53030ff9f1f658fa2b1085ca9c0e2a2c0b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wp-cli/wp-cli/zipball/7b062d2edd4e0ca34fb55e61e5b47023c14b2b1e",
-                "reference": "7b062d2edd4e0ca34fb55e61e5b47023c14b2b1e",
+                "url": "https://api.github.com/repos/wp-cli/wp-cli/zipball/1e363d53030ff9f1f658fa2b1085ca9c0e2a2c0b",
+                "reference": "1e363d53030ff9f1f658fa2b1085ca9c0e2a2c0b",
                 "shasum": ""
             },
             "require": {
@@ -452,7 +471,7 @@
                 "cli",
                 "wordpress"
             ],
-            "time": "2014-07-28 14:39:16"
+            "time": "2014-07-01 00:05:47"
         }
     ],
     "packages-dev": [
@@ -463,7 +482,6 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "wp-cli/wp-cli": 20,
         "interconnectit/search-replace-db": 20
     },
     "prefer-stable": false,
