@@ -39,7 +39,7 @@ Called automatically after `npm install`, this is the first task that should be 
 Pulls down the database and runs a search and replace on it, overwriting the local database. Change `environment` to the ID of the environment from which you'd like to pull.
 
 ### `grunt pull_uploads:environment`
-Pulls down the wp-content/uploads directory. This will also change the `uploads_sync` setting to "rsync" in your site_config.local.json file. Change `environment` to the ID of the environment from which you'd like to pull.
+Pulls down the wp-content/uploads directory. This will also change the `uploads_sync` setting to "rsync" in your site_config.local.json file if it is not defined. If the setting is "rewrite", it will add a rewrite rule to the .htaccess file to load all uploads from the `db_master` environmnet. Change `environment` to the ID of the environment from which you'd like to pull.
 
 ## Configuration
 Before Grunt is initialized, four configuration files are loaded and combined into one giant config JSON object. The files in order of precedence (i.e. early files' settings will override latter ones):
@@ -145,6 +145,8 @@ General rules:
 			"version": "" 				// Version
 			"uri": "", 					// Theme URI
 			"tags": "", 				// Tags
+			"license": "",              // License
+			"license_uri": "",          // License URI
 
 		},
 

@@ -1,7 +1,7 @@
 {
-  "name": "wpengine-site-boilerplate",
+  "name": "helperpress",
   "version": "0.1.0",
-  "description": "A starting point for WordPress projects to be hosted on WPEngine",
+  "description": "A starting point for WordPress projects",
   "main": "Gruntfile.js",
   "scripts": {
     "test": "echo \"TODO: Add tests \" && exit 1",
@@ -9,9 +9,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@bitbucket.org:40digits/wpengine-site-boilerplate.git"
+    "url": "git@bitbucket.org:40digits/helperpress.git"
   },
-  "author": "40Digits Interactive, LLC",
+  "author": "40Digits Interactive, LLC <hello@40digits.com> (http://www.40digits.com)",
+  "contributors": [
+    "Charlie Rosenbury <charlie@40digits.com> (http://rosenbury.com)"
+  ],
   "license": "BSD-2-Clause",
   "dependencies": {
     "grunt": "~0.4.5",
@@ -46,7 +49,7 @@
     "grunt-rsync": "~0.6.2"
   },
   "config": {
-    "assets_dir": "wp-theme/assets/",
-    "css_dir": "wp-theme/"
+    "assets_dir": "wp-theme/assets",
+    "css_dir": "wp-theme"
   }
 }
