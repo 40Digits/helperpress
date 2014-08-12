@@ -1,8 +1,8 @@
 // Combine Media Queries
 module.exports = {
-	your_target: {
+	sass: {
 		files: {
-			'<%= pkg.config.sass_dir %>/*.{scss,sass}': ['<%= pkg.config.assets_dir %>/_src/css/prefix/*.css']
+			'<%= pkg.config.assets_dir %>/_precompiled/cmq': ['<%= pkg.config.assets_dir %>/_precompiled/sass/*.css']
 		}
 	}
 };

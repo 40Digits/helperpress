@@ -8,9 +8,9 @@ module.exports = {
 		},
 		files: [{
 			expand: true,
-			cwd: '<%= pkg.config.sass_dir %>',
-			src: ['*.{scss,sass}'],
-			dest: '<%= pkg.config.css_dir %>',
+			cwd: '<%= pkg.config.assets_dir %>/_src/sass/',
+			src: ['**/*.{scss,sass}'],
+			dest: '<%= pkg.config.assets_dir %>/_precompiled/sass',
 			ext: '.css'
 		}]
 	},
@@ -21,9 +21,9 @@ module.exports = {
 		},
 		files: [{
 			expand: true,
-			cwd: '<%= pkg.config.sass_dir %>',
-			src: ['*.{scss,sass}'],
-			dest: '<%= pkg.config.css_dir %>/',
+			cwd: '<%= pkg.config.assets_dir %>/_src/sass/',
+			src: ['**/*.{scss,sass}'],
+			dest: '<%= pkg.config.assets_dir %>/_precompiled/sass',
 			ext: '.css'
 		}]
 	}

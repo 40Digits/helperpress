@@ -2,6 +2,7 @@ module.exports = {
 	built: [
 		'bower_components',
 		'vendor',
+		'wp-theme/assets/_precompiled',
 		'www'
 	],
 	wp: [

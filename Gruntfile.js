@@ -23,7 +23,8 @@ module.exports = function (grunt) {
 	grunt.registerTask( 'setup', [
 		'composer:install',
 		'bower:install',
-		'wp_install'
+		'wp_install',
+		'watch'
 	]);
 
 	grunt.registerTask('update', 'Update all the things.', function(){
@@ -39,6 +40,14 @@ module.exports = function (grunt) {
 		// migrate DB down
 
 	});
+
+	grunt.registerTask('build', [
+		'sass:dist',
+		'cmq:sass',
+		'autoprefixer:cmq',
+		'concat:js_dist',
+		'uglify:js_concat'
+	]);
 
 	grunt.registerTask('default', ['watch']);
 

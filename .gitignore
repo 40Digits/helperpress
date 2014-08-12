@@ -59,10 +59,11 @@ Thumbs.db
 /uploads
 
 # Compiled Assets & such
-/wp-theme/assets/_src/compiled
+/wp-theme/assets/_precompiled
 /wp-theme/assets/css
 /wp-theme/assets/js
 /wp-theme/assets/scripts
+/wp-theme/*.css
 
 # Local site config
 /site_config.local.json
