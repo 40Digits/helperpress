@@ -49,7 +49,7 @@ module.exports = function(grunt) {
 		if(isBrandNew){
 
 			// update style.css output for WP theme config
-			grunt.task.run('wp_theme_css');
+			grunt.task.run('wp_stylesheet_theme_info');
 
 
 		} else {

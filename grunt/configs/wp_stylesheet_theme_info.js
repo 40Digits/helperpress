@@ -3,6 +3,6 @@ var fs = require('fs'),
 
 module.exports = {
 	options: {
-		sass: './wp-theme/assets/_src/sass/style.' + sassExt
+		src: './wp-theme/assets/_src/sass/style.' + sassExt
 	}
 };
