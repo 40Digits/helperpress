@@ -52,6 +52,7 @@ var repo_config = {
 				config: 'write_site_config.repo.wp.theme.author',
 				type: 'input',
 				message: 'Enter Author:',
+				default: '<%= pkg.author %>',
 				when: setExtendedThemeSettings
 			},
 			{
@@ -64,6 +65,7 @@ var repo_config = {
 				config: 'write_site_config.repo.wp.theme.version',
 				type: 'input',
 				message: 'Enter Version:',
+				default: '<%= pkg.version %>',
 				when: setExtendedThemeSettings
 			},
 			{
@@ -76,6 +78,19 @@ var repo_config = {
 				config: 'write_site_config.repo.wp.theme.tags',
 				type: 'input',
 				message: 'Enter Tags:',
+				when: setExtendedThemeSettings
+			},
+			{
+				config: 'write_site_config.repo.wp.theme.license',
+				type: 'input',
+				message: 'Enter License:',
+				default: '<%= pkg.license %>',
+				when: setExtendedThemeSettings
+			},
+			{
+				config: 'write_site_config.repo.wp.theme.license_uri',
+				type: 'input',
+				message: 'Enter License URI:',
 				when: setExtendedThemeSettings
 			},
 
