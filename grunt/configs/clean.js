@@ -12,7 +12,6 @@ module.exports = {
 	],
 	reset: [
 		'site_config.json',
-		'site_config.local.json',
-		'uploads'
+		'site_config.local.json'
 	]
 };

@@ -183,11 +183,8 @@ Currently just used for autoprefixer in CSS files
 {
 
     // Which browsers should the code be expected to support?
-    "browser_support": {
-
-    	"ie": "9" // this structure TBD
-
-    }
+    // autoprefixer syntax
+    "browser_support": ['last 2 version', 'ie 9'] 
 
 }
 ```

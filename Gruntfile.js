@@ -27,20 +27,6 @@ module.exports = function (grunt) {
 		'watch'
 	]);
 
-	grunt.registerTask('update', 'Update all the things.', function(){
-
-		// prompt checklist of things to update
-
-		// update composer
-
-		// update WP core
-
-		// update WP plugins
-
-		// migrate DB down
-
-	});
-
 	grunt.registerTask('build', [
 		'sass:dist',
 		'cmq:sass',

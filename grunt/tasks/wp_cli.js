@@ -23,6 +23,20 @@ function coreDownload(){
   execSync.run(cmd);
 }
 
+function coreUpdate(){
+  var cmd = options.cmdPath + ' core update --path=' + options.wpPath;
+
+  execSync.run(cmd);
+
+  coreUpdateDb();
+}
+
+function coreUpdateDb(){
+  var cmd = options.cmdPath + ' core update-db --path=' + options.wpPath;
+
+  execSync.run(cmd);
+}
+
 function coreInstall(flags){
   var cmd = options.cmdPath + ' core install --path=' + options.wpPath,
     validFlags = [
@@ -147,6 +161,13 @@ function pluginActivate(plugin){
 
 }
 
+
+function pluginUpdateAll(){
+  var cmd = options.cmdPath + ' plugin update --all --path=' + options.wpPath;
+
+  execSync.run(cmd);
+}
+
 function pluginBatchInstall(plugins){
   plugins.forEach(function(el){
     pluginInstall(el);
@@ -165,16 +186,18 @@ module.exports = function(gruntObj) {
 
   var wp = {
     download_core: coreDownload,
+    update_core: coreUpdate,
     install_core: coreInstall,
     core_config: coreConfig,
     db_create: dbCreate,
     rewrite_flush: rewriteFlush,
     install_plugins: pluginBatchInstall,
+    update_all_plugins: pluginUpdateAll,
     remove_plugins: pluginBatchUninstall
   };
 
   grunt.registerMultiTask('wp_cli', 'WP CLI grunt wrapper', function() {
-    // Merge task-specific and/or target-specific options with these defaults.
+
     options = this.options({
       cmdPath: 'wp',
       wpPath: './'

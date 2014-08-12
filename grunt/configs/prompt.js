@@ -124,7 +124,7 @@ var sudo_pass = {
 			{
 				config: 'sudo_pass', 
 				type: 'password', 
-				message: 'Some tasks we\'re running need root access. Enter your sudo password:'
+				message: 'Some tasks we\'re running need root access. Please enter your sudo password:'
 			}
 		],
 		then: function(answers){
@@ -133,8 +133,43 @@ var sudo_pass = {
 	}
 };
 
+var update = {
+	options: {
+		questions: [
+			{
+				config: 'do_update',
+				type: 'checkbox',
+				message: 'What would you like to update?',
+				choices: [
+					{
+						name: 'WordPress Core',
+						value: 'wp_cli:update_core',
+						checked: true
+					},
+					{
+						name: 'WordPress Plugins',
+						value: 'wp_cli:update_all_plugins',
+						checked: true
+					},
+					{
+						name: 'Composer Packages',
+						value: 'composer:update',
+						checked: true
+					},
+					{
+						name: 'Bower Packages',
+						value: 'bower:install',
+						checked: true
+					}
+				]
+			}
+		]
+	}
+};
+
 module.exports = {
 	repo_config: repo_config,
-	sudo_pass: sudo_pass
+	sudo_pass: sudo_pass,
+	update: update
 };
 
