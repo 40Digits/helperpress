@@ -3,6 +3,7 @@ module.exports = {
 		'bower_components',
 		'vendor',
 		'wp-theme/assets/_precompiled',
+		'wp-theme/assets/_src/**/vendor',
 		'www'
 	],
 	wp: [

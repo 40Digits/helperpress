@@ -60,6 +60,7 @@ Thumbs.db
 
 # Compiled Assets & such
 /wp-theme/assets/_precompiled
+/wp-theme/assets/_src/**/vendor
 /wp-theme/assets/css
 /wp-theme/assets/js
 /wp-theme/assets/scripts
