@@ -5,15 +5,18 @@ module.exports = function(grunt) {
 
 		// dump & import
 		var targetOpts = {
-				title: '<%= pkg.config.environments.' + environment + '.title %>',
+				title: '<%= helperpress.environments.' + environment + '.title %>',
 
-				database: '<%= pkg.config.environments.' + environment + '.db.database %>',
-				user: '<%= pkg.config.environments.' + environment + '.db.user %>',
-				pass: '<%= pkg.config.environments.' + environment + '.db.pass %>',
-				host: '<%= pkg.config.environments.' + environment + '.db.host %>',
+				database: '<%= helperpress.environments.' + environment + '.db.database %>',
+				user: '<%= helperpress.environments.' + environment + '.db.user %>',
+				pass: '<%= helperpress.environments.' + environment + '.db.pass %>',
+				host: '<%= helperpress.environments.' + environment + '.db.host %>',
 
-				ssh_host: '<%= pkg.config.environments.' + environment + '.ssh_host %>'
+				ssh_host: '<%= helperpress.environments.' + environment + '.ssh_host %>'
 			};
+
+
+		grunt.task.run('notify:db_migrate_start');
 
 		// dump it
 		grunt.config('db_dump.' + environment + '.options', targetOpts);
@@ -22,27 +25,28 @@ module.exports = function(grunt) {
 		// import it
 
 		grunt.config('db_import.local.options.import_from', 'db/backups/<%= grunt.template.today(\'yyyy-mm-dd\') %>_' + environment + '.sql');
-		grunt.config('db_import.local.options.title', '<%= pkg.config.environments.' + environment + '.title %>');
+		grunt.config('db_import.local.options.title', '<%= helperpress.environments.' + environment + '.title %>');
 		grunt.task.run('db_import:local');
 
 		// search and replace it
 		var searchReplaceOpts = 
 			{
 				home_url: {
-					search: '<%= pkg.config.environments.' + environment + '.home_url %>',
-					replace: '<%= pkg.config.environments.local.home_url %>'
+					search: '<%= helperpress.environments.' + environment + '.home_url %>',
+					replace: '<%= helperpress.environments.local.home_url %>'
 				},
 				wp_path: {
-					search: '<%= pkg.config.environments.' + environment + '.wp_path %>',
-					replace: '<%= pkg.config.environments.local.wp_path %>'
+					search: '<%= helperpress.environments.' + environment + '.wp_path %>',
+					replace: '<%= helperpress.environments.local.wp_path %>'
 				}
 			}; 
-
 
 
 		var curConf = grunt.config('search_replace_db');
 		grunt.config( 'search_replace_db', _.extend(curConf, searchReplaceOpts) );
 		grunt.task.run('search_replace_db');
+
+		grunt.task.run('notify:db_migrate_complete');
 
 	});
 }

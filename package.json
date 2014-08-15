@@ -28,15 +28,18 @@
     "userhome": "~0.1.0",
     "grunt-mysql-dump-import": "git+https://github.com/40Digits/grunt-mysql-dump-import.git",
     "grunt-contrib-symlink": "~0.3.0",
-    "bower": "~1.3.8",
-    "grunt-bower-task": "~0.4.0",
-    "grunt-bower-concat": "~0.3.0",
     "execSync": "~1.0.1-pre",
     "grunt-contrib-clean": "~0.6.0",
     "underscore-deep-extend": "0.0.5",
     "load-grunt-tasks": "~0.6.0",
     "glob": "~4.0.5",
-    "ejs": "~1.0.0"
+    "ejs": "~1.0.0",
+    "grunt-bower-task": "~0.4.0",
+    "grunt-browserify": "~2.1.4",
+    "grunt-browserify-bower": "~0.1.4",
+    "deamdify": "~0.1.1",
+    "browserify-shim": "~3.6.0",
+    "remapify": "~1.0.0"
   },
   "devDependencies": {
     "grunt-contrib-watch": "~0.6.1",
@@ -50,5 +53,10 @@
   "config": {
     "assets_dir": "wp-theme/assets",
     "css_dir": "wp-theme"
-  }
+  },
+
+  "browserify": {
+    "transform": [ "browserify-shim" ]
+  },
+  "browserify-shim": "grunt/configs/js/browserifyShim.js"
 }

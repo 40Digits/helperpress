@@ -51,6 +51,7 @@ Thumbs.db
 
 # Bower
 /bower_components
+/lib
 
 # DB Dumps
 /db

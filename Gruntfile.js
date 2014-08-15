@@ -31,8 +31,10 @@ module.exports = function (grunt) {
 		'sass:dist',
 		'cmq:sass',
 		'autoprefixer:cmq',
-		'concat:js_dist',
-		'uglify:js_concat'
+		'browserifyBower',
+		'browserify',
+		'concat:browserify_dist',
+		'uglify:browserify'
 	]);
 
 	grunt.registerTask('default', ['watch']);
@@ -52,14 +54,9 @@ module.exports = function (grunt) {
 		userDefaultsJSON = grunt.file.exists( userhome('.helperpress') ) ? grunt.file.readJSON( userhome('.helperpress') ) : {},
 		siteConfigJSON = grunt.file.exists('site_config.json') ? grunt.file.readJSON('site_config.json') : {},
 		siteConfigLocalJSON = grunt.file.exists('site_config.local.json') ? grunt.file.readJSON('site_config.local.json') : {};
-	
-	// wrap config objects for extending
-	var wrappedUserDefaultsJSON = { config: userDefaultsJSON },
-		wrappedSiteConfigJSON = { config: siteConfigJSON },
-		wrappedSiteConfigLocalJSON = { config: siteConfigLocalJSON };
 
 	// combine all config files
-	gruntConfig.pkg = _.deepExtend( packageJSON, wrappedUserDefaultsJSON, wrappedSiteConfigJSON, wrappedSiteConfigLocalJSON );
+	gruntConfig.helperpress = _.deepExtend( packageJSON.config, userDefaultsJSON, siteConfigJSON, siteConfigLocalJSON );
 
 
 

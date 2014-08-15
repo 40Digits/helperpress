@@ -5,15 +5,15 @@ module.exports = {
 	cmq: {
 		expand: true,
 		flatten: true,
-		cwd: '<%= pkg.config.assets_dir %>/_precompiled/cmq/',
+		cwd: '<%= helperpress.assets_dir %>/_precompiled/cmq/',
 		src: '*.css',
-		dest: '<%= pkg.config.css_dir %>'
+		dest: '<%= helperpress.css_dir %>'
 	},
 	sass: {
 		expand: true,
 		flatten: true,
-		cwd: '<%= pkg.config.assets_dir %>/_precompiled/sass/',
+		cwd: '<%= helperpress.assets_dir %>/_precompiled/sass/',
 		src: '*.css',
-		dest: '<%= pkg.config.css_dir %>'
+		dest: '<%= helperpress.css_dir %>'
 	}
 };

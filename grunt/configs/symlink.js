@@ -4,7 +4,7 @@ module.exports = {
 	},
 	theme: {
 		src: './wp-theme',
-		dest: './www/wp-content/themes/<%= pkg.config.wp.theme.slug %>'
+		dest: './www/wp-content/themes/<%= helperpress.wp.theme.slug %>'
 	},
 	uploads: {
 		src: './uploads',
@@ -12,6 +12,6 @@ module.exports = {
 	},
 	sites: {
 		src: './www',
-		dest: '<%= pkg.config.apache.sites_dir %>/<%= pkg.config.wp.theme.slug %>'
+		dest: '<%= helperpress.apache.sites_dir %>/<%= helperpress.wp.theme.slug %>'
 	}
 };

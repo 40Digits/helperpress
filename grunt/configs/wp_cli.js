@@ -9,17 +9,17 @@ module.exports = {
 	download_core: true,
 
 	core_config: {
-		dbname: '<%= pkg.config.environments.local.db.database %>',
-		dbuser: '<%= pkg.config.environments.local.db.user %>',
-		dbpass: '<%= pkg.config.environments.local.db.pass %>',
-		dbhost: '<%= pkg.config.environments.local.db.host %>'
+		dbname: '<%= helperpress.environments.local.db.database %>',
+		dbuser: '<%= helperpress.environments.local.db.user %>',
+		dbpass: '<%= helperpress.environments.local.db.pass %>',
+		dbhost: '<%= helperpress.environments.local.db.host %>'
 	},
 
 	db_create: true,
 
 	install_core: {
-		url: '<%= pkg.config.environments.local.home_url %>',
-		title: '<%= pkg.config.wp.theme.name %>',
+		url: '<%= helperpress.environments.local.home_url %>',
+		title: '<%= helperpress.wp.theme.name %>',
 		admin_user: 'j3k',
 		admin_password: wpRndPass,
 		admin_email: 'j3k.porkins@gmail.com'
@@ -29,7 +29,7 @@ module.exports = {
 
 	rewrite_flush: true,
 
-	install_plugins: '<%= pkg.config.wp.plugins %>',
+	install_plugins: '<%= helperpress.wp.plugins %>',
 
 	remove_plugins: ['hello'],
 

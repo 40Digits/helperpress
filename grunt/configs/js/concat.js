@@ -3,13 +3,13 @@ module.exports = {
 		separator: ';'
 	},
 
-	js: {
-		src: '<%= pkg.config.assets_dir %>/_src/js/**/*.js',
-		dest: '<%= pkg.config.assets_dir %>/js/main.js'
+	browserify: {
+		src: '<%= helperpress.assets_dir %>/_precompiled/browserify/**/*.js',
+		dest: '<%= helperpress.assets_dir %>/js/main.js'
 	},
 
-	js_dist: {
-		src: '<%= pkg.config.assets_dir %>/_src/js/**/*.js',
-		dest: '<%= pkg.config.assets_dir %>/_precompiled/concat/main.js'
+	browserify_dist: {
+		src: '<%= helperpress.assets_dir %>/_precompiled/browserify/**/*.js',
+		dest: '<%= helperpress.assets_dir %>/_precompiled/concat/main.js'
 	}
 }

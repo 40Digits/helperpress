@@ -8,9 +8,9 @@ module.exports = {
 		},
 		files: [{
 			expand: true,
-			cwd: '<%= pkg.config.assets_dir %>/_src/sass/',
+			cwd: '<%= helperpress.assets_dir %>/_src/sass/',
 			src: ['**/*.{scss,sass}'],
-			dest: '<%= pkg.config.assets_dir %>/_precompiled/sass',
+			dest: '<%= helperpress.assets_dir %>/_precompiled/sass',
 			ext: '.css'
 		}]
 	},
@@ -21,9 +21,9 @@ module.exports = {
 		},
 		files: [{
 			expand: true,
-			cwd: '<%= pkg.config.assets_dir %>/_src/sass/',
+			cwd: '<%= helperpress.assets_dir %>/_src/sass/',
 			src: ['**/*.{scss,sass}'],
-			dest: '<%= pkg.config.assets_dir %>/_precompiled/sass',
+			dest: '<%= helperpress.assets_dir %>/_precompiled/sass',
 			ext: '.css'
 		}]
 	}

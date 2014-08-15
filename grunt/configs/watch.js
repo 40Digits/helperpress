@@ -1,6 +1,6 @@
 module.exports = {
 	sass_dev: {
-		files: '<%= pkg.config.assets_dir %>/_src/**/*.{scss,sass,css}',
+		files: '<%= helperpress.assets_dir %>/_src/**/*.{scss,sass,css}',
 		tasks: [
 			'sass:dev',
 			'autoprefixer:sass'
@@ -19,9 +19,23 @@ module.exports = {
 		}
 	},
 
-	js: {
-		files: '<%= pkg.config.assets_dir %>/_src/**/*.js',
-		tasks: ['concat:js'],
+	browserify: {
+		files: '<%= helperpress.assets_dir %>/_src/**/*.js',
+		tasks: [
+			'browserifyBower:libs:nowrite',
+			'browserify:app'
+		],
+		options: {
+			livereload: true
+		}
+	},
+
+	browserifyBower: {
+		files: './bower.json',
+		tasks: [
+			'browserifyBower',
+			'concat:browserify'
+		],
 		options: {
 			livereload: true
 		}

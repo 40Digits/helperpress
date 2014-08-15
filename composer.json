@@ -20,11 +20,11 @@
 		"gabrielgil/timthumb": "2.*",
 		"wp-cli/wp-cli": "0.16.*",
 		"interconnectit/Search-Replace-DB": "@dev",
-		"40digits/40d-semantic-sass-structure": "*"
+		"40digits/40d-semantic-sass-structure": "1.*"
 	},
 	"extra": {
 		"installer-paths": {
-			"./wp-theme/assets/scripts/timthumb/": ["gabrielgil/timthumb"],
+			"./wp-theme/assets/scripts/timthumb": ["gabrielgil/timthumb"],
 			"./wp-theme/assets/_src/sass/": ["40digits/40d-semantic-sass-structure"]
 		}
 	}

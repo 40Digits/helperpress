@@ -3,10 +3,10 @@
 module.exports = {
 	local: {
 		options: {
-			database: '<%= pkg.config.environments.local.db.database %>',
-			user: '<%= pkg.config.environments.local.db.user %>',
-			pass: '<%= pkg.config.environments.local.db.pass %>',
-			host: '<%= pkg.config.environments.local.db.host %>'
+			database: '<%= helperpress.environments.local.db.database %>',
+			user: '<%= helperpress.environments.local.db.user %>',
+			pass: '<%= helperpress.environments.local.db.pass %>',
+			host: '<%= helperpress.environments.local.db.host %>'
 		}
 	}
 }

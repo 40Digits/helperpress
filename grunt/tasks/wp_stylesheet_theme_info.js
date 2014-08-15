@@ -14,7 +14,7 @@ module.exports = function (grunt) {
         });
 
         var newLines = [],
-            themeConfig = grunt.config('pkg.config.wp.theme'),
+            themeConfig = grunt.config('helperpress.wp.theme'),
 
             keyMap = {
                 name: {

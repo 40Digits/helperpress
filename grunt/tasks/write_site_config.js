@@ -41,11 +41,11 @@ module.exports = function(grunt) {
 
 	function updatedLoadedConfig(newConfig){
 
-		var curPkg = grunt.config('pkg.config'),
-			pkgExtended = _.deepExtend(curPkg, newConfig);
+		var hpConfig = grunt.config('helperpress'),
+			hpConfigExtended = _.deepExtend(hpConfig, newConfig);
 
 
-		grunt.config('pkg.config', pkgExtended);
+		grunt.config('helperpress', hpConfigExtended);
 	}
 
 
@@ -91,7 +91,7 @@ module.exports = function(grunt) {
 
 
 		// Local Database
-		var wpSlug = grunt.config('pkg.config.wp.theme.slug');
+		var wpSlug = grunt.config('helperpress.wp.theme.slug');
 
 		if( typeof objHasKeys(options, [ 'db', 'database' ]) !== 'undefined' ) {
 
@@ -128,12 +128,12 @@ module.exports = function(grunt) {
 		} else {
 
 			// let's infer it
-			localEnv.home_url = grunt.config('pkg.config.apache.url_scheme').replace('*', wpSlug);
+			localEnv.home_url = grunt.config('helperpress.apache.url_scheme').replace('*', wpSlug);
 
 		}
 
 		// uploads_sync
-		var curUploadsConf = grunt.config('pkg.config.environments.local.uploads_sync');
+		var curUploadsConf = grunt.config('helperpress.environments.local.uploads_sync');
 		if( typeof options.uploads_sync !== 'undefined' ){
 
 			localEnv.uploads_sync = options.uploads_sync;

@@ -1,7 +1,7 @@
 module.exports = {
-	js_concat: {
+	browserify: {
 		files: {
-			'<%= pkg.config.assets_dir %>/js/main.js': ['<%= pkg.config.assets_dir %>/_precompiled/concat/main.js']
+			'<%= helperpress.assets_dir %>/js/main.js': ['<%= helperpress.assets_dir %>/_precompiled/browserify/main.js']
 		}
 	}
 };

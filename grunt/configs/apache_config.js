@@ -1,14 +1,14 @@
 module.exports = {
 	local: {
 		options: {
-			site_slug: '<%= pkg.config.wp.theme.slug %>',
-			url_scheme: '<%= pkg.config.apache.url_scheme %>',
-			apache_scheme: '<%= pkg.config.apache.scheme %>',
-			vhost_dir: '<%= pkg.config.apache.vhost_dir %>',
-			doc_root: '<%= pkg.config.environments.local.wp_path %>',
-			logs_dir: '<%= pkg.config.apache.logs_dir %>',
-			as_service: '<%= pkg.config.apache.as_service %>',
-			a2ensite: '<%= pkg.config.apache.a2ensite %>'
+			site_slug: '<%= helperpress.wp.theme.slug %>',
+			url_scheme: '<%= helperpress.apache.url_scheme %>',
+			apache_scheme: '<%= helperpress.apache.scheme %>',
+			vhost_dir: '<%= helperpress.apache.vhost_dir %>',
+			doc_root: '<%= helperpress.environments.local.wp_path %>',
+			logs_dir: '<%= helperpress.apache.logs_dir %>',
+			as_service: '<%= helperpress.apache.as_service %>',
+			a2ensite: '<%= helperpress.apache.a2ensite %>'
 		}
 	}
 };

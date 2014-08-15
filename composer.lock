@@ -4,17 +4,22 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "7628e85c0f0b159b9991c6f6b8258967",
+    "hash": "5c0dc330442236738e93ceaf738cac0d",
     "packages": [
         {
             "name": "40digits/40d-semantic-sass-structure",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:40digits/40d-semantic-sass-structure.git",
-                "reference": "7efb2ba819a226ad75e2e04433e90168d98ec696"
+                "reference": "8411860299a7159d994cb3740feba18b58adcb34"
             },
             "type": "library",
+            "autoload": {
+                "classmap": [
+                    "./"
+                ]
+            },
             "license": [
                 "MIT"
             ],
@@ -25,7 +30,7 @@
                 }
             ],
             "description": "A starting point for SASS work",
-            "time": "2014-08-11 16:25:05"
+            "time": "2014-08-14 21:45:32"
         },
         {
             "name": "gabrielgil/timthumb",

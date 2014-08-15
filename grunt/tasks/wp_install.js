@@ -54,15 +54,13 @@ module.exports = function(grunt) {
 
 		} else {
 
-			var dbEnvironment = grunt.config.process( '<%= pkg.config.db_master %>' );
+			var dbEnvironment = grunt.config.process( '<%= helperpress.db_master %>' );
 			
 			if(dbEnvironment.length > 0 && dbEnvironment != "local"){
 
 				// migrate data
 				grunt.task.run([
-					'notify:db_migrate_start',
 					'pull_db:' + dbEnvironment,
-					'notify:db_migrate_complete',
 					'pull_uploads:' + dbEnvironment
 				]);
 
