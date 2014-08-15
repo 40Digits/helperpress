@@ -81,22 +81,22 @@ module.exports = function(grunt) {
 
     for(var flag in extendedFlags){
 
-      if( typeof extendedFlags[flag] === 'undefined' ){
+      if( typeof validFlags[flag] === 'undefined' ){
         grunt.warn('"' + flag + '" is not a valid "search-replace-db" flag');
         continue;
       }
 
-      if( validFlags[flag].type === 'eq-blank' ){
+      if( validFlags[flag].type === 'eq-blank' && extendedFlags[flag].length === 0 ){
 
-        cmd += ' ' + validFlags[flag].blank;
+          cmd += ' ' + validFlags[flag].blank;
 
       } else {
 
         cmd += ' --' + flag;
 
-        if( validFlags[flag].type === 'eq' ){
+        if( validFlags[flag].type !== 'empty' ){
             cmd += '=' + grunt.config.process( extendedFlags[flag] );
-        };
+        }
 
       }
 
