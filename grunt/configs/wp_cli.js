@@ -3,7 +3,7 @@ var wpRndPass = require('randomstring').generate(10); // in case we're installin
 module.exports = {
 	options: {
 		cmdPath: './vendor/bin/wp',
-		wpPath: './www'
+		wpPath: '<%= helperpress.build_dir %>'
 	},
 
 	download_core: true,

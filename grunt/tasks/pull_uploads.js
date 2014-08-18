@@ -9,7 +9,7 @@ module.exports = function(grunt){
 
 			case 'rewrite':
 				var htaccess = new FileSection({
-						filename: './www/.htaccess',
+						filename: grunt.config('helperpress.build_dir') + '/.htaccess',
 						marker: {
 							start: '# BEGIN HelperPress',
 							end: '# END HelperPress'

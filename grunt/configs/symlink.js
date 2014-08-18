@@ -4,14 +4,14 @@ module.exports = {
 	},
 	theme: {
 		src: './wp-theme',
-		dest: './www/wp-content/themes/<%= helperpress.wp.theme.slug %>'
+		dest: '<%= helperpress.build_dir %>/wp-content/themes/<%= helperpress.wp.theme.slug %>'
 	},
 	uploads: {
 		src: './uploads',
-		dest: './www/wp-content/uploads'
+		dest: '<%= helperpress.build_dir %>/wp-content/uploads'
 	},
 	sites: {
-		src: './www',
+		src: '<%= helperpress.build_dir %>',
 		dest: '<%= helperpress.apache.sites_dir %>/<%= helperpress.wp.theme.slug %>'
 	}
 };

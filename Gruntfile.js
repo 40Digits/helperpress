@@ -27,14 +27,21 @@ module.exports = function (grunt) {
 		'watch'
 	]);
 
-	grunt.registerTask('build', [
+	grunt.registerTask('build_dist', [
+
+		// CSS
 		'sass:dist',
 		'cmq:sass',
 		'autoprefixer:cmq',
+
+		// JS
 		'browserifyBower',
 		'browserify',
 		'concat:browserify_dist',
-		'uglify:browserify'
+		'uglify:browserify',
+
+		// Images
+		'newer:imagemin:assets_dist'
 	]);
 
 	grunt.registerTask('default', ['watch']);

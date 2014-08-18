@@ -10,9 +10,19 @@ module.exports = {
 		}
 	},
 
+	imagemin: {
+		files: [
+			'<%= helperpress.assets_dir %>/_src/**/*.{png,gif,jpg,jpeg}'
+		],
+		tasks: ['newer:imagemin:assets_dev'],
+		options: {
+			livereload: true
+		}
+	},
+
 	files_reload: {
 		files: [
-			'./wp-theme/**/*.{jpg,gif,jpeg,php}'
+			'./wp-theme/**/*.{ejs,html,php}'
 		],
 		options: {
 			livereload: true

@@ -4,13 +4,13 @@ module.exports = {
 		'vendor',
 		'wp-theme/assets/_precompiled',
 		'wp-theme/assets/_src/sass',
-		'www'
+		'<%= helperpress.build_dir %>'
 	],
 	assets: [
 		'wp-theme/assets/_precompiled'
 	],
 	wp: [
-		'www',
+		'<%= helperpress.build_dir %>',
 		'db',
 		'uploads'
 	],

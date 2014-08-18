@@ -115,7 +115,7 @@ module.exports = function(grunt) {
 		} else {
 
 			// let's infer it... probably CWD
-			localEnv.wp_path = process.cwd() + '/www';
+			localEnv.wp_path = process.cwd() + '/' + grunt.config('helperpress.build_dir');
 
 		}
 			

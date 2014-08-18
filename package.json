@@ -39,7 +39,10 @@
     "grunt-browserify-bower": "~0.1.4",
     "deamdify": "~0.1.1",
     "browserify-shim": "~3.6.0",
-    "remapify": "~1.0.0"
+    "remapify": "~1.0.0",
+    "grunt-contrib-imagemin": "~0.8.0",
+    "grunt-newer": "~0.7.0",
+    "imagemin-jpeg-recompress": "~0.5.0"
   },
   "devDependencies": {
     "grunt-contrib-watch": "~0.6.1",
@@ -52,11 +55,13 @@
   },
   "config": {
     "assets_dir": "wp-theme/assets",
-    "css_dir": "wp-theme"
+    "css_dir": "wp-theme",
+    "build_dir": "www"
   },
-
   "browserify": {
-    "transform": [ "browserify-shim" ]
+    "transform": [
+      "browserify-shim"
+    ]
   },
   "browserify-shim": "grunt/configs/js/browserifyShim.js"
 }
