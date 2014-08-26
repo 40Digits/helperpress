@@ -58,7 +58,7 @@ function coreInstall(flags){
     flagVal = grunt.config.process(flags[el]);
 
     if( flagVal.length > 0){
-      cmd += ' --' + el + '=' + flagVal;
+      cmd += ' --' + el + '="' + flagVal.replace(/"/g, "") + '"';
     }
 
   }

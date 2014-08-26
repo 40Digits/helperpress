@@ -1,5 +1,3 @@
-var remapify = require('remapify');
-
 module.exports = {
 	options: {
 		transform: [

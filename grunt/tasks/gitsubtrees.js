@@ -31,7 +31,10 @@ module.exports = function(grunt) {
 			grunt.fatal('Cannot pull subtree(s), there are uncomitted changes to this repo. Please commit, remove, or stash changes to continue.');
 		}
 
+		grunt.log.subhead('Adding "' + this.target + '" remote');
 		addRemote(this.target, this.data.url);
+
+		grunt.log.subhead('Adding "' + this.target + '" subtree');
 		addSubtree(this.target, this.data.path, this.data.branch);
 
 	});

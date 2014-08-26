@@ -1,8 +1,4 @@
 module.exports = {
-	options:{
-		atBegin: true
-	},
-	
 	sass_dev: {
 		files: [
 			// all sass and css files in the assets dir
@@ -13,7 +9,8 @@ module.exports = {
 			'autoprefixer:sass'
 		],
 		options: {
-			livereload: true
+			livereload: true,
+			atBegin: true
 		}
 	},
 
@@ -24,7 +21,8 @@ module.exports = {
 		],
 		tasks: ['newer:imagemin:assets_dev'],
 		options: {
-			livereload: true
+			livereload: true,
+			atBegin: true
 		}
 	},
 
@@ -33,7 +31,7 @@ module.exports = {
 			// everything in the theme dir except the assets dir (because we're already watching that)
 			'./wp-theme/!(assets)',
 			// the assets dir and subfolders except 'js' and 'images' (because we're already watching them)
-			'<%= helperpress.assets_dir %>/!(js|images)/**'
+			'<%= helperpress.assets_dir %>/!(js|images|(_*))/**'
 		],
 		options: {
 			livereload: true
@@ -50,7 +48,8 @@ module.exports = {
 			'browserify:app'
 		],
 		options: {
-			livereload: true
+			livereload: true,
+			atBegin: true
 		}
 	},
 
@@ -61,7 +60,8 @@ module.exports = {
 			'concat:browserify'
 		],
 		options: {
-			livereload: true
+			livereload: true,
+			atBegin: true
 		}
 	}
-};
+};		

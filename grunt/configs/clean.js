@@ -21,7 +21,8 @@ module.exports = {
 	assets: [
 		'<%= helperpress.assets_dir %>/_precompiled',
 		'<%= helperpress.assets_dir %>/images',
-		'<%= helperpress.assets_dir %>/js'
+		'<%= helperpress.assets_dir %>/js',
+		'.sass-cache'
 	],
 	wp: [
 		'<%= helperpress.build_dir %>',
