@@ -4,8 +4,7 @@
   "description": "A starting point for WordPress projects",
   "main": "Gruntfile.js",
   "scripts": {
-    "test": "echo \"TODO: Add tests \" && exit 1",
-    "postinstall": "grunt setup"
+    "test": "echo \"TODO: Add tests \" && exit 1"
   },
   "repository": {
     "type": "git",

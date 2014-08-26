@@ -19,15 +19,72 @@ module.exports = function (grunt) {
 	// Aliases
 	////////////
 
-
-	grunt.registerTask( 'setup', [
-		'composer:install',
-		'bower:install',
-		'wp_install',
-		'watch'
+	// run this task first after forking
+	grunt.registerTask( 'init_project', [	
+		'gitsubtrees',	
+		'prompt:repo_config',
+		'write_site_config:repo',
+		'gitaddcommit:site_config_init',
+		'wp_stylesheet_theme_info',
+		'gitaddcommit:stylesheet_init'
 	]);
 
-	grunt.registerTask('build_dist', [
+
+	// run this task to setup things for local development
+	grunt.registerTask( 'build_dev', [
+
+		'prompt:sudo_pass', // needed for apache_config
+
+		// install packages
+		'composer:install',
+		'bower:install',
+
+		// setup local config
+		'write_site_config:local',
+
+		// WordPress goodness
+		'wp_cli:download_core',
+		'wp_cli:core_config',
+		'wp_cli:db_create',
+		'wp_cli:install_core',
+		'wp_cli:install_plugins',
+		'wp_cli:remove_plugins',
+		'wp_cli:rewrite_flush',
+
+		// symlink wp-theme into WP installation
+		'symlink:theme',
+
+		// config apache
+		'apache_config',
+
+		// watch, because we're good to go!
+		'watch'
+
+	]);
+
+	// run this task to setup everything for distribution
+	grunt.registerTask( 'build_dist', [
+
+		// install packages
+		'composer:install',
+		'bower:install',
+
+		'write_site_config:local',
+
+		// WordPress goodness
+		'wp_cli:download_core',
+		'wp_cli:core_config',
+		'wp_cli:db_create',
+		'wp_cli:install_core',
+		'wp_cli:install_plugins',
+		'wp_cli:remove_plugins',
+		'wp_cli:rewrite_flush',
+
+		'build_dist_assets'
+
+	]);
+
+	grunt.registerTask( 'build_dist_assets', [
 
 		// CSS
 		'sass:dist',
@@ -44,10 +101,9 @@ module.exports = function (grunt) {
 		'newer:imagemin:assets_dist'
 	]);
 
-	grunt.registerTask('default', ['watch']);
 
 
-
+	// default task is defined in ./grunt/tasks dir
 
 
 
@@ -64,7 +120,7 @@ module.exports = function (grunt) {
 
 	// combine all config files
 	gruntConfig.helperpress = _.deepExtend( packageJSON.config, userDefaultsJSON, siteConfigJSON, siteConfigLocalJSON );
-
+	gruntConfig.pkg = packageJSON;
 
 
 
@@ -127,7 +183,6 @@ module.exports = function (grunt) {
 			task(grunt);
 
 	});
-
 
 	// initialize config
 	grunt.initConfig(gruntConfig);

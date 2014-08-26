@@ -105,7 +105,7 @@ module.exports = function (grunt) {
         }
         
         var styleCss = new FileSection({  
-                filename: this.options.src,
+                filename: options.filename,
                 marker: options.marker,
             });
 

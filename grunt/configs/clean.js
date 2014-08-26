@@ -1,13 +1,27 @@
 module.exports = {
 	built: [
+		// bower
 		'bower_components',
+		'lib',
+
+		// composer
 		'vendor',
-		'wp-theme/assets/_precompiled',
-		'wp-theme/assets/_src/sass',
+
+		// assets
+		'<%= helperpress.assets_dir %>/_precompiled',
+		'<%= helperpress.assets_dir %>/images',
+		'<%= helperpress.assets_dir %>/js',
+
+		// sass subtree
+		'<%= helperpress.assets_dir %>/_src/sass',
+
+		// wp dir
 		'<%= helperpress.build_dir %>'
 	],
 	assets: [
-		'wp-theme/assets/_precompiled'
+		'<%= helperpress.assets_dir %>/_precompiled',
+		'<%= helperpress.assets_dir %>/images',
+		'<%= helperpress.assets_dir %>/js'
 	],
 	wp: [
 		'<%= helperpress.build_dir %>',
@@ -15,7 +29,6 @@ module.exports = {
 		'uploads'
 	],
 	reset: [
-		'site_config.json',
 		'site_config.local.json'
 	]
 };

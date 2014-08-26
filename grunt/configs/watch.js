@@ -1,10 +1,13 @@
 module.exports = {
 	sass_dev: {
-		files: '<%= helperpress.assets_dir %>/_src/**/*.{scss,sass,css}',
+		files: [
+			// all sass and css files in the assets dir
+			'<%= helperpress.assets_dir %>/_src/**/*.{scss,sass,css}'
+		],
 		tasks: [
 			'sass:dev',
 			'autoprefixer:sass'
-			],
+		],
 		options: {
 			livereload: true
 		}
@@ -12,6 +15,7 @@ module.exports = {
 
 	imagemin: {
 		files: [
+			// all images in the assets dir
 			'<%= helperpress.assets_dir %>/_src/**/*.{png,gif,jpg,jpeg}'
 		],
 		tasks: ['newer:imagemin:assets_dev'],
@@ -22,7 +26,10 @@ module.exports = {
 
 	files_reload: {
 		files: [
-			'./wp-theme/**/*.{ejs,html,php}'
+			// everything in the theme dir except the assets dir (because we're already watching that)
+			'./wp-theme/!(assets)',
+			// the assets dir and subfolders except 'js' and 'images' (because we're already watching them)
+			'<%= helperpress.assets_dir %>/!(js|images)/**'
 		],
 		options: {
 			livereload: true
@@ -30,7 +37,10 @@ module.exports = {
 	},
 
 	browserify: {
-		files: '<%= helperpress.assets_dir %>/_src/**/*.js',
+		files: [
+			// all js files in the assets dir
+			'<%= helperpress.assets_dir %>/_src/**/*.js'
+		],
 		tasks: [
 			'browserifyBower:libs:nowrite',
 			'browserify:app'
@@ -41,7 +51,7 @@ module.exports = {
 	},
 
 	browserifyBower: {
-		files: './bower.json',
+		files: ['bower.json'],
 		tasks: [
 			'browserifyBower',
 			'concat:browserify'

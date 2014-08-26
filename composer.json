@@ -8,10 +8,6 @@
 		{
 			"type": "vcs",
 			"url": "git://github.com/interconnectit/Search-Replace-DB.git"
-		},
-		{
-			"type": "vcs",
-			"url": "git@bitbucket.org:40digits/40d-semantic-sass-structure.git"
 		}
 	],
 	"require": {
@@ -19,13 +15,11 @@
 	    "mnsami/composer-custom-directory-installer": "1.0.*",
 		"gabrielgil/timthumb": "2.*",
 		"wp-cli/wp-cli": "0.16.*",
-		"interconnectit/Search-Replace-DB": "@dev",
-		"40digits/40d-semantic-sass-structure": "1.*"
+		"interconnectit/Search-Replace-DB": "@dev"
 	},
 	"extra": {
 		"installer-paths": {
-			"./wp-theme/assets/scripts/timthumb": ["gabrielgil/timthumb"],
-			"./wp-theme/assets/_src/sass/": ["40digits/40d-semantic-sass-structure"]
+			"./wp-theme/assets/scripts/timthumb": ["gabrielgil/timthumb"]
 		}
 	}
 }

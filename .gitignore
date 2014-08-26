@@ -65,6 +65,7 @@ Thumbs.db
 /wp-theme/assets/css
 /wp-theme/assets/js
 /wp-theme/assets/scripts
+/wp-theme/assets/images
 /wp-theme/*.css
 
 # Local site config

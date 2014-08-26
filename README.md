@@ -12,7 +12,9 @@ A tool for automating much of the WordPress development workflow.
 - **Automatic Versioning** - pushes and merges become versioned automatically.
 
 ## Installation
-Run `npm install` in the repo directory. ![(boom)](https://dujrsrsgsd3nh.cloudfront.net/img/emoticons/boom.gif)
+
+1. Run `npm install` in the repo directory.
+2. Run `grunt setup_dev`
 
 ## Requirements
 *This has only been tested on OS X. It will not work as-is on Windows.*
