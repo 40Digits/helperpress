@@ -1,4 +1,8 @@
 module.exports = {
+	options:{
+		atBegin: true
+	},
+	
 	sass_dev: {
 		files: [
 			// all sass and css files in the assets dir

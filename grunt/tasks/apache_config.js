@@ -35,21 +35,18 @@ module.exports = function(grunt) {
 
 
 			// Point host name to localhost in hosts file
+			grunt.log.subhead('Defining "' + hostName + '" in hosts file...');
 			
-			hostExists(hostName, '127.0.0.1', function(found){
-				grunt.log.subhead('Defining "' + hostName + '" in hosts file...');
-
-				if(found){
-					grunt.log.okln('Host already defined.');
-					return;
-				}
+			if( hostExists(hostName, '127.0.0.1') ){
+				grunt.log.okln('Host already defined.');
+			}else{
 
 				var lhLine = '\n127.0.0.1	' + hostName;
 				execSync.run( sudo.apply('echo "' + lhLine + '" >> /etc/hosts') );
 
 				grunt.log.okln('Host defined.');
 
-			});
+			}
 
 
 			// a2ensite if necessary
