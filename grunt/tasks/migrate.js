@@ -11,21 +11,21 @@ module.exports = function(grunt){
 			// no args passed, so let's do it interactively
 			// TODO
 
-		}else if(typeof env === 'undefined'){
+		}else if(typeof env === 'undefined' || env === '_master'){
 
 			// assume helperpress.db_master
-			grunt.log.writeln('Environment not specified, assuming helperpress.db_master');
+			grunt.log.writeln('Migrating from configured helperpress.db_master');
 
 			env = grunt.config.process( '<%= helperpress.db_master %>' );
 
 			if(!env){
 
-				return grunt.warn('helperess.db_master not defined. Skipping migration.');
+				return grunt.oklns('helperess.db_master not defined. Skipping migration.');
 
-			}else if(dbEnvironment === 'local'){
+			}else if(env === 'local'){
 				// TODO: create an env alias option so when we're on a non-local env we still check correctly
 
-				return grunt.warn('helperess.db_master defined as this environement. Skipping migration.');
+				return grunt.oklns('helperess.db_master defined as this environement. Skipping migration.');
 
 			}
 
@@ -120,7 +120,6 @@ module.exports = function(grunt){
 		grunt.task.run('db_dump:' + environment);
 
 		// import it
-
 		grunt.config('db_import.local.options.import_from', 'db/backups/<%= grunt.template.today(\'yyyy-mm-dd\') %>_' + environment + '.sql');
 		grunt.config('db_import.local.options.title', '<%= helperpress.environments.' + environment + '.title %>');
 		grunt.task.run('db_import:local');

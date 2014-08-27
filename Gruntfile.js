@@ -57,6 +57,9 @@ module.exports = function (grunt) {
 		// config apache
 		'apache_config',
 
+		// pull DB and files from db_master
+		'migrate:pull:_master',
+
 		// watch, because we're good to go!
 		'watch'
 
