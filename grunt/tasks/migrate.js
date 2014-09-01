@@ -1,6 +1,6 @@
 var _ = require('lodash'),
 	fs = require('fs'),
-	FileSection = require(__dirname + '/../node_modules/file-section');
+	FileSection = require(__dirname + '/../lib/file-section');
 
 module.exports = function(grunt){
 
@@ -8,10 +8,13 @@ module.exports = function(grunt){
 
 		if(typeof direction === 'undefined'){
 
-			// no args passed, so let's do it interactively
-			// TODO
+			// no args passed
+			// TODO: let's do it interactively
+			direction = 'pull';
 
-		}else if(typeof env === 'undefined' || env === '_master'){
+		}
+
+		if(typeof env === 'undefined' || env === '_master'){
 
 			// assume helperpress.db_master
 			grunt.log.writeln('Migrating from configured helperpress.db_master');
@@ -20,85 +23,186 @@ module.exports = function(grunt){
 
 			if(!env){
 
-				return grunt.oklns('helperess.db_master not defined. Skipping migration.');
+				return grunt.ok('helperpress.db_master not defined. Skipping migration.');
 
 			}else if(env === 'local'){
 				// TODO: create an env alias option so when we're on a non-local env we still check correctly
 
-				return grunt.oklns('helperess.db_master defined as this environement. Skipping migration.');
+				return grunt.ok('helperpress.db_master defined as this environement. Skipping migration.');
 
 			}
 
 		}
 
 		// migrate data
-		pull_db(env);
-		pull_uploads(env);
+		db.apply(this, [direction, env]);
+		uploads.apply(this, [direction, env]);
 
 	}
 
 
 
-	function pull_uploads(environment){
+	function uploads(direction, environment){
 
-		switch(grunt.config('helperpress.environments.local.uploads_sync')){
+		var migrateTask;
 
-			case 'rewrite':
-				var htaccess = new FileSection({
-						filename: grunt.config('helperpress.build_dir') + '/.htaccess',
-						marker: {
-							start: '# BEGIN HelperPress',
-							end: '# END HelperPress'
-						}
-					}),
+		if(grunt.config('helperpress.environments.local.migrate_uploads') == 'rewrite'){
 
-					rewriteBase = grunt.config('helperpress.apache.scheme') === 'subdir' ? grunt.config('helperpress.environments.local.wp.theme.slug') : '/',
-					rewriteHost = grunt.config('helperpress.environments.' + grunt.config('helperpress.db_master') + '.home_url'),
+			// if we're currently using the htaccess rewrite method, disable it
+			grunt.task.run('wp_uploads_rewrite:disable');
 
-					rewriteContents = [
-						'RewriteEngine On',
-						'RewriteBase ' + rewriteBase,
-						'RewriteRule ^wp-content/uploads/(.+) http://' + rewriteHost + '/wp-content/uploads/$1 [L]'
-					];
+			// ...and update the config setting
+			grunt.config('write_site_config.migrate_upload', {
+				type: 'local',
+				settings: {
+					uploads_sync: 'copy'
+				}
+			});
 
-				htaccess.write( rewriteContents );
-				break;
+			grunt.task.run('write_site_config.migrate_upload');
 
+		}
+
+
+		switch(grunt.config('helperpress.environments.' + environment + '.migrate_uploads_method')){
 
 			case 'rsync':
-			default:
+
+				var sshInfo = '<%= helperpress.environments.' + environment + '.ssh %>',
+					sshString = '',
+					rsyncOpts = {
+						recursive: true
+					};
+
+				this.requiresConfig('helperpress.environments.' + environment + '.ssh');
+
+				// build sshString
+				if(typeof sshInfo.host !== 'undefined'){
+					sshString = sshInfo.user !== 'undefined' ? sshInfo.user + '@' + sshInfo.host : sshInfo.host;
+				}
+
+				// maybe add some more options
+				if(typeof sshInfo.keyfile !== 'undefined'){
+					rsyncOpts.privateKey = sshInfo.keyfile;
+				}
+				if(typeof sshInfo.port !== 'undefined'){
+					rsyncOpts.port = sshInfo.port;
+				}
+
+				// let em know that SSH password auth is for suckas
+				if(typeof sshInfo.password !== 'password'){
+					grunt.warn('grunt-rsync only supports passwordless SSH authentication.');
+				}
+
+
+				if(direction === 'pull'){
+					rsyncOpts.src = sshString + ':<%= helperpress.environments.' + environment + '.wp_path %>/wp-content/uploads';
+					rsyncOpts.dest = './';
+				} else {
+					rsyncOpts.src = './uploads';
+					rsyncOpts.dest = sshString + ':<%= helperpress.environments.' + environment + '.wp_path %>/wp-content/';
+				}
+
 
 				// Dynamically set rsync config
-				grunt.config('rsync.' + environment + '_uploads_down', {
-					options: {
-						src: '<%= helperpress.environments.' + environment + '.ssh_host %>:<%= helperpress.environments.' + environment + '.wp_path %>/wp-content/uploads',
-						dest: './',
-						delete: true
-					}
+				grunt.config('rsync.' + environment + '_uploads_migrate', {
+					options: rsyncOpts
 				});
 
-				grunt.config('rsync.' + environment + '_uploads_up', {
-					options: {
-						src: './uploads',
-						dest: '<%= helperpress.environments.' + environment + '.ssh_host %>:<%= helperpress.environments.' + environment + '.wp_path %>/wp-content/',
-						delete: true
-					}
-				});
+				migrateTask = 'rsync:' + environment + '_uploads_migrate';
 
-				grunt.task.run([
-					'notify:pull_uploads_start',
-					'rsync:' + environment + '_uploads_down',
-					'notify:pull_uploads_complete',
-					'symlink:uploads'
-				]);
 				break;
 
+
+			case 'sftp':
+
+				var sftpOpts = {
+						createDirectories: true,
+						showProgress: true,
+						host: '<%= helperpress.environments.' + environment + '.ssh.host %>'
+					},
+					sftpFiles = {},
+
+					sshInfo = grunt.config('<%= helperpress.environments.' + environment + '.ssh %>'),
+
+					// paths for transfer		
+					localBasePath = './',
+					localPath = 'uploads',
+					remoteBasePath = '<%= helperpress.environments.' + environment + '.wp_path %>/',
+					remotePath = 'wp-content/uploads';
+
+				this.requiresConfig('helperpress.environments.' + environment + '.ssh.host');
+
+				// map HP's SSH settings to ssh task's
+				if(typeof sshInfo.user !== 'undefined'){
+					sftpOpts.username = sshInfo.user;
+				}
+				if(typeof sshInfo.pass !== 'undefined'){
+					sftpOpts.password = sshInfo.pass;
+				}
+				if(typeof sshInfo.keyfile !== 'undefined'){
+					sftpOpts.privateKey = sshInfo.keyfile;
+				}
+				if(typeof sshInfo.passphrase !== 'undefined'){
+					sftpOpts.passphrase = sshInfo.passphrase;
+				}
+				if(typeof sshInfo.port !== 'undefined'){
+					sftpOpts.port = sshInfo.port;
+				}
+
+				if(direction === 'pull'){
+
+					sftpFiles = {
+						remotePath: localPath
+					};
+
+					sftpOpts.srcBasePath = remoteBasePath;
+					sftpOpts.destBasePath = localBasePath;
+
+					sftpOpts.mode = 'download';
+
+				} else {
+
+					sftpFiles = {
+						localPath: remotePath
+					};
+
+
+					sftpOpts.srcBasePath = localBasePath;
+					sftpOpts.destBasePath = remoteBasePath;
+
+					sftpOpts.mode = 'upload';
+
+				}
+
+				// Dynamically set sftp config
+				grunt.config('sftp.' + environment + '_uploads_migrate', {
+					options: sftpOpts,
+					files: sftpFiles
+				});
+
+				migrateTask = 'sftp:' + environment + '_uploads_migrate';
+
+				break;
+		}
+
+
+		// run it!
+		grunt.task.run([
+			'notify:migrate_uploads_start',
+			migrateTask,
+			'notify:migrate_uploads_complete'
+		]);
+
+		// make sure uploads dir is symlink'd
+		if(direction == 'pull'){
+			grunt.task.run('symlink:uploads');
 		}
 
 	}
 
 
-	function pull_db(environment){
+	function db(direction, environment){
 
 		// dump & import
 		var targetOpts = {
@@ -113,7 +217,7 @@ module.exports = function(grunt){
 			};
 
 
-		grunt.task.run('notify:db_migrate_start');
+		grunt.task.run('notify:migrate_db_start');
 
 		// dump it
 		grunt.config('db_dump.' + environment + '.options', targetOpts);
@@ -142,13 +246,14 @@ module.exports = function(grunt){
 		grunt.config( 'search_replace_db', _.extend(curConf, searchReplaceOpts) );
 		grunt.task.run('search_replace_db');
 
-		grunt.task.run('notify:db_migrate_complete');
+		grunt.task.run('notify:migrate_db_complete');
 
 	}
 
 
-	grunt.registerTask('pull_uploads', 'Syncs WP uploads', pull_uploads);
-	grunt.registerTask('pull_db', 'Pull DB from specified environment into local DB.', pull_db);
-	grunt.registerTask('migrate', 'Migrates data from one WP install to another', migrate);
+
+	grunt.registerTask('migrate_uploads', 'Migrates WP uploads', uploads);
+	grunt.registerTask('migrate_db', 'Migrates DB and does an intelligent search and replace.', db);
+	grunt.registerTask('migrate', 'Migrates all data from one WP install to another', migrate);
 
 };

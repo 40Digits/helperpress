@@ -5,28 +5,28 @@ module.exports = {
 			message: "Your input is required to continue."
 		}
 	},
-	db_migrate_start: {
+	migrate_db_start: {
 		options: {
 			title: "HelperPress",
 			message: "DB migration starting..."
 		}
 	},
-	db_migrate_complete: {
+	migrate_db_complete: {
 		options: {
 			title: "HelperPress",
 			message: "DB migration complete"
 		}
 	},
-	pull_uploads_start: {
+	migrate_uploads_start: {
 		options: {
 			title: "HelperPress",
-			message: "Syncing down uploads..."
+			message: "Uploads migration starting..."
 		}
 	},
-	pull_uploads_complete: {
+	migrate_uploads_complete: {
 		options: {
 			title: "HelperPress",
-			message: "Syncing uploads complete"
+			message: "Uploads migration complete"
 		}
 	}
 };

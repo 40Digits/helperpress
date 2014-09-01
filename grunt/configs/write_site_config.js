@@ -1,4 +1,8 @@
 module.exports = {
-	repo: {},
-	local: {}
+
+	// target for prompt task
+	init_prompt: {
+		type: 'repo'
+	}
+	
 }

@@ -4,8 +4,8 @@
 var execSync = require('execSync'),
 	ejs = require('ejs'),
 	
-	hostExists = require(__dirname + '/../node_modules/hosts-util').hostExists,
-	sudo = require(__dirname + '/../node_modules/apply-sudo');
+	hostExists = require(__dirname + '/../lib/hosts-util').hostExists,
+	sudo = require(__dirname + '/../lib/apply-sudo');
 
 module.exports = function(grunt) {
 

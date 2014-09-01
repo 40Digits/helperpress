@@ -1,7 +1,7 @@
 module.exports = function (grunt) {
 
     var fs = require('fs'),
-        FileSection = require(__dirname + '/../node_modules/file-section');
+        FileSection = require(__dirname + '/../lib/file-section');
 
     grunt.registerTask('wp_stylesheet_theme_info', "Defines the theme in style.css", function () {
 

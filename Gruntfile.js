@@ -21,12 +21,19 @@ module.exports = function (grunt) {
 
 	// run this task first after forking
 	grunt.registerTask( 'init_project', [	
+
+		// initialize subtrees
 		'gitsubtrees',	
+
+		// interactively setup this repo
 		'prompt:repo_config',
-		'write_site_config:repo',
+		'write_site_config:init_prompt',
 		'gitaddcommit:site_config_init',
+
+		// add WP theme definition banner to stylesheet
 		'wp_stylesheet_theme_info',
 		'gitaddcommit:stylesheet_init'
+
 	]);
 
 
@@ -83,7 +90,12 @@ module.exports = function (grunt) {
 		'wp_cli:remove_plugins',
 		'wp_cli:rewrite_flush',
 
-		'build_dist_assets'
+		// build assets
+		'build_dist_assets',
+
+		// copy theme into build dir
+
+		// clean copied theme
 
 	]);
 
@@ -103,6 +115,7 @@ module.exports = function (grunt) {
 		// Images
 		'newer:imagemin:assets_dist'
 	]);
+
 
 
 

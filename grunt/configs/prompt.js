@@ -1,7 +1,7 @@
 var repoName = process.cwd().substr(process.cwd().lastIndexOf('/') + 1),
 	validationFuncs = {},
 
-	sudo = require(__dirname + '/../node_modules/apply-sudo');
+	sudo = require(__dirname + '/../lib/apply-sudo');
 
 
 validationFuncs.notBlank = function(val){
@@ -21,20 +21,20 @@ var repo_config = {
 	options: {
 		questions: [
 			{
-				config: 'write_site_config.repo.wp.theme.slug', 
+				config: 'write_site_config.init_prompt.settings.wp.theme.slug', 
 				type: 'input', 
 				message: 'Enter site slug:', 
 				default: repoName,
 				validate: validationFuncs.noSpecialChars
 			},
 			{
-				config: 'write_site_config.repo.wp.theme.name', 
+				config: 'write_site_config.init_prompt.settings.wp.theme.name', 
 				type: 'input', 
 				message: 'Enter site\'s nice name:',
 				validate: validationFuncs.notBlank
 			},
 			{
-				config: 'write_site_config.repo.wp.theme.desc', 
+				config: 'write_site_config.init_prompt.settings.wp.theme.desc', 
 				type: 'input', 
 				message: 'Enter site\'s description:',
 				// TODO: it would be nice to generate a default based on the site's nice name
@@ -49,46 +49,46 @@ var repo_config = {
 
 			// Optional Extended Theme settings
 			{
-				config: 'write_site_config.repo.wp.theme.author',
+				config: 'write_site_config.init_prompt.settings.wp.theme.author',
 				type: 'input',
 				message: 'Enter Author:',
 				default: '<%= pkg.author %>',
 				when: setExtendedThemeSettings
 			},
 			{
-				config: 'write_site_config.repo.wp.theme.author_uri',
+				config: 'write_site_config.init_prompt.settings.wp.theme.author_uri',
 				type: 'input',
 				message: 'Enter Author URI:',
 				when: setExtendedThemeSettings
 			},
 			{
-				config: 'write_site_config.repo.wp.theme.version',
+				config: 'write_site_config.init_prompt.settings.wp.theme.version',
 				type: 'input',
 				message: 'Enter Version:',
 				default: '<%= pkg.version %>',
 				when: setExtendedThemeSettings
 			},
 			{
-				config: 'write_site_config.repo.wp.theme.uri',
+				config: 'write_site_config.init_prompt.settings.wp.theme.uri',
 				type: 'input',
 				message: 'Enter Theme URI:',
 				when: setExtendedThemeSettings
 			},
 			{
-				config: 'write_site_config.repo.wp.theme.tags',
+				config: 'write_site_config.init_prompt.settings.wp.theme.tags',
 				type: 'input',
 				message: 'Enter Tags:',
 				when: setExtendedThemeSettings
 			},
 			{
-				config: 'write_site_config.repo.wp.theme.license',
+				config: 'write_site_config.init_prompt.settings.wp.theme.license',
 				type: 'input',
 				message: 'Enter License:',
 				default: '<%= pkg.license %>',
 				when: setExtendedThemeSettings
 			},
 			{
-				config: 'write_site_config.repo.wp.theme.license_uri',
+				config: 'write_site_config.init_prompt.settings.wp.theme.license_uri',
 				type: 'input',
 				message: 'Enter License URI:',
 				when: setExtendedThemeSettings
@@ -98,7 +98,7 @@ var repo_config = {
 			// plugins
 			// value can be slug (from WP Plugins repo), path to local .zip file, or URL
 			{
-				config: 'write_site_config.repo.wp.plugins', 
+				config: 'write_site_config.init_prompt.settings.wp.plugins', 
 				type: 'checkbox', 
 				message: 'Select WordPress plugins:',
 				choices: [

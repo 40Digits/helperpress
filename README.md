@@ -37,11 +37,11 @@ Called automatically after `npm install`, this is the first task that should be 
 - Compiles SASS
 - Starts LiveReload
 
-### `grunt pull_db:environment`
+### `grunt migrate_db:direction:environment`
 Pulls down the database and runs a search and replace on it, overwriting the local database. Change `environment` to the ID of the environment from which you'd like to pull.
 
-### `grunt pull_uploads:environment`
-Pulls down the wp-content/uploads directory. This will also change the `uploads_sync` setting to "rsync" in your site_config.local.json file if it is not defined. If the setting is "rewrite", it will add a rewrite rule to the .htaccess file to load all uploads from the `db_master` environmnet. Change `environment` to the ID of the environment from which you'd like to pull.
+### `grunt migrate_uploads:direction:environment`
+Pulls or pushes the wp-content/uploads directory.  If the setting is "rewrite", it will add a rewrite rule to the .htaccess file to load all uploads from the `db_master` environmnet. Change `environment` to the ID of the environment from which you'd like to pull.
 
 ## Configuration
 Before Grunt is initialized, four configuration files are loaded and combined into one giant config JSON object. The files in order of precedence (i.e. early files' settings will override latter ones):
@@ -83,8 +83,15 @@ General rules:
 			// human-readable title
 			"title": "Development (Dev01)",
 
-			// Server SSH info
-			"ssh_host": "dev01.40digits.net",
+			// Server SSH (and SFTP) info
+			"ssh": {
+				"host": "dev01.40digits.net",
+				"port": 22,							// (optional) defaults to 22
+				"user": "kewld00d69",				// (optional) defaults to current shell user
+				"pass": "password1234",				// (optional) Note: won't work for SSH
+				"keyfile": "~/.ssh/customkey.rsa"	// (optional) uses typical default when omitted
+				"passphrase": "myKeysPassphrase"	// (optional) specify key's passphrase if needed
+			},
 
 			// Database settings (using SSH)
 			// DO NOT COMMIT CREDENTIALS - use ~/.helperpress or site_config.local.json
@@ -104,12 +111,20 @@ General rules:
 			"home_url": "my-wp.dev01.40digits.net",
 
 			/*
-			how HP should deploy source (uploads and databases are handled elsewhere)
+			how HP should deploy source
 			"rsync": rsync over SSH
-			"git_push": builds, grabs remote's .git folder, rsyncs files, commits, and pushes
+			"wpe": WPEngine's Git Deploy. (builds, grabs remote's .git folder, rsyncs files, commits, and pushes)
 			"none": don't allow deploy to run on this environment (e.g. it's handled elsewhere)
 			*/
 			"deploy_method": "rsync"
+
+			/*
+			how HP should migrate wp-uploads
+			"rsync": rsync over SSH
+			"sftp": connect via SFTP and upload/download
+			"none": don't allow automatic uploads migration on this environment (e.g. it's handled elsewhere)
+			*/
+			"migrate_uploads_method": "rsync"
 		}
 
 	},
@@ -118,9 +133,9 @@ General rules:
     "db_master": "development",
 
     /*
-    approach for syncing uploads.
-    "rewrite" uses Apache rewrites via .htaccess
-    "rsync" uses rsync to sync folder down
+    method for syncing uploads.
+    "rewrite" uses Apache rewrites via .htaccess (default)
+    "copy" copies files to local machine
     */
     "uploads_sync": "rsync"
 }
@@ -186,7 +201,7 @@ Currently just used for autoprefixer in CSS files
 
     // Which browsers should the code be expected to support?
     // autoprefixer syntax
-    "browser_support": ['last 2 version', 'ie 9'] 
+    "browser_support": ["last 2 version", "ie 9"] 
 
 }
 ```

@@ -1,8 +1,6 @@
 var _ = require('lodash'),
 	_deepExtend = require('underscore-deep-extend'),
-	fs = require('fs'),
-	
-	options = {};
+	fs = require('fs');
 	
 // initialize _deepExtend into _ object
 _.mixin({deepExtend: _deepExtend(_)});
@@ -10,19 +8,33 @@ _.mixin({deepExtend: _deepExtend(_)});
 
 module.exports = function(grunt) {
 
-	var configs = {
+	var configFileFuncs = {
 		repo: repo,
 		local: local
 	};
 
+	// setup these default configs so the defaults for each config file can be run
+	grunt.config('write_site_config.local', {});
+	grunt.config('write_site_config.repo', {});
+
 	grunt.registerMultiTask('write_site_config', 'Generates config files', function(){
 
-		if(typeof configs[this.target] !== 'function')
-			return grunt.warn('"write_site_config" only handles specific targets ("repo" and "local")');
+		if(typeof this.data.type === 'undefined'){
+			// see if target name is a valid type
+			if(typeof configFileFuncs[this.target] === 'function'){
+				this.data.type = this.target;
+			} else {
+				return grunt.warn('"write_site_config" requires a "type" setting. None defined in "' + this.target + '" target.');
+			}
+		}
 
-		options[this.target] = this.data;
+		var type = this.data.type;
 
-		configs[this.target]( grunt.config.process(this.data) );
+		if(typeof configFileFuncs[type] !== 'function'){
+			return grunt.warn('"write_site_config.type" must be either "repo" or "local".');
+		}
+
+		configFileFuncs[type].apply( this, grunt.config.process(this.data.settings) );
 
 	});
 
@@ -53,11 +65,17 @@ module.exports = function(grunt) {
 	// down to bidness
 	////////////////////
 
-	function repo(options){
-		var newContents = grunt.config('write_site_config.repo');
+	function repo(newConfig){
+		var curConfig = fs.existsSync('site_config.json') ? grunt.file.readJSON('site_config.json') : {};
+		
+		if( typeof newConfig === 'undefined' ){
+			newConfig = {};
+		}
+
+		var toSave = _.deepExtend(curConfig, newConfig);
 
 		// create site_config.json
-		grunt.file.write( './site_config.json', prettyJSON(newContents) );
+		grunt.file.write( './site_config.json', prettyJSON(toSave) );
 
 		// update package.json
 		// map write_site_config.repo.wp.theme vals to package.json vals
@@ -71,36 +89,35 @@ module.exports = function(grunt) {
 			pkgSrc = grunt.file.readJSON('./package.json');
 
 		for( var key in pkgKeyMap ){
-			if( typeof newContents.wp.theme[key] !== "string" || newContents.wp.theme[key].length > 0 ){
+			if( typeof newConfigContents.wp.theme[key] !== 'string' || newConfigContents.wp.theme[key].length > 0 ){
 				continue;
 			}
 
-			pkgSrc[pkgKeyMap[key]] = newContents.wp.theme[key];
+			pkgSrc[pkgKeyMap[key]] = newConfigContents.wp.theme[key];
 		}
 
 		// update package.json
 		grunt.file.write( './package.json', prettyJSON(pkgSrc) );
 
+		updatedLoadedConfig(newConfigContents);
+	}
 
-		updatedLoadedConfig(newContents);
-	};
+	function local(newConfig){
+		var curConfig = fs.existsSync('site_config.local.json') ? grunt.file.readJSON('site_config.local.json') : {};
 
-	function local(options){
-		var localEnv = {},
-			curContents = fs.existsSync('site_config.local.json') ? grunt.file.readJSON('site_config.local.json') : {};
+		if( typeof newConfig === 'undefined')
+			newConfig = {};
 
+		// Intelligently set defaults
+		//////////////////////////////
 
 		// Local Database
 		var wpSlug = grunt.config('helperpress.wp.theme.slug');
 
-		if( typeof objHasKeys(options, [ 'db', 'database' ]) !== 'undefined' ) {
-
-			localEnv.database = options.db.database;
-
-		} else if( wpSlug.length > 0 && typeof objHasKeys(curContents, [ 'environments', 'local', 'database' ]) === 'undefined' ) {
+		if( wpSlug.length > 0 && typeof objHasKeys(curConfig, [ 'environments', 'local', 'database' ]) === 'undefined' ) {
 
 			// if we have a wp slug and there is no currently configured db, use that.
-			localEnv.db = {
+			newConfig.environments.local.db = {
 				database: wpSlug
 			};
 
@@ -108,61 +125,46 @@ module.exports = function(grunt) {
 		
 
 		// Local wp_path
-		if( typeof options.wp_path !== 'undefined' ){
-
-			localEnv.wp_path = options.wp_path;
-
-		} else {
+		if( typeof curConfig.wp_path === 'undefined' ){
 
 			// let's infer it... probably CWD
-			localEnv.wp_path = process.cwd() + '/' + grunt.config('helperpress.build_dir');
+			newConfig.environments.local.wp_path = process.cwd() + '/' + grunt.config('helperpress.build_dir');
 
 		}
 			
 
 		// Local home_url
-		if( typeof options.home_url !== 'undefined' ){
+		if( typeof curConfig.home_url === 'undefined' ){
 
-			localEnv.home_url = options.home_url;
-
-		} else {
-
-			// let's infer it
-			localEnv.home_url = grunt.config('helperpress.apache.url_scheme').replace('*', wpSlug);
+			// let's infer it based on apache config
+			newConfig.environments.local.home_url = grunt.config('helperpress.apache.url_scheme').replace('*', wpSlug);
 
 		}
 
 		// uploads_sync
-		var curUploadsConf = grunt.config('helperpress.environments.local.uploads_sync');
-		if( typeof options.uploads_sync !== 'undefined' ){
+		if( typeof newConfig.uploads_sync === 'undefined' && typeof curConfig.uploads_sync === 'undefined' ){
 
-			localEnv.uploads_sync = options.uploads_sync;
+			var curUploadsConf = grunt.config('helperpress.uploads_sync');
+			if( typeof curUploadsConf === 'string' && curUploadsConf.length > 0 ){
+				
+				// if it's set elsewhere (likely ~/.helperpress) then save that within repo
+				newConfig.uploads_sync = curUploadsConf;
 
-		} else if(typeof curUploadsConf === 'string' && curUploadsConf.length > 0){
-			
-			// if it's set elsewhere (likely ~/.helperpress) then save that within repo
-			localEnv.uploads_sync = curUploadsConf;
+			} else {
 
-		} else {
+				// default to rewrite
+				newConfig.uploads_sync = 'rewrite';
 
-			// default to rsync
-			localEnv.uploads_sync = 'rsync';
+			}
 
 		}
 
-
-		var newContents = {
-			'environments': {
-				'local': localEnv
-			}
-		};
-
-		var toSave = _.deepExtend(curContents, newContents);
+		var toSave = _.deepExtend(curConfig, newConfig);
 
 		// write it to the file
 		grunt.file.write( 'site_config.local.json', prettyJSON(toSave) );
 
-		updatedLoadedConfig(newContents);
+		updatedLoadedConfig(newConfigContents);
 
 	}
 
