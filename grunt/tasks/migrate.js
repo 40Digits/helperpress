@@ -6,35 +6,7 @@ module.exports = function(grunt){
 
 	function migrate(direction, env){
 
-		if(typeof direction === 'undefined'){
-
-			// no args passed
-			// TODO: let's do it interactively
-			direction = 'pull';
-
-		}
-
-		if(typeof env === 'undefined' || env === '_master'){
-
-			// assume helperpress.db_master
-			grunt.log.writeln('Migrating from configured helperpress.db_master');
-
-			env = grunt.config.process( '<%= helperpress.db_master %>' );
-
-			if(!env){
-
-				return grunt.ok('helperpress.db_master not defined. Skipping migration.');
-
-			}else if(env === 'local'){
-				// TODO: create an env alias option so when we're on a non-local env we still check correctly
-
-				return grunt.ok('helperpress.db_master defined as this environement. Skipping migration.');
-
-			}
-
-		}
-
-		// migrate data
+		// migrate all data
 		db.apply(this, [direction, env]);
 		uploads.apply(this, [direction, env]);
 
@@ -46,20 +18,51 @@ module.exports = function(grunt){
 
 		var migrateTask;
 
-		if(grunt.config('helperpress.environments.local.migrate_uploads') == 'rewrite'){
+
+		if(typeof direction === 'undefined'){
+
+			// no args passed
+			// TODO: let's do it interactively
+			direction = 'pull';
+
+		}
+
+		if(typeof environment === 'undefined' || environment === '_master'){
+
+			// assume helperpress.db_master
+			grunt.log.writeln('Migrating from configured helperpress.db_master');
+
+			environment = grunt.config.process( '<%= helperpress.db_master %>' );
+
+			if(!environment){
+
+				return grunt.ok('helperpress.db_master not defined. Skipping migration.');
+
+			}else if(environment === 'local'){
+				// TODO: create an env alias option so when we're on a non-local env we still check correctly
+
+				return grunt.ok('helperpress.db_master defined as this environement. Skipping migration.');
+
+			}
+
+		}
+
+		if(grunt.config('helperpress.uploads_sync') !== 'copy'){
 
 			// if we're currently using the htaccess rewrite method, disable it
 			grunt.task.run('wp_uploads_rewrite:disable');
 
 			// ...and update the config setting
 			grunt.config('write_site_config.migrate_upload', {
-				type: 'local',
-				settings: {
-					uploads_sync: 'copy'
+				options:{
+					type: 'local',
+					settings: {
+						uploads_sync: 'copy'
+					}
 				}
 			});
 
-			grunt.task.run('write_site_config.migrate_upload');
+			grunt.task.run('write_site_config:migrate_upload');
 
 		}
 
@@ -115,21 +118,23 @@ module.exports = function(grunt){
 
 
 			case 'sftp':
+			default:
 
-				var sftpOpts = {
-						createDirectories: true,
-						showProgress: true,
-						host: '<%= helperpress.environments.' + environment + '.ssh.host %>'
-					},
-					sftpFiles = {},
-
-					sshInfo = grunt.config('<%= helperpress.environments.' + environment + '.ssh %>'),
+				var sshInfo = grunt.config('helperpress.environments.' + environment + '.ssh'),
 
 					// paths for transfer		
 					localBasePath = './',
 					localPath = 'uploads',
-					remoteBasePath = '<%= helperpress.environments.' + environment + '.wp_path %>/',
-					remotePath = 'wp-content/uploads';
+					remoteBasePath = '<%= helperpress.environments.' + environment + '.wp_path %>/wp-content/',
+					remotePath = 'uploads',
+
+					sftpOpts = {
+						createDirectories: true,
+						showProgress: true,
+						host: '<%= helperpress.environments.' + environment + '.ssh.host %>',
+						path: remoteBasePath
+					},
+					sftpFiles = {};
 
 				this.requiresConfig('helperpress.environments.' + environment + '.ssh.host');
 
@@ -141,7 +146,7 @@ module.exports = function(grunt){
 					sftpOpts.password = sshInfo.pass;
 				}
 				if(typeof sshInfo.keyfile !== 'undefined'){
-					sftpOpts.privateKey = sshInfo.keyfile;
+					sftpOpts.privateKey = grunt.file.read(sshInfo.keyfile);
 				}
 				if(typeof sshInfo.passphrase !== 'undefined'){
 					sftpOpts.passphrase = sshInfo.passphrase;
@@ -152,9 +157,7 @@ module.exports = function(grunt){
 
 				if(direction === 'pull'){
 
-					sftpFiles = {
-						remotePath: localPath
-					};
+					sftpFiles[localBasePath] = remotePath;
 
 					sftpOpts.srcBasePath = remoteBasePath;
 					sftpOpts.destBasePath = localBasePath;
@@ -163,10 +166,7 @@ module.exports = function(grunt){
 
 				} else {
 
-					sftpFiles = {
-						localPath: remotePath
-					};
-
+					sftpFiles[remoteBasePath] = localPath + '/**';
 
 					sftpOpts.srcBasePath = localBasePath;
 					sftpOpts.destBasePath = remoteBasePath;
@@ -204,6 +204,36 @@ module.exports = function(grunt){
 
 	function db(direction, environment){
 
+
+
+		if(typeof direction === 'undefined'){
+
+			// no args passed
+			// TODO: let's do it interactively
+			direction = 'pull';
+
+		}
+
+		if(typeof environment === 'undefined' || environment === '_master'){
+
+			// assume helperpress.db_master
+			grunt.log.writeln('Migrating from configured helperpress.db_master');
+
+			environment = grunt.config.process( '<%= helperpress.db_master %>' );
+
+			if(!environment){
+
+				return grunt.ok('helperpress.db_master not defined. Skipping migration.');
+
+			}else if(environment === 'local'){
+				// TODO: create an env alias option so when we're on a non-local env we still check correctly
+
+				return grunt.ok('helperpress.db_master defined as this environement. Skipping migration.');
+
+			}
+
+		}
+
 		// dump & import
 		var targetOpts = {
 				title: '<%= helperpress.environments.' + environment + '.title %>',
@@ -213,7 +243,7 @@ module.exports = function(grunt){
 				pass: '<%= helperpress.environments.' + environment + '.db.pass %>',
 				host: '<%= helperpress.environments.' + environment + '.db.host %>',
 
-				ssh_host: '<%= helperpress.environments.' + environment + '.ssh_host %>'
+				ssh_host: '<%= helperpress.environments.' + environment + '.ssh.host %>'
 			};
 
 

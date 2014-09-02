@@ -27,7 +27,7 @@ module.exports = function (grunt) {
 
 		// interactively setup this repo 
 		'prompt:repo_config',
-		'write_site_config:init_prompt',
+		'write_site_config:repo_config',
 		'gitaddcommit:site_config_init',
 
 		// add WP theme definition banner to stylesheet
@@ -66,7 +66,7 @@ module.exports = function (grunt) {
 		'apache_config',
 
 		// pull DB and files from db_master
-		'migrate:pull:_master',
+		'migrate_db:pull:_master',
 
 		// watch, because we're good to go!
 		'watch'

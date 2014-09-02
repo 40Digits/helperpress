@@ -27,13 +27,15 @@ module.exports = function(grunt){
 
 			// update site_config via write_site_config task
 			grunt.config('write_site_config.rewrite_rules', {
-				type: 'local',
-				settings: {
-					uploads_sync: 'rewrite'
+				options: {
+					type: 'local',
+					settings: {
+						uploads_sync: 'rewrite'
+					}
 				}
 			});
 
-			grunt.task.run('write_site_config.rewrite_rules');
+			grunt.task.run('write_site_config:rewrite_rules');
 		}
 
 		htaccess.write( rewriteContents );

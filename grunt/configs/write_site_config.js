@@ -1,8 +1,22 @@
 module.exports = {
 
+	// defaults
+	local: {
+		options: {
+			type: 'local'
+		}
+	},
+	repo: {
+		options: {
+			type: 'repo'
+		}
+	},
+
 	// target for prompt task
-	init_prompt: {
-		type: 'repo'
+	repo_config: {
+		options: {
+			type: 'repo'
+		}
 	}
 	
 }

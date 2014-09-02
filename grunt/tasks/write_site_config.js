@@ -13,28 +13,27 @@ module.exports = function(grunt) {
 		local: local
 	};
 
-	// setup these default configs so the defaults for each config file can be run
-	grunt.config('write_site_config.local', {});
-	grunt.config('write_site_config.repo', {});
 
 	grunt.registerMultiTask('write_site_config', 'Generates config files', function(){
 
-		if(typeof this.data.type === 'undefined'){
+		var options = this.options();
+
+		if(typeof options.type === 'undefined'){
 			// see if target name is a valid type
 			if(typeof configFileFuncs[this.target] === 'function'){
-				this.data.type = this.target;
+				options.type = this.target;
 			} else {
 				return grunt.warn('"write_site_config" requires a "type" setting. None defined in "' + this.target + '" target.');
 			}
 		}
 
-		var type = this.data.type;
+		var type = options.type;
 
 		if(typeof configFileFuncs[type] !== 'function'){
 			return grunt.warn('"write_site_config.type" must be either "repo" or "local".');
 		}
 
-		configFileFuncs[type].apply( this, grunt.config.process(this.data.settings) );
+		configFileFuncs[type]( grunt.config.process(options.settings) );
 
 	});
 
@@ -66,47 +65,55 @@ module.exports = function(grunt) {
 	////////////////////
 
 	function repo(newConfig){
-		var curConfig = fs.existsSync('site_config.json') ? grunt.file.readJSON('site_config.json') : {};
-		
-		if( typeof newConfig === 'undefined' ){
-			newConfig = {};
-		}
-
-		var toSave = _.deepExtend(curConfig, newConfig);
+		var curConfig = fs.existsSync('site_config.json') ? grunt.file.readJSON('site_config.json') : {},
+			toSave = _.deepExtend(curConfig, newConfig);
 
 		// create site_config.json
 		grunt.file.write( './site_config.json', prettyJSON(toSave) );
 
-		// update package.json
-		// map write_site_config.repo.wp.theme vals to package.json vals
-		var pkgKeyMap = {
-				slug: 'name',
-				version: 'version',
-				description: 'description',
-				license: 'license'
-			},
+		if( typeof objHasKeys(toSave, [ 'wp', 'theme' ]) !== 'undefined' ){
 
-			pkgSrc = grunt.file.readJSON('./package.json');
+			// update package.json
+			// map write_site_config.repo.wp.theme vals to package.json vals
+			var pkgKeyMap = {
+					slug: 'name',
+					version: 'version',
+					description: 'description',
+					license: 'license'
+				},
 
-		for( var key in pkgKeyMap ){
-			if( typeof newConfigContents.wp.theme[key] !== 'string' || newConfigContents.wp.theme[key].length > 0 ){
-				continue;
+				pkgSrc = grunt.file.readJSON('./package.json');
+
+			for( var key in pkgKeyMap ){
+				if( typeof toSave.wp.theme[key] !== 'string' || toSave.wp.theme[key].length == 0 ){
+					continue;
+				}
+
+				pkgSrc[pkgKeyMap[key]] = toSave.wp.theme[key];
 			}
 
-			pkgSrc[pkgKeyMap[key]] = newConfigContents.wp.theme[key];
+			// update package.json
+			grunt.file.write( './package.json', prettyJSON(pkgSrc) );
+
 		}
 
-		// update package.json
-		grunt.file.write( './package.json', prettyJSON(pkgSrc) );
-
-		updatedLoadedConfig(newConfigContents);
+		updatedLoadedConfig(newConfig);
 	}
 
 	function local(newConfig){
 		var curConfig = fs.existsSync('site_config.local.json') ? grunt.file.readJSON('site_config.local.json') : {};
 
-		if( typeof newConfig === 'undefined')
+		if( typeof newConfig === 'undefined' ){
 			newConfig = {};
+		}
+
+		if( typeof newConfig.environments === 'undefined' ){
+			newConfig.environments = {};
+		}
+
+		if( typeof newConfig.environments.local === 'undefined' ){
+			newConfig.environments.local = {};
+		}
 
 		// Intelligently set defaults
 		//////////////////////////////
@@ -157,6 +164,19 @@ module.exports = function(grunt) {
 
 			}
 
+			// setup rewrite or do migration
+			switch( newConfig.uploads_sync ) {
+
+				case 'rewrite':
+					grunt.task.run('wp_uploads_rewrite:enable');
+					break;
+
+				case 'copy':
+					grunt.task.run('migrate_uploads:pull:_master');
+					break;
+
+			}
+
 		}
 
 		var toSave = _.deepExtend(curConfig, newConfig);
@@ -164,7 +184,7 @@ module.exports = function(grunt) {
 		// write it to the file
 		grunt.file.write( 'site_config.local.json', prettyJSON(toSave) );
 
-		updatedLoadedConfig(newConfigContents);
+		updatedLoadedConfig(newConfig);
 
 	}
 

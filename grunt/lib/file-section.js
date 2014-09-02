@@ -43,7 +43,7 @@ FileSection.prototype.read = function() {
                 thisFS.content.push(line);
             }
 
-            if (line.indexOf(thisFS.options.marker.begin) !== -1){
+            if (line.indexOf(thisFS.options.marker.start) !== -1){
                 inSection = true;
                 thisFS.startLine = i;
             }
@@ -55,12 +55,14 @@ FileSection.prototype.read = function() {
 };
 
 FileSection.prototype.write = function( newLines, pos ) {
+
     // add markers
     newLines.unshift(this.options.marker.start);
     newLines.push(this.options.marker.end);
     
     // if it's already there, remove it
-    this.fileContents.splice(this.startLine, this.length);
+    this.fileContents.splice(this.startLine, this.length + 2);
+
 
     // insert it
     if(pos === 'end'){
