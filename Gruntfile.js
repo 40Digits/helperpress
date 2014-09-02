@@ -25,7 +25,7 @@ module.exports = function (grunt) {
 		// initialize subtrees
 		'gitsubtrees',	
 
-		// interactively setup this repo
+		// interactively setup this repo 
 		'prompt:repo_config',
 		'write_site_config:init_prompt',
 		'gitaddcommit:site_config_init',
@@ -57,6 +57,7 @@ module.exports = function (grunt) {
 		'wp_cli:install_plugins',
 		'wp_cli:remove_plugins',
 		'wp_cli:rewrite_flush',
+		'clean:wp_default_themes',
 
 		// symlink wp-theme into WP installation
 		'symlink:theme',
@@ -89,13 +90,16 @@ module.exports = function (grunt) {
 		'wp_cli:install_plugins',
 		'wp_cli:remove_plugins',
 		'wp_cli:rewrite_flush',
+		'clean:wp_default_themes',
 
 		// build assets
 		'build_dist_assets',
 
 		// copy theme into build dir
+		'copy:theme',
 
 		// clean copied theme
+		'clean:non_dist'
 
 	]);
 
