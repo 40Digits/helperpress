@@ -70,4 +70,4 @@ Thumbs.db
 /wp-theme/*.css
 
 # Local site config
-/site_config.local.json
+/helperpress.local.json

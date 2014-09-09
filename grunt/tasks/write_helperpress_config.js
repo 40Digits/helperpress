@@ -14,7 +14,7 @@ module.exports = function(grunt) {
 	};
 
 
-	grunt.registerMultiTask('write_site_config', 'Generates config files', function(){
+	grunt.registerMultiTask('write_helperpress_config', 'Generates config files', function(){
 
 		var options = this.options();
 
@@ -23,14 +23,14 @@ module.exports = function(grunt) {
 			if(typeof configFileFuncs[this.target] === 'function'){
 				options.type = this.target;
 			} else {
-				return grunt.warn('"write_site_config" requires a "type" setting. None defined in "' + this.target + '" target.');
+				return grunt.warn('"write_helperpress_config" requires a "type" setting. None defined in "' + this.target + '" target.');
 			}
 		}
 
 		var type = options.type;
 
 		if(typeof configFileFuncs[type] !== 'function'){
-			return grunt.warn('"write_site_config.type" must be either "repo" or "local".');
+			return grunt.warn('"write_helperpress_config.type" must be either "repo" or "local".');
 		}
 
 		configFileFuncs[type]( grunt.config.process(options.settings) );
@@ -65,16 +65,16 @@ module.exports = function(grunt) {
 	////////////////////
 
 	function repo(newConfig){
-		var curConfig = fs.existsSync('site_config.json') ? grunt.file.readJSON('site_config.json') : {},
+		var curConfig = fs.existsSync('helperpress.json') ? grunt.file.readJSON('helperpress.json') : {},
 			toSave = _.deepExtend(curConfig, newConfig);
 
-		// create site_config.json
-		grunt.file.write( './site_config.json', prettyJSON(toSave) );
+		// create helperpress.json
+		grunt.file.write( './helperpress.json', prettyJSON(toSave) );
 
 		if( typeof objHasKeys(toSave, [ 'wp', 'theme' ]) !== 'undefined' ){
 
 			// update package.json
-			// map write_site_config.repo.wp.theme vals to package.json vals
+			// map write_helperpress_config.repo.wp.theme vals to package.json vals
 			var pkgKeyMap = {
 					slug: 'name',
 					version: 'version',
@@ -101,7 +101,7 @@ module.exports = function(grunt) {
 	}
 
 	function local(newConfig){
-		var curConfig = fs.existsSync('site_config.local.json') ? grunt.file.readJSON('site_config.local.json') : {};
+		var curConfig = fs.existsSync('helperpress.local.json') ? grunt.file.readJSON('helperpress.local.json') : {};
 
 		if( typeof newConfig === 'undefined' ){
 			newConfig = {};
@@ -182,7 +182,7 @@ module.exports = function(grunt) {
 		var toSave = _.deepExtend(curConfig, newConfig);
 
 		// write it to the file
-		grunt.file.write( 'site_config.local.json', prettyJSON(toSave) );
+		grunt.file.write( 'helperpress.local.json', prettyJSON(toSave) );
 
 		updatedLoadedConfig(newConfig);
 

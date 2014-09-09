@@ -14,34 +14,34 @@ validationFuncs.noSpecialChars = function(val){
 }
 
 function setExtendedThemeSettings(answers){
-	return answers['_write_site_config.deep_theme_settings'];
+	return answers['_write_helperpress_config.deep_theme_settings'];
 }
 
 var repo_config = {
 	options: {
 		questions: [
 			{
-				config: 'write_site_config.repo_config.options.settings.wp.theme.slug', 
+				config: 'write_helperpress_config.repo_config.options.settings.wp.theme.slug', 
 				type: 'input', 
 				message: 'Enter site slug:', 
 				default: repoName,
 				validate: validationFuncs.noSpecialChars
 			},
 			{
-				config: 'write_site_config.repo_config.options.settings.wp.theme.name', 
+				config: 'write_helperpress_config.repo_config.options.settings.wp.theme.name', 
 				type: 'input', 
 				message: 'Enter site\'s nice name:',
 				validate: validationFuncs.notBlank
 			},
 			{
-				config: 'write_site_config.repo_config.options.settings.wp.theme.desc', 
+				config: 'write_helperpress_config.repo_config.options.settings.wp.theme.desc', 
 				type: 'input', 
 				message: 'Enter site\'s description:',
 				// TODO: it would be nice to generate a default based on the site's nice name
 				default: 'A custom-built WordPress theme.'
 			},
 			{
-				config: '_write_site_config.deep_theme_settings', 
+				config: '_write_helperpress_config.deep_theme_settings', 
 				type: 'confirm', 
 				message: 'Would you like to setup optional theme settings?',
 				default: false
@@ -49,46 +49,46 @@ var repo_config = {
 
 			// Optional Extended Theme settings
 			{
-				config: 'write_site_config.repo_config.options.settings.wp.theme.author',
+				config: 'write_helperpress_config.repo_config.options.settings.wp.theme.author',
 				type: 'input',
 				message: 'Enter Author:',
 				default: '<%= pkg.author %>',
 				when: setExtendedThemeSettings
 			},
 			{
-				config: 'write_site_config.repo_config.options.settings.wp.theme.author_uri',
+				config: 'write_helperpress_config.repo_config.options.settings.wp.theme.author_uri',
 				type: 'input',
 				message: 'Enter Author URI:',
 				when: setExtendedThemeSettings
 			},
 			{
-				config: 'write_site_config.repo_config.options.settings.wp.theme.version',
+				config: 'write_helperpress_config.repo_config.options.settings.wp.theme.version',
 				type: 'input',
 				message: 'Enter Version:',
 				default: '<%= pkg.version %>',
 				when: setExtendedThemeSettings
 			},
 			{
-				config: 'write_site_config.repo_config.options.settings.wp.theme.uri',
+				config: 'write_helperpress_config.repo_config.options.settings.wp.theme.uri',
 				type: 'input',
 				message: 'Enter Theme URI:',
 				when: setExtendedThemeSettings
 			},
 			{
-				config: 'write_site_config.repo_config.options.settings.wp.theme.tags',
+				config: 'write_helperpress_config.repo_config.options.settings.wp.theme.tags',
 				type: 'input',
 				message: 'Enter Tags:',
 				when: setExtendedThemeSettings
 			},
 			{
-				config: 'write_site_config.repo_config.options.settings.wp.theme.license',
+				config: 'write_helperpress_config.repo_config.options.settings.wp.theme.license',
 				type: 'input',
 				message: 'Enter License:',
 				default: '<%= pkg.license %>',
 				when: setExtendedThemeSettings
 			},
 			{
-				config: 'write_site_config.repo_config.options.settings.wp.theme.license_uri',
+				config: 'write_helperpress_config.repo_config.options.settings.wp.theme.license_uri',
 				type: 'input',
 				message: 'Enter License URI:',
 				when: setExtendedThemeSettings
@@ -98,7 +98,7 @@ var repo_config = {
 			// plugins
 			// value can be slug (from WP Plugins repo), path to local .zip file, or URL
 			{
-				config: 'write_site_config.repo_config.options.settings.wp.plugins', 
+				config: 'write_helperpress_config.repo_config.options.settings.wp.plugins', 
 				type: 'checkbox', 
 				message: 'Select WordPress plugins:',
 				choices: [

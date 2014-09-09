@@ -27,8 +27,8 @@ module.exports = function (grunt) {
 
 		// interactively setup this repo 
 		'prompt:repo_config',
-		'write_site_config:repo_config',
-		'gitaddcommit:site_config_init',
+		'write_helperpress_config:repo_config',
+		'gitaddcommit:helperpress_config_init',
 
 		// add WP theme definition banner to stylesheet
 		'wp_stylesheet_theme_info',
@@ -47,7 +47,7 @@ module.exports = function (grunt) {
 		'bower:install',
 
 		// setup local config
-		'write_site_config:local',
+		'write_helperpress_config:local',
 
 		// WordPress goodness
 		'wp_cli:download_core',
@@ -80,7 +80,7 @@ module.exports = function (grunt) {
 		'composer:install',
 		'bower:install',
 
-		'write_site_config:local',
+		'write_helperpress_config:local',
 
 		// WordPress goodness
 		'wp_cli:download_core',
@@ -135,8 +135,8 @@ module.exports = function (grunt) {
 
 	var packageJSON = grunt.file.readJSON('package.json'),
 		userDefaultsJSON = grunt.file.exists( userhome('.helperpress') ) ? grunt.file.readJSON( userhome('.helperpress') ) : {},
-		siteConfigJSON = grunt.file.exists('site_config.json') ? grunt.file.readJSON('site_config.json') : {},
-		siteConfigLocalJSON = grunt.file.exists('site_config.local.json') ? grunt.file.readJSON('site_config.local.json') : {};
+		siteConfigJSON = grunt.file.exists('helperpress.json') ? grunt.file.readJSON('helperpress.json') : {},
+		siteConfigLocalJSON = grunt.file.exists('helperpress.local.json') ? grunt.file.readJSON('helperpress.local.json') : {};
 
 	// combine all config files
 	gruntConfig.helperpress = _.deepExtend( packageJSON.config, userDefaultsJSON, siteConfigJSON, siteConfigLocalJSON );

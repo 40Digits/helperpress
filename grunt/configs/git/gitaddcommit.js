@@ -1,5 +1,5 @@
 module.exports = {
-	site_config_init: {
+	helperpress_config_init: {
 		options: {
 			message: 'HelperPress site config init',
 			noVerify: true

@@ -29,8 +29,8 @@ module.exports = function(grunt){
 					'RewriteRule ^wp-content/uploads/(.+) http://' + rewriteHost + '/wp-content/uploads/$1 [L]'
 				];
 
-				// update site_config via write_site_config task
-				grunt.config('write_site_config.rewrite_rules', {
+				// update helperpress_config via write_helperpress_config task
+				grunt.config('write_helperpress_config.rewrite_rules', {
 					options: {
 						type: 'local',
 						settings: {
@@ -39,7 +39,7 @@ module.exports = function(grunt){
 					}
 				});
 
-				grunt.task.run('write_site_config:rewrite_rules');
+				grunt.task.run('write_helperpress_config:rewrite_rules');
 			}
 
 			htaccess.write( rewriteContents );

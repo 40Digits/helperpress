@@ -29,8 +29,8 @@ Called automatically after `npm install`, this is the first task that should be 
 - Installs Composer components
 - Installs Bower components
 - Installs and configures WordPress 
-- Migrates site data down if site_config.json already exists in the repo
-- Creates site_config.local.json
+- Migrates site data down if helperpress.json already exists in the repo
+- Creates helperpress.local.json
 
 ### `grunt watch`
 
@@ -46,8 +46,8 @@ Pulls or pushes the wp-content/uploads directory.  If the setting is "rewrite", 
 ## Configuration
 Before Grunt is initialized, four configuration files are loaded and combined into one giant config JSON object. The files in order of precedence (i.e. early files' settings will override latter ones):
 
-1. site_config.local.json
-2. site_config.json
+1. helperpress.local.json
+2. helperpress.json
 3. ~/.helperpress
 4. package.json
 
@@ -55,8 +55,8 @@ Before Grunt is initialized, four configuration files are loaded and combined in
 
 *Where should the setting apply?*          | This Repo              | All Repos
 -------------------------------------------|------------------------|-------------------
-  **This Environment**                     | site_config.local.json | ~/.helperpress
-  **All Environments**                     | site_config.json       | package.json*
+  **This Environment**                     | helperpress.local.json | ~/.helperpress
+  **All Environments**                     | helperpress.json       | package.json*
 
 ######* *package.json "config" object should only be edited in the boilerplate.*
 
@@ -65,12 +65,12 @@ See the example commented JSON object below for information about each property.
 
 
 #### Environments
-These settings will come from **site_config.json**, **site_config.local.json**, &  **~/wpe_defaults**.
+These settings will come from **helperpress.json**, **helperpress.local.json**, &  **~/.helperpress**.
 
 General rules:
 
-- If the information is unique to this repository, it'll go in site_config.json or site_config.local.json
-- Never commit usernames and passwords (i.e. keep them out of package.json and site_config.json)
+- If the information is unique to this repository, it'll go in helperpress.json or helperpress.local.json
+- Never commit usernames and passwords (i.e. keep them out of package.json and helperpress.json)
 - If a setting gets reused across multiple sites, such as your local environment setup or development environment creds, it'll go in ~/.helperpress
 
 ```js
@@ -94,7 +94,7 @@ General rules:
 			},
 
 			// Database settings (using SSH)
-			// DO NOT COMMIT CREDENTIALS - use ~/.helperpress or site_config.local.json
+			// DO NOT COMMIT CREDENTIALS - use ~/.helperpress or helperpress.local.json
 			"db": {
 
 				"host": "127.0.0.1",

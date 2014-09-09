@@ -52,7 +52,7 @@ module.exports = function(grunt){
 			grunt.task.run('wp_uploads_rewrite:disable');
 
 			// ...and update the config setting
-			grunt.config('write_site_config.migrate_upload', {
+			grunt.config('write_helperpress_config.migrate_upload', {
 				options:{
 					type: 'local',
 					settings: {
@@ -61,7 +61,7 @@ module.exports = function(grunt){
 				}
 			});
 
-			grunt.task.run('write_site_config:migrate_upload');
+			grunt.task.run('write_helperpress_config:migrate_upload');
 
 		}
 

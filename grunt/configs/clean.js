@@ -43,7 +43,7 @@ module.exports = {
 
 	// reset local config
 	reset: [
-		'site_config.local.json'
+		'helperpress.local.json'
 	],
 
 	// clean the non-distrubutable stuff in the build dir. BE CAREFUL HERE

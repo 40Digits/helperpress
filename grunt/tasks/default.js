@@ -4,13 +4,13 @@ module.exports = function(grunt){
 
 	grunt.registerTask('default', 'Determines what to do based on state of repo configs', function(){
 
-		if( !fs.existsSync('./site_config.json') ){
+		if( !fs.existsSync('./helperpress.json') ){
 			// brand new project
 			grunt.task.run([
 				'init_project',
 				'build_dev'
 			]);
-		}else if( !fs.existsSync('./site_config.local.json') ){
+		}else if( !fs.existsSync('./helperpress.local.json') ){
 			// already initialized project
 			grunt.task.run('build_dev');
 		}else{
