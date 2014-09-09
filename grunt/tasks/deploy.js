@@ -1,4 +1,5 @@
-var execSync = require('execSync');
+var execSync = require('execSync'),
+	_ = require('lodash');
 
 'use strict';
 
@@ -9,7 +10,16 @@ module.exports = function(grunt) {
 	grunt.registerTask('deploy', 'Deploy to WPEngine using Git Deploy', function(environment) {
 
 		if(typeof environment === 'undefined'){
+			// infer based on current gir branch
 
+			var curBranch = execSync.exec('git symbolic-ref HEAD 2>/dev/null | cut -d"/" -f 3').stdout.trim(), // via http://stackoverflow.com/questions/1593051/how-to-programmatically-determine-the-current-checked-out-git-branch#comment-9751841
+				envConfig = grunt.config('helperpress.environments');
+
+			if( _.indexOf(Object.keys(envConfig), curBranch) === -1 ){
+				grunt.fatal('Looks like there is no environment configured for git branch "' + curBranch + '"');
+			}
+
+			environment = curBranch;
 		}
 
 		this.requiresConfig(
