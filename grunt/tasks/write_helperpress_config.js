@@ -121,7 +121,7 @@ module.exports = function(grunt) {
 		// Local Database
 		var wpSlug = grunt.config('helperpress.wp.theme.slug');
 
-		if( wpSlug.length > 0 && typeof objHasKeys(curConfig, [ 'environments', 'local', 'database' ]) === 'undefined' ) {
+		if( wpSlug.length > 0 && typeof objHasKeys(curConfig, [ 'environments', 'local', 'db' , 'database' ]) === 'undefined' ) {
 
 			// if we have a wp slug and there is no currently configured db, use that.
 			newConfig.environments.local.db = {
