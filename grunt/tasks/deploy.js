@@ -73,7 +73,7 @@ module.exports = function(grunt) {
 		execSync.run(gitCmd + 'commit -m "HelperPress Deploy" --no-verify');
 
 		// git push current branch as master
-		execSync(gitCmd + 'push wpe ' + environment + ':master');
+		execSync.run(gitCmd + 'push wpe ' + environment + ':master');
 
 	});
 
