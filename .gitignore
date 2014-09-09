@@ -38,7 +38,7 @@ Thumbs.db
 
 # WordPress Core, Uploads & Plugins
 /www
-/www-dist
+/www*
 
 # Sublime, because people forget this in their global .gitignore
 *.sublime-*

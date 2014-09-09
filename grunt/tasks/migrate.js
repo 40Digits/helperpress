@@ -22,7 +22,6 @@ module.exports = function(grunt){
 		if(typeof direction === 'undefined'){
 
 			// no args passed
-			// TODO: let's do it interactively
 			direction = 'pull';
 
 		}
@@ -128,6 +127,7 @@ module.exports = function(grunt){
 					remoteBasePath = '<%= helperpress.environments.' + environment + '.wp_path %>/wp-content/',
 					remotePath = 'uploads',
 
+					// args to be passed to sftp task
 					sftpOpts = {
 						createDirectories: true,
 						showProgress: true,
@@ -208,8 +208,6 @@ module.exports = function(grunt){
 
 		if(typeof direction === 'undefined'){
 
-			// no args passed
-			// TODO: let's do it interactively
 			direction = 'pull';
 
 		}

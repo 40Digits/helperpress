@@ -17,15 +17,17 @@ module.exports = function(grunt) {
 
 		var options = this.options({
 				flags: '--all',
+				gitFlags: '',
 				message: this.target,
 				noVerify: false
 			}),
-			verifyFlag = options.noVerify ? ' --no-verify' : '';
+			verifyFlag = options.noVerify ? ' --no-verify' : '',
+			gitCmd = 'git ' + options.gitFlags + ' ';
 
 
 
-		execSync.run('git add ' + options.flags);
-		execSync.run('git commit -m "' + options.message.replace(/"/g, "") + '"' + verifyFlag);
+		execSync.run(gitCmd + 'add ' + options.flags);
+		execSync.run(gitCmd + 'commit -m "' + options.message.replace(/"/g, "") + '"' + verifyFlag);
 
 	});
 

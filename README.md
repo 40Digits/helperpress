@@ -118,6 +118,9 @@ General rules:
 			*/
 			"deploy_method": "rsync"
 
+			// Git remote for when using 'wpe' as deploy_method
+			"remote": "git@git.wpengine.com:production/sitename.git"
+
 			/*
 			how HP should migrate wp-uploads
 			"rsync": rsync over SSH
