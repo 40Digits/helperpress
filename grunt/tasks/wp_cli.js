@@ -30,14 +30,18 @@ module.exports = function(grunt) {
 
 
   // Run a WP-CLI command
-  function runCmd(args){
-   var result = execSync.exec(options.cmdPath + ' ' + args + ' --path=' + options.wpPath);
+  function runCmd(args, silent){
+    var result = execSync.exec(options.cmdPath + ' ' + args + ' --path=' + options.wpPath);
    
-   if(result.code === 0){
-    grunt.log.ok(result.stdout)
-   }else{
-    grunt.fatal(result.stdout)
-   }
+    if(!silent){
+      if(result.code === 0){
+        grunt.log.ok(result.stdout)
+      }else{
+        grunt.fatal(result.stdout)
+      }
+    }
+
+    return result;
   }
 
 
@@ -131,9 +135,28 @@ module.exports = function(grunt) {
   // DB
 
   function dbCreate(){
-    var cmd = 'db create';
+    var cmd = 'db create',
+      listResult = dbListTables('blog', true);
+
+    // abort if DB already exists & is not WP install
+    if(listResult.code === 1 && listResult.stdout.indexOf('Can’t select database') === -1){
+      return grunt.fatal('Database exists but is not a WP install. Aborting to be safe.');
+    }else if(listResult.code === 0){
+      return grunt.log.ok('Database exists and is a WP install.');
+    }
 
     runCmd(cmd);
+    
+  }
+
+  function dbListTables(scope, silent){
+    var cmd = 'db tables';
+
+    if(typeof scope === 'string'){
+      cmd += ' --scope=' + scope;
+    }
+
+    return runCmd(cmd, silent);
     
   }
 
