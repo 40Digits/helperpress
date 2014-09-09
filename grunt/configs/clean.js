@@ -31,7 +31,7 @@ module.exports = {
 		'.sass-cache'
 	],
 
-	// clean every WP defualt theme for the next 1000 years
+	// clean every WP default theme for the next 1000 years
 	wp_default_themes: [
 		'<%= helperpress.build_dir %>/wp-content/themes/twenty*'
 	],
