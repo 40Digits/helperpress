@@ -113,7 +113,7 @@ General rules:
 			/*
 			how HP should deploy source
 			"rsync": rsync over SSH
-			"wpe": WPEngine's Git Deploy. (builds, grabs remote's .git folder, rsyncs files, commits, and pushes)
+			"wpe": WPEngine's Git Deploy
 			"none": don't allow deploy to run on this environment (e.g. it's handled elsewhere)
 			*/
 			"deploy_method": "rsync"

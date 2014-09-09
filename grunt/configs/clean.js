@@ -14,10 +14,12 @@ module.exports = {
 		'<%= helperpress.assets_dir %>/images',
 		'<%= helperpress.assets_dir %>/js',
 
-		// sass subtree
-		'<%= helperpress.assets_dir %>/_src/sass',
-
 		// wp dir
+		'<%= helperpress.build_dir %>'
+	],
+
+	// wp dir
+	build_dir: [
 		'<%= helperpress.build_dir %>'
 	],
 

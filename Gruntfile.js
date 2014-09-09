@@ -118,6 +118,7 @@ module.exports = function (grunt) {
 
 		// Images
 		'newer:imagemin:assets_dist'
+		
 	]);
 
 

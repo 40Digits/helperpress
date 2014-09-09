@@ -4,28 +4,50 @@ var execSync = require('execSync');
 
 module.exports = function(grunt) {
 
-	var distDir = 'www-dist-wpe',
-		gitFlag = '--git-dir="' + distDir + '/.git" --work-tree="' + distDir + '"',
-		gitCmd = 'git ' + gitFlag + ' ';
+	var distDir = 'www-dist';
 
-	grunt.registerTask('deploy_wpe', 'Deploy to WPEngine using Git Deploy', function(environment) {
+	grunt.registerTask('deploy', 'Deploy to WPEngine using Git Deploy', function(environment) {
+
+		if(typeof environment === 'undefined'){
+
+		}
 
 		this.requiresConfig(
-			'helperpress.environments.' + environment + '.remote'
+			'helperpress.environments.' + environment + '.deploy_method'
 		);
 
 		// set correct output dir
 		grunt.config('helperpress.build_dir', distDir);
 
+		// clean previous build
+		grunt.task.run('clean:build_dir');
+
 		// build distributable code
 		grunt.task.run('build_dist');
 
-		// do the git deploy schtuff
-		grunt.task.run('_deploy_wpe_git:' + environment);
+		// run the appropriate deploy method
+		switch( grunt.config('helperpress.environments.' + environment + '.deploy_method') ){
+
+			case 'wpe':
+				grunt.task.run('_deploy_wpe_git:' + environment);
+				break;
+
+			case 'rsync':
+			case 'none':
+				break;
+
+		}
 
 	});
 
 	grunt.registerTask('_deploy_wpe_git', 'Internal helper function for deploy_wpe', function(environment) {
+
+		this.requiresConfig(
+			'helperpress.environments.' + environment + '.remote'
+		);
+
+		var gitFlag = '--git-dir="' + distDir + '/.git" --work-tree="' + distDir + '"',
+			gitCmd = 'git ' + gitFlag + ' ';
 
 		// copy WPE .gitignore
 		execSync.run('cp grunt/templates/wpe-gitignore ' + distDir + '/.gitignore');
