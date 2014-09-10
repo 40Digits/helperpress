@@ -9,7 +9,7 @@ module.exports = function(grunt) {
 
 	grunt.registerTask('deploy', 'Deploy to WPEngine using Git Deploy', function(environment) {
 
-		var curBranch = execSync.exec('git symbolic-ref HEAD 2>/dev/null | cut -d"/" -f 3').stdout.trim(), // via http://stackoverflow.com/questions/1593051/how-to-programmatically-determine-the-current-checked-out-git-branch#comment-9751841
+		var curBranch = execSync.exec('git symbolic-ref HEAD 2>/dev/null | cut -d"/" -f 3').stdout.trim(); // via http://stackoverflow.com/questions/1593051/how-to-programmatically-determine-the-current-checked-out-git-branch#comment-9751841
 
 		// default to current git branch
 		if(typeof environment === 'undefined'){
