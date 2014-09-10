@@ -9,17 +9,24 @@ module.exports = function(grunt) {
 
 	grunt.registerTask('deploy', 'Deploy to WPEngine using Git Deploy', function(environment) {
 
+		var curBranch = execSync.exec('git symbolic-ref HEAD 2>/dev/null | cut -d"/" -f 3').stdout.trim(), // via http://stackoverflow.com/questions/1593051/how-to-programmatically-determine-the-current-checked-out-git-branch#comment-9751841
+
+		// default to current git branch
 		if(typeof environment === 'undefined'){
-			// infer based on current gir branch
 
-			var curBranch = execSync.exec('git symbolic-ref HEAD 2>/dev/null | cut -d"/" -f 3').stdout.trim(), // via http://stackoverflow.com/questions/1593051/how-to-programmatically-determine-the-current-checked-out-git-branch#comment-9751841
-				envConfig = grunt.config('helperpress.environments');
+			var envConfig = grunt.config('helperpress.environments');
 
+			// make sure that the current branch has an associated config
 			if( _.indexOf(Object.keys(envConfig), curBranch) === -1 ){
 				grunt.fatal('Looks like there is no environment configured for git branch "' + curBranch + '"');
 			}
 
 			environment = curBranch;
+		}
+
+		// warn if they're trying to deploy to an env that is not the current branch
+		if(environment !== curBranch ){
+			grunt.warn('Deploying current branch "' + curBranch + '" to environment "' + environment + '" is probably not want you wanted to do. If it is, then --force it.');
 		}
 
 		this.requiresConfig(
@@ -43,7 +50,10 @@ module.exports = function(grunt) {
 				break;
 
 			case 'rsync':
+
+				break;
 			case 'none':
+				grunt.log.ok('deploy_method for "' + environment + '" is set to "none", so we\'ve built it in "' + distDir + '" and that\'s all.');
 				break;
 
 		}
