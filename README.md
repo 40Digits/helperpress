@@ -14,13 +14,14 @@ A tool for automating much of the WordPress development workflow.
 ## Installation
 
 1. Run `npm install` in the repo directory.
-2. Run `grunt setup_dev`
+2. Run `grunt`
 
 ## Requirements
 *This has only been tested on OS X. It will not work as-is on Windows.*
 
 1. Node.js & npm (via [Homebrew](http://brew.sh/#install): `brew install node`)
 2. [Composer](https://getcomposer.org/doc/00-intro.md#globally-on-osx-via-homebrew-)
+3. `mysql` CLI command
 
 ## Grunt Tasks
 ### `grunt setup`
@@ -140,7 +141,7 @@ General rules:
     "rewrite" uses Apache rewrites via .htaccess (default)
     "copy" copies files to local machine
     */
-    "uploads_sync": "rsync"
+    "uploads_sync": "copy"
 }
 ```
 

@@ -40,8 +40,8 @@ module.exports = {
 
 	browserify: {
 		files: [
-			// all js files in the assets dir
-			'<%= helperpress.assets_dir %>/_src/**/*.js'
+			// all js files in the js assets dir
+			'<%= helperpress.assets_dir %>/_src/js/*.js'
 		],
 		tasks: [
 			'browserifyBower:libs:nowrite',

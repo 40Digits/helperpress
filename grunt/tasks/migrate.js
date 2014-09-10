@@ -35,12 +35,12 @@ module.exports = function(grunt){
 
 			if(!environment){
 
-				return grunt.ok('helperpress.db_master not defined. Skipping migration.');
+				return grunt.log.ok('helperpress.db_master not defined. Skipping migration.');
 
 			}else if(environment === 'local'){
 				// TODO: create an env alias option so when we're on a non-local env we still check correctly
 
-				return grunt.ok('helperpress.db_master defined as this environement. Skipping migration.');
+				return grunt.log.ok('helperpress.db_master defined as this environement. Skipping migration.');
 
 			}
 
@@ -221,12 +221,12 @@ module.exports = function(grunt){
 
 			if(!environment){
 
-				return grunt.ok('helperpress.db_master not defined. Skipping migration.');
+				return grunt.log.ok('helperpress.db_master not defined. Skipping migration.');
 
 			}else if(environment === 'local'){
 				// TODO: create an env alias option so when we're on a non-local env we still check correctly
 
-				return grunt.ok('helperpress.db_master defined as this environement. Skipping migration.');
+				return grunt.log.ok('helperpress.db_master defined as this environement. Skipping migration.');
 
 			}
 
