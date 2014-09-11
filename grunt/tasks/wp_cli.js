@@ -50,7 +50,12 @@ module.exports = function(grunt) {
   function coreDownload(){
     var cmd = 'core download';
 
-    runCmd(cmd);
+    var result = runCmd(cmd, true);
+
+    // if bad exit code and it's not just the case that it's already installed, then abort
+    if(result.code !== 0 && result.stdout.indexOf('already present here') === -1){
+      grunt.fatal(result.stdout);
+    }
   }
 
   function coreUpdate(){
