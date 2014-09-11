@@ -51,6 +51,11 @@ FileSection.prototype.read = function() {
 
     this.length = thisFS.endLine - thisFS.startLine + 1; // plus one since it's 0-index
 
+    //make sure it stays 0 if it's really 0
+    if(this.length === 1){
+        this.length = 0;
+    }
+
     return this;
 };
 
@@ -61,7 +66,9 @@ FileSection.prototype.write = function( newLines, pos ) {
     newLines.push(this.options.marker.end);
     
     // if it's already there, remove it
-    this.fileContents.splice(this.startLine, this.length + 2);
+    if(this.length > 0){
+        this.fileContents.splice(this.startLine, this.length + 2);
+    }
 
 
     // insert it

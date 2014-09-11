@@ -8,7 +8,7 @@ module.exports = function (grunt) {
         var options = this.options({
             marker: {
                 start: '/*! ---HelperPress Theme Config Start---',
-                end: '// ---HelperPress Theme Config End---',
+                end: '---HelperPress Theme Config End--- */',
             },
             tabString: '\t'
         });
