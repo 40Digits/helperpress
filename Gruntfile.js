@@ -42,6 +42,9 @@ module.exports = function (grunt) {
 
 		'prompt:sudo_pass', // needed for apache_config
 
+		// clean previous build
+		'clean:build_dir',
+
 		// install packages
 		'composer:install',
 		'bower:install',
@@ -75,6 +78,9 @@ module.exports = function (grunt) {
 
 	// run this task to setup everything for distribution
 	grunt.registerTask( 'build_dist', [
+
+		// clean previous build
+		'clean:build_dir',
 
 		// install packages
 		'composer:install',

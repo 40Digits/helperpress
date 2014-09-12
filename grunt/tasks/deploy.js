@@ -36,9 +36,6 @@ module.exports = function(grunt) {
 		// set correct output dir
 		grunt.config('helperpress.build_dir', distDir);
 
-		// clean previous build
-		grunt.task.run('clean:build_dir');
-
 		// build distributable code
 		grunt.task.run('build_dist');
 
