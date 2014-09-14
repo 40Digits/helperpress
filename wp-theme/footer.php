@@ -1,6 +1,5 @@
-
 	<?php wp_footer(); ?>
-	<script data-main="<?php bloginfo('template_directory') ?>/assets/scripts/main.js" src="<?php bloginfo('template_directory') ?>/assets/scripts/vendor/require.js"></script>
+	<script src="<?php bloginfo('template_directory') ?>/assets/js/main.js"></script>
 	<?php if(ENVIRONMENT == 'staging' || ENVIRONMENT == 'testing'){ ?>
 		<script type='text/javascript'>
 			(function (d, t) {
