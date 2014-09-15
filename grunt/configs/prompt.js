@@ -100,7 +100,7 @@ var repo_config = {
 			{
 				config: 'write_helperpress_config.repo_config.options.settings.wp.plugins', 
 				type: 'checkbox', 
-				message: 'Select WordPress plugins:',
+				message: 'Select WordPress plugins.',
 				choices: [
 					{
 						name: 'WordPress SEO',
@@ -109,8 +109,33 @@ var repo_config = {
 					},
 					{
 						name: 'Advanced Custom Fields',
-						value: 'advanced-custom-fields',
+						value: 'https://www.dropbox.com/s/82j0sfrtn6fazf9/advanced-custom-fields-pro.zip?dl=1',
 						checked: true
+					},
+					{
+						name: 'Ninja Forms Core',
+						value: 'ninja-forms',
+						checked: false
+					},
+					{
+						name: 'Gravity Forms Core',
+						value: 'https://www.dropbox.com/s/ykdrq084p7nkjl5/gravityforms.zip?dl=1',
+						checked: false
+					},
+					{
+						name: 'Contact Form 7',
+						value: 'contact-form-7',
+						checked: false
+					},
+					{
+						name: 'Really Simple Captcha',
+						value: 'really-simple-captcha',
+						checked: false
+					},
+					{
+						name: 'Contact Form 7 DB',
+						value: 'contact-form-7-to-database-extension',
+						checked: false
 					}
 				]
 			}
