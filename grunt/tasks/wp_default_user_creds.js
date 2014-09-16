@@ -14,7 +14,7 @@ module.exports = function(grunt){
 			return grunt.log.ok('User credentials file exists, assuming WP DB has already been initialized. Skipping write.');
 		}
 
-		grunt.file.write(filename, fileContents);
+		grunt.file.write(filename, JSON.stringify(fileContents) );
 	}
 
 	grunt.registerTask( 'wp_default_user_creds', 'Creates wp-default-user-creds.txt and places default user credentials into it.', writeUserCredsFile);
