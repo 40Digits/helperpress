@@ -69,5 +69,8 @@ Thumbs.db
 /wp-theme/assets/images
 /wp-theme/*.css
 
+# default user credentials file
+/wp-default-user-creds.txt
+
 # Local site config
 /helperpress.local.json

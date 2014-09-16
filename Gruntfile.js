@@ -56,6 +56,7 @@ module.exports = function (grunt) {
 		'wp_cli:download_core',
 		'wp_cli:core_config',
 		'wp_cli:db_create',
+		'wp_default_user_creds',
 		'wp_cli:install_core',
 		'wp_cli:install_plugins',
 		'wp_cli:remove_plugins',
