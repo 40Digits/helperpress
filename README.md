@@ -142,6 +142,9 @@ General rules:
     "copy" copies files to local machine
     */
     "uploads_sync": "copy"
+
+    // set "local" environment as an alias for another one (useful when running on that environment)
+    "alias_local_env": "development"
 }
 ```
 

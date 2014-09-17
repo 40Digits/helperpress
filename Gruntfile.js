@@ -178,6 +178,18 @@ module.exports = function (grunt) {
 
 	});
 
+	// if this environment is one of the deployment environments (ie, not a dev's local machine),
+	// then set "local" env to the same JSON object as defined env
+	if( typeof gruntConfig.helperpress.alias_local_env === 'string' ){
+
+		// make sure that environment is actually defined
+		if( typeof gruntConfig.helperpress.environments[gruntConfig.helperpress.alias_local_env] === undefined ){
+			grunt.warn('No configuration defined for "' + gruntConfig.helperpress.alias_local_env + '" environment. Cannot set local environment as alias.');
+		}
+
+		grunt.log.ok('Overwriting "local" environment config with "' + gruntConfig.helperpress.alias_local_env + '" config.');
+		gruntConfig.helperpress.environments.local = gruntConfig.helperpress.environments[gruntConfig.helperpress.alias_local_env];
+	}
 
 
 
