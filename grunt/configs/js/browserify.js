@@ -2,7 +2,7 @@ module.exports = {
 	options: {
 		transform: [
 			'browserify-shim',
-			'deAMDify'
+			'deamdify'
 		]
 	},
 
