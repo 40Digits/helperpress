@@ -141,10 +141,11 @@ module.exports = function(grunt) {
 			
 
 		// Local home_url
-		if( typeof curConfig.home_url === 'undefined' ){
+		var apache_url_scheme = grunt.config('helperpress.apache.url_scheme');
+		if( typeof curConfig.home_url === 'undefined' && typeof apache_url_scheme !== 'undefined' ){
 
 			// let's infer it based on apache config
-			newConfig.environments.local.home_url = grunt.config('helperpress.apache.url_scheme').replace('*', wpSlug);
+			newConfig.environments.local.home_url = apache_url_scheme.replace('*', wpSlug);
 
 		}
 

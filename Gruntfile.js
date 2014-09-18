@@ -187,8 +187,9 @@ module.exports = function (grunt) {
 			grunt.warn('No configuration defined for "' + gruntConfig.helperpress.alias_local_env + '" environment. Cannot set local environment as alias.');
 		}
 
-		grunt.log.ok('Overwriting "local" environment config with "' + gruntConfig.helperpress.alias_local_env + '" config.');
-		gruntConfig.helperpress.environments.local = gruntConfig.helperpress.environments[gruntConfig.helperpress.alias_local_env];
+		grunt.log.ok('Merging "local" environment config with "' + gruntConfig.helperpress.alias_local_env + '" config.');
+		gruntConfig.helperpress.environments.local = _deepExtend( gruntConfig.helperpress.environments[gruntConfig.helperpress.alias_local_env], gruntConfig.helperpress.environments.local );
+		
 	}
 
 
