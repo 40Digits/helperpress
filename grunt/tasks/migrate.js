@@ -18,10 +18,8 @@ module.exports = function(grunt){
 
 		var migrateTask;
 
-
 		if(typeof direction === 'undefined'){
 
-			// no args passed
 			direction = 'pull';
 
 		}
@@ -37,8 +35,7 @@ module.exports = function(grunt){
 
 				return grunt.log.ok('helperpress.db_master not defined. Skipping migration.');
 
-			}else if(environment === 'local'){
-				// TODO: create an env alias option so when we're on a non-local env we still check correctly
+			}else if(environment === 'local' || environment === grunt.config('helperpress.alias_local_env') ){
 
 				return grunt.log.ok('helperpress.db_master defined as this environement. Skipping migration.');
 
@@ -70,7 +67,7 @@ module.exports = function(grunt){
 
 			case 'rsync':
 
-				var sshInfo = '<%= helperpress.environments.' + environment + '.ssh %>',
+				var sshInfo = grunt.config.process('<%= helperpress.environments.' + environment + '.ssh %>'),
 					sshString = '',
 					rsyncOpts = {
 						recursive: true
@@ -99,9 +96,9 @@ module.exports = function(grunt){
 
 				if(direction === 'pull'){
 					rsyncOpts.src = sshString + ':<%= helperpress.environments.' + environment + '.wp_path %>/wp-content/uploads';
-					rsyncOpts.dest = './';
+					rsyncOpts.dest = '<%= helperpress.build_dir %>/wp-content/';
 				} else {
-					rsyncOpts.src = './uploads';
+					rsyncOpts.src = '<%= helperpress.build_dir %>/wp-content/uploads';
 					rsyncOpts.dest = sshString + ':<%= helperpress.environments.' + environment + '.wp_path %>/wp-content/';
 				}
 
@@ -122,7 +119,7 @@ module.exports = function(grunt){
 				var sshInfo = grunt.config('helperpress.environments.' + environment + '.ssh'),
 
 					// paths for transfer		
-					localBasePath = './',
+					localBasePath = '<%= helperpress.build_dir %>/wp-content/',
 					localPath = 'uploads',
 					remoteBasePath = '<%= helperpress.environments.' + environment + '.wp_path %>/wp-content/',
 					remotePath = 'uploads',
@@ -157,7 +154,7 @@ module.exports = function(grunt){
 
 				if(direction === 'pull'){
 
-					sftpFiles[localBasePath] = remotePath;
+					sftpFiles[localPath] = remotePath;
 
 					sftpOpts.srcBasePath = remoteBasePath;
 					sftpOpts.destBasePath = localBasePath;
@@ -166,7 +163,7 @@ module.exports = function(grunt){
 
 				} else {
 
-					sftpFiles[remoteBasePath] = localPath + '/**';
+					sftpFiles[remoteBasePath] = localBasePath + localPath + '/**';
 
 					sftpOpts.srcBasePath = localBasePath;
 					sftpOpts.destBasePath = remoteBasePath;
@@ -193,11 +190,6 @@ module.exports = function(grunt){
 			migrateTask,
 			'notify:migrate_uploads_complete'
 		]);
-
-		// make sure uploads dir is symlink'd
-		if(direction == 'pull'){
-			grunt.task.run('symlink:uploads');
-		}
 
 	}
 
