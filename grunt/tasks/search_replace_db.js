@@ -9,7 +9,6 @@
 'use strict';
 
 var execSync = require('execSync'),
-  _ = require('lodash'),
 
   options;
 
@@ -21,13 +20,9 @@ module.exports = function(grunt) {
     options = this.options({
       scriptPath: './vendor/interconnectit/search-replace-db/srdb.cli.php',
       phpPath: 'php',
-      globalFlags: {}
     });
 
     var cmd = options.phpPath + ' ' + options.scriptPath,
-
-      // allow global flags to be set via options
-      extendedFlags = _.extend(options.globalFlags, this.data),
 
       // the script's expected flags
       validFlags = {
@@ -79,14 +74,13 @@ module.exports = function(grunt) {
         },
       };
 
-    for(var flag in extendedFlags){
+    for(var flag in options){
 
       if( typeof validFlags[flag] === 'undefined' ){
-        grunt.warn('"' + flag + '" is not a valid "search-replace-db" flag');
         continue;
       }
 
-      if( validFlags[flag].type === 'eq-blank' && extendedFlags[flag].length === 0 ){
+      if( validFlags[flag].type === 'eq-blank' && options[flag].length === 0 ){
 
           cmd += ' ' + validFlags[flag].blank;
 
@@ -95,7 +89,7 @@ module.exports = function(grunt) {
         cmd += ' --' + flag;
 
         if( validFlags[flag].type !== 'empty' ){
-            cmd += '=' + grunt.config.process( extendedFlags[flag] );
+            cmd += '=' + grunt.config.process( options[flag] );
         }
 
       }
