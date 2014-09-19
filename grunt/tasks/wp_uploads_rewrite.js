@@ -26,7 +26,7 @@ module.exports = function(grunt){
 			];
 
 			// update site_config via write_site_config task
-			grunt.config('write_site_config.rewrite_rules', {
+			grunt.config('write_helperpress_config.rewrite_rules', {
 				options: {
 					type: 'local',
 					settings: {
@@ -35,7 +35,7 @@ module.exports = function(grunt){
 				}
 			});
 
-			grunt.task.run('write_site_config:rewrite_rules');
+			grunt.task.run('write_helperpress_config:rewrite_rules');
 		}
 
 		htaccess.write( rewriteContents );
