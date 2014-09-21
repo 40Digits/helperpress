@@ -188,8 +188,8 @@ module.exports = function (grunt) {
 		}
 
 		grunt.log.ok('Merging "local" environment config with "' + gruntConfig.helperpress.alias_local_env + '" config.');
-		gruntConfig.helperpress.environments.local = _deepExtend( gruntConfig.helperpress.environments[gruntConfig.helperpress.alias_local_env], gruntConfig.helperpress.environments.local );
-		
+		gruntConfig.helperpress.environments.local = _.deepExtend( gruntConfig.helperpress.environments[gruntConfig.helperpress.alias_local_env], gruntConfig.helperpress.environments.local );
+
 	}
 
 
