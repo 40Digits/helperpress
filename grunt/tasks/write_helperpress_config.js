@@ -173,7 +173,8 @@ module.exports = function(grunt) {
 					break;
 
 				case 'copy':
-					grunt.task.run('migrate_uploads:pull:_master');
+					// not sure we actually need to do this. should keep it manual.
+					// grunt.task.run('migrate_uploads:pull:_master');
 					break;
 
 			}
