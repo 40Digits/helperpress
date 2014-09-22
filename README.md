@@ -1,4 +1,4 @@
-![HELPeR](http://www.40digits.com/wp-content/uploads/2014/08/helperpress.png)
+![HELPeR](http://www.40digits.com/wp-content/uploads/2014/09/helperpress-tools.png)
 
 HelperPress
 ======================
