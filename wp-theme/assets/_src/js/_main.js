@@ -74,7 +74,7 @@ function queueFiles(file){
 // run selector filters
 for(var sel in config.selectors){
 
-  if( $(selector).length === 0 )
+  if( $(sel).length === 0 )
     continue;
 
   config.selectors[sel].forEach(queueFiles);
