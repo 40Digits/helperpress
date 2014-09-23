@@ -234,7 +234,7 @@ module.exports = function(grunt){
 
 		// determine proper ssh host string
 		var sshHost = '<%= helperpress.environments.' + environment + '.ssh.host %>',
-			sshUser = grunt.config('<%= helperpress.environments.' + environment + '.ssh.user %>');
+			sshUser = grunt.config.process('<%= helperpress.environments.' + environment + '.ssh.user %>');
 
 		if(typeof sshUser === 'string'){
 			sshHost = sshUser + '@' + sshHost;
