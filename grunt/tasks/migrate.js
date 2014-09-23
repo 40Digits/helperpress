@@ -94,12 +94,15 @@ module.exports = function(grunt){
 				}
 
 
+				var remoteDir = sshString + ':<%= helperpress.environments.' + environment + '.wp_path %>/wp-content/uploads/',
+					localDir = '<%= helperpress.build_dir %>/wp-content/uploads/';
+
 				if(direction === 'pull'){
-					rsyncOpts.src = sshString + ':<%= helperpress.environments.' + environment + '.wp_path %>/wp-content/uploads';
-					rsyncOpts.dest = '<%= helperpress.build_dir %>/wp-content/';
+					rsyncOpts.src = remoteDir;
+					rsyncOpts.dest = localDir;
 				} else {
-					rsyncOpts.src = '<%= helperpress.build_dir %>/wp-content/uploads';
-					rsyncOpts.dest = sshString + ':<%= helperpress.environments.' + environment + '.wp_path %>/wp-content/';
+					rsyncOpts.src = localDir;
+					rsyncOpts.dest = remoteDir;
 				}
 
 
@@ -120,9 +123,7 @@ module.exports = function(grunt){
 
 					// paths for transfer		
 					localBasePath = '<%= helperpress.build_dir %>/wp-content/',
-					localPath = 'uploads',
 					remoteBasePath = '<%= helperpress.environments.' + environment + '.wp_path %>/wp-content/',
-					remotePath = 'uploads',
 
 					// args to be passed to sftp task
 					sftpOpts = {
@@ -155,7 +156,7 @@ module.exports = function(grunt){
 
 				if(direction === 'pull'){
 
-					sftpFiles[localPath] = remotePath;
+					sftpFiles['uploads'] = 'uploads';
 
 					sftpOpts.srcBasePath = remoteBasePath;
 					sftpOpts.destBasePath = localBasePath;
@@ -164,7 +165,12 @@ module.exports = function(grunt){
 
 				} else {
 
-					sftpFiles[remoteBasePath] = localBasePath + localPath + '/**';
+					sftpFiles = [{
+						cwd: localBasePath + 'uploads/',
+						expand: true,
+						src: '**',
+						dest: remoteBasePath + 'uploads/'
+					}];
 
 					sftpOpts.srcBasePath = localBasePath;
 					sftpOpts.destBasePath = remoteBasePath;
