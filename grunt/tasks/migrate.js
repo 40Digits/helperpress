@@ -127,6 +127,7 @@ module.exports = function(grunt){
 					// args to be passed to sftp task
 					sftpOpts = {
 						createDirectories: true,
+						directoryPermissions: parseInt(777, 8),
 						showProgress: true,
 						host: '<%= helperpress.environments.' + environment + '.ssh.host %>',
 						path: remoteBasePath
@@ -225,6 +226,14 @@ module.exports = function(grunt){
 
 		grunt.task.run('notify:migrate_db_start');
 
+		// determine proper ssh host string
+		var sshHost = '<%= helperpress.environments.' + environment + '.ssh.host %>',
+			sshUser = grunt.config('<%= helperpress.environments.' + environment + '.ssh.user %>');
+
+		if(typeof sshUser === 'string'){
+			sshHost = sshUser + '@' + sshHost;
+		}
+
 		var remoteConfig = {
 			title: '<%= helperpress.environments.' + environment + '.title %>',
 
@@ -233,7 +242,7 @@ module.exports = function(grunt){
 			pass: '<%= helperpress.environments.' + environment + '.db.pass %>',
 			host: '<%= helperpress.environments.' + environment + '.db.host %>',
 
-			ssh_host: '<%= helperpress.environments.' + environment + '.ssh.host %>'
+			ssh_host: sshHost
 		};
 	
 		// are we pulling or pushing?
