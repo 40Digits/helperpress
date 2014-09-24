@@ -41,9 +41,6 @@
 */
 
 
-
-
-
 var config = require('./_config'),
 	$ = require('jquery'),
 
@@ -82,10 +79,14 @@ for(var sel in config.selectors){
 }
 
 // require the files if not in toIgnore
-toRequire.forEach(function(module){
+toRequire.forEach(function(moduleId){
 
   if($.inArray('!' + module, toIgnore) === -1){
-    require(module);
+    var module = require(moduleId);
+   
+    if( $.isFunction(module) ){
+      module();
+    }
   }
 
 });
