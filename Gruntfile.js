@@ -96,6 +96,7 @@ module.exports = function (grunt) {
 		'wp_cli:install_core',
 		'wp_cli:install_plugins',
 		'wp_cli:remove_plugins',
+		'wp_cli:rewrite_flush',
 		'clean:wp_default_themes',
 
 		// build assets
