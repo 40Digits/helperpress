@@ -7,10 +7,13 @@ module.exports = {
 	},
 
 	app: {
-		files: {
-			'<%= helperpress.assets_dir %>/_precompiled/browserify/main.js': [
-				'<%= helperpress.assets_dir %>/_src/js/*.js'
-			]
-		}
+		files: [
+			{
+				cwd: '<%= helperpress.assets_dir %>/_src/js/',
+				expand: true,
+				src: ['**/*.js','!_config.js'],
+				dest: '<%= helperpress.assets_dir %>/_precompiled/browserify'
+			}
+		]
 	}
 };

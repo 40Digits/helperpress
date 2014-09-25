@@ -41,11 +41,12 @@ module.exports = {
 	browserify: {
 		files: [
 			// all js files in the js assets dir
-			'<%= helperpress.assets_dir %>/_src/js/*.js'
+			'<%= helperpress.assets_dir %>/_src/js/**/*.js'
 		],
 		tasks: [
 			'browserifyBower:libs:nowrite',
-			'browserify:app'
+			'browserify:app',
+			'concat:browserify'
 		],
 		options: {
 			livereload: true,
@@ -54,7 +55,7 @@ module.exports = {
 	},
 
 	browserifyBower: {
-		files: ['bower.json'],
+		files: ['bower_components/**'],
 		tasks: [
 			'browserifyBower',
 			'concat:browserify'
