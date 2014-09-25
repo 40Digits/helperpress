@@ -45,7 +45,7 @@ module.exports = {
 		],
 		tasks: [
 			'browserifyBower:libs:nowrite',
-			'browserify:app'
+			'browserify:dev'
 		],
 		options: {
 			livereload: true,
@@ -57,7 +57,7 @@ module.exports = {
 		files: ['bower.json'],
 		tasks: [
 			'browserifyBower',
-			'browserify:app',
+			'browserify:dev',
 		],
 		options: {
 			livereload: true,

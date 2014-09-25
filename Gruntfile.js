@@ -113,18 +113,17 @@ module.exports = function (grunt) {
 	grunt.registerTask( 'build_dist_assets', [
 
 		// CSS
-		'sass:dist',
-		'cmq:sass',
-		'autoprefixer:cmq',
+		// 'sass:dist',
+		// 'cmq:sass',
+		// 'autoprefixer:cmq',
 
 		// JS
 		'browserifyBower',
 		'browserify',
-		'concat:browserify_dist',
 		'uglify:browserify',
 
 		// Images
-		'newer:imagemin:assets_dist'
+		'imagemin:assets_dist'
 		
 	]);
 
