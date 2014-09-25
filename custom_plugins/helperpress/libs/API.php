@@ -12,4 +12,8 @@ class API {
 
     }
 
+    public function protect_helperpress_directory () {
+
+    }
+
 }
