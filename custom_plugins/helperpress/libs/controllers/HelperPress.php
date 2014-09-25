@@ -18,7 +18,7 @@ class HelperPress {
     private function authorize ($api_key) {
         if (!$this->api->verify_key($key)) {
             // Unauthorized
-            // Return error
+            // Return error 403
         }
 
         return true;
