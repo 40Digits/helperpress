@@ -1,19 +1,70 @@
-module.exports = {
-	options: {
-		transform: [
-			'browserify-shim',
-			'deamdify'
-		]
-	},
+var fs = require('fs'),
+	through = require('through');
 
-	app: {
-		files: [
-			{
-				cwd: '<%= helperpress.assets_dir %>/_src/js/',
-				expand: true,
-				src: ['**/*.js','!_config.js'],
-				dest: '<%= helperpress.assets_dir %>/_precompiled/browserify'
-			}
-		]
+module.exports = function(grunt){
+
+	var jsCwd = '<%= helperpress.assets_dir %>/_src/js',
+		srcFiles = '**/*.js';
+
+	function getFilename(fullpath){
+		return fullpath.replace(/^.*[\\\/]/, '');
 	}
-};
+
+	// this transform adds require calls into the _main.js module for all files we're
+	// browserifying-ifying
+	function requireDynamicFiles(file){
+
+		var data = '',
+			filename = getFilename(file);
+
+	    return through(write, end);
+
+	    function write (buf) { data += buf }
+	    function end () {
+
+			if(filename === '_main.js'){
+
+				var codeToInsert = '',
+					allModules = grunt.file.expand(
+						{
+							cwd: grunt.config.process(jsCwd)
+						}, 
+						[
+							srcFiles,
+							'!_main.js',
+							'!_config.js'
+						]
+					);
+
+
+				for(var toRequire in allModules){
+					codeToInsert += 'require("./' + allModules[toRequire].replace(/\.[^/.]+$/, '') + '");';
+				}
+
+				data += codeToInsert;
+
+			}
+
+	        this.queue(data);
+	        this.queue(null);
+
+	    }
+	}
+
+
+	return {
+		options: {
+			transform: [
+				'browserify-shim',
+				'deamdify',
+				requireDynamicFiles
+			]
+		},
+
+		app: {
+			files: {
+				'<%= helperpress.assets_dir %>/js/main.js': jsCwd + '/' + srcFiles
+			}
+		}
+	};
+}

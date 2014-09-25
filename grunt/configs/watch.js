@@ -45,20 +45,19 @@ module.exports = {
 		],
 		tasks: [
 			'browserifyBower:libs:nowrite',
-			'browserify:app',
-			'concat:browserify'
+			'browserify:app'
 		],
 		options: {
 			livereload: true,
-			atBegin: true
+			atBegin: false // the browserifyBower target will catch it atBegin.
 		}
 	},
 
 	browserifyBower: {
-		files: ['bower_components/**'],
+		files: ['bower.json'],
 		tasks: [
 			'browserifyBower',
-			'concat:browserify'
+			'browserify:app',
 		],
 		options: {
 			livereload: true,
