@@ -24,7 +24,7 @@ module.exports = function(grunt){
 
 			if(filename === '_main.js'){
 
-				var codeToInsert = '',
+				var codeToInsert = 'return;',
 					allModules = grunt.file.expand(
 						{
 							cwd: grunt.config.process(jsCwd)
