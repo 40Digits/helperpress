@@ -7,19 +7,19 @@ use \HelperPress\Libs\Controllers\Admin;
 class Plugin {
 
     public static function activate () {
-
+        // This is where you create that private directory for your shiz
     }
 
     public static function deactivate () {
-
+        // delete that private dir of your shiz
     }
 
     public static function initiate () {
-
+        // define your WP routes/rewrites here
     }
 
     public static function load_scripts () {
-
+        // loads scripts on frontend--sooooo you shouldn't need this function
     }
 
     public static function install_admin_panel () {
