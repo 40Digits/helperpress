@@ -2,20 +2,31 @@
 
 namespace HelperPress\Libs;
 
-use \HelperPress\Libs\Controllers\Admin;
-
 class Plugin {
+
+    public static function initiate () {
+
+        // See if we need to activate. This sometimes get skipped due to migration
+        if(!file_exists(HP_PRIVATE_DIR_PATH))
+            $this->activate();
+
+        // Routes & Request Vars
+        add_action( 'init', array('\HelperPress\Libs\Controllers\Routes', 'add_rewrite_rules') );  
+        add_action( 'query_vars', array('\HelperPress\Libs\Controllers\Routes', 'add_query_vars') );
+        add_action( 'template_redirect', array('\HelperPress\Libs\Controllers\Routes', 'route_handler') );
+
+    }
 
     public static function activate () {
         // This is where you create that private directory for your shiz
+        mkdir(HP_PRIVATE_DIR_PATH);
+
+        \HelperPress\Libs\API::protect_helperpress_directory();
+
     }
 
     public static function deactivate () {
         // delete that private dir of your shiz
-    }
-
-    public static function initiate () {
-        // define your WP routes/rewrites here
     }
 
     public static function load_scripts () {
@@ -24,8 +35,8 @@ class Plugin {
 
     public static function install_admin_panel () {
         add_menu_page(
-            "Helper Press",
-            "Helper Press",
+            "HelperPress",
+            "HelperPress",
             "administrator",
             "hp-menu",
             array('\HelperPress\Libs\Controllers\Admin', 'index')

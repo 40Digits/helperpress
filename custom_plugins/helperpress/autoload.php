@@ -1,8 +1,8 @@
 <?php
 
-function autoloader ($class) {
+function helperpress_autoloader ($class) {
     $class = str_replace('\\', '/', $class);
-    $class = str_replace('WPSC', '', $class);
+    $class = str_replace('HP', '', $class);
     $class_path = HP_BASE_PATH . $class . '.php';
 
     if (!file_exists($class_path)) {
@@ -12,4 +12,4 @@ function autoloader ($class) {
     include($class_path);
 }
 
-spl_autoload_register('autoloader');
+spl_autoload_register('helperpress_autoloader');
