@@ -59,12 +59,14 @@ module.exports = function (grunt) {
 		'wp_default_user_creds',
 		'wp_cli:install_core',
 		'wp_cli:install_plugins',
-		'wp_cli:remove_plugins',
-		'wp_cli:rewrite_flush',
-		'clean:wp_default_themes',
 
 		// symlink wp-theme into WP installation
 		'symlink:theme',
+
+		// wrap up WP-CLI stuff
+		'wp_cli:remove_plugins',
+		'wp_cli:rewrite_flush',
+		'clean:wp_default_themes',
 
 		// config apache
 		'apache_config',
@@ -95,15 +97,17 @@ module.exports = function (grunt) {
 		'wp_cli:db_create',
 		'wp_cli:install_core',
 		'wp_cli:install_plugins',
-		'wp_cli:remove_plugins',
-		'wp_cli:rewrite_flush',
-		'clean:wp_default_themes',
 
 		// build assets
 		'build_dist_assets',
 
 		// copy theme into build dir
 		'copy:theme',
+
+		// wrap up WP-CLI stuff
+		'wp_cli:remove_plugins',
+		'wp_cli:rewrite_flush',
+		'clean:wp_default_themes',
 
 		// clean copied theme
 		'clean:non_dist'
@@ -113,9 +117,9 @@ module.exports = function (grunt) {
 	grunt.registerTask( 'build_dist_assets', [
 
 		// CSS
-		// 'sass:dist',
-		// 'cmq:sass',
-		// 'autoprefixer:cmq',
+		'sass:dist',
+		'cmq:sass',
+		'autoprefixer:cmq',
 
 		// JS
 		'browserifyBower',
