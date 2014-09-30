@@ -214,18 +214,15 @@ module.exports = function (grunt) {
 	// kick it off
 	////////////////
 
-	// load Grunt tasks defined in package.json
-	loadGruntTasks(grunt);
-
-	// load Grunt tasks in ./grunt/tasks directory
-	var configPath = './grunt/tasks/';
-	glob.sync('**/*.js', {cwd: configPath}).forEach(function(option) {
-
-		var task = require(configPath + option);
-
-		if(typeof task === 'function')
-			task(grunt);
-
+	loadGruntTasks(grunt, {
+		dir: 'grunt/tasks/',
+		smartLoad: {
+			'sass:dev': ['grunt-contrib-sass'],
+			'autoprefixer:sass': ['grunt-autoprefixer'],
+			'newer:imagemin:assets_dev': ['grunt-newer', 'grunt-contrib-imagemin'],
+			'browserifyBower': ['grunt-browserify-bower'],
+			'browserify:dev': ['grunt-browserify']
+		}
 	});
 
 	// initialize config
