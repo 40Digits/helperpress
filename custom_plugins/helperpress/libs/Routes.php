@@ -2,15 +2,8 @@
 
 namespace HelperPress\Libs;
 
-class Plugin {
+class Routes {
 
-    // Hooks
-    public static function add_rewrite_rules() {  
-        add_rewrite_rule(  
-            "_helperpress/([^/]+)/([^/]+)/([^/]+)/",  
-            'index.php?helperpress_api_key=$matches[1]&helperpress_action=$matches[2]&helperpress_arg=$matches[2]',
-            'top');
-    }
 
     public static function add_query_vars( $public_query_vars ) {
         $public_query_vars[] = 'helperpress_api_key';
@@ -22,7 +15,9 @@ class Plugin {
 
     // Route handler
     public static function route_handler() {
+
         $action = get_query_var('helperpress_action');
+        $api = new \HelperPress\Libs\API();
 
         if(empty($action))
             return;
@@ -31,20 +26,18 @@ class Plugin {
         $arg = get_query_var('helperpress_arg');
 
         // check the key
-        if(!\HelperPress\Libs\API::verify_key($key)){
-            // TODO: send bad auth header
-            echo 'key is incorrect';
-            exit;
+        if(!$api->verify_key($key)){
+            http_response_code(401);
+            die('Bad auth key');
         }
 
-        switch($action){
-            case 'import_db':
-                \HelperPress\Libs\DB::import_db($arg);
-                break;
+        $db = new \HelperPress\Libs\DB();
 
-            case 'dump_db':
-                \HelperPress\Libs\DB::import_db();
-                break;
+        if (method_exists($db, $action)) {
+            call_user_func_array(array($db, $action), array($arg));
+        }else{
+            http_response_code(501);
+            die('Action does not exist');
         }
         
     }

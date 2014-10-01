@@ -4,38 +4,68 @@ namespace HelperPress\Libs;
 
 class DB {
 
-    public function import_db ($filename) {
+	private $dumps_dir;
+	private $imports_dir;
 
-    	$this->_import_mysql_dump($filename);
+	public function __construct () {
+		$this->dumps_dir = HP_PRIVATE_DIR_PATH . '/dumps';
+		$this->imports_dir = HP_PRIVATE_DIR_PATH . '/imports';
 
-		//TODO return good news header
-    }
+		// make the dirs if they doesn't exist
+		mkdir($this->dumps_dir);
+		mkdir($this->imports_dir);
+	}
 
-    public function dump_db () {
+	public function import_db ($filename) {
+
+		$file_path = $this->imports_dir . '/' . $filename;
+
+		try {
+			// import it
+			$this->_import_mysql_dump($file_path);
+
+			// great success
+			http_response_code(200);
+
+		} catch (Exception $e){
+			http_response_code(500);
+			echo $e->getMessage();
+		}
+
+	}
+
+	public function dump_db () {
 		include(HP_BASE_PATH . '/vendor/mysqldump-php/src/Ifsnop/Mysqldump/Mysqldump.php');
 
-		$dump_path = HP_PRIVATE_DIR_PATH . '/dumps/' . date('Y-m-d--H-m-s.sql');
+		$file_path = $this->dumps_dir . '/' . date('Y-m-d--H-m-s') . '.sql';
 
-		$dump = new Ifsnop\Mysqldump\Mysqldump( DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, 'mysql');
-	    $dump->start('/dump.sql');
+		try {
+			// do the dump
+			$dump = new \Ifsnop\Mysqldump\Mysqldump( DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, 'mysql');
+			$dump->start($file_path);
 
-	    //TODO return good news header
-	   	echo $dump_path;
-    }
+			// great success
+			http_response_code(200);
+			echo $file_path;
+		} catch (Exception $e) {
+			http_response_code(500);
+			echo $e->getMessage();
+		}
+	}
 
 	// taken from http://stackoverflow.com/questions/19751354/how-to-import-sql-file-in-mysql-database-using-php
-    private function _import_mysql_dump($filename){
-    	
-    	$mysql_host = DB_HOST;
-    	$mysql_username = DB_USER;
-    	$mysql_password = DB_PASSWORD;
-    	$mysql_database = DB_NAME;
+	private function _import_mysql_dump($filename){
+		
+		$mysql_host = DB_HOST;
+		$mysql_username = DB_USER;
+		$mysql_password = DB_PASSWORD;
+		$mysql_database = DB_NAME;
 
 		// Connect to MySQL server
-		mysql_connect($mysql_host, $mysql_username, $mysql_password) or die('Error connecting to MySQL server: ' . mysql_error());
+		mysql_connect($mysql_host, $mysql_username, $mysql_password) or throw new Exception('Error connecting to MySQL server: ' . mysql_error());
 
 		// Select database
-		mysql_select_db($mysql_database) or die('Error selecting MySQL database: ' . mysql_error());
+		mysql_select_db($mysql_database) or throw new Exception('Error selecting MySQL database: ' . mysql_error());
 
 		// Temporary variable, used to store current query
 		$templine = '';
@@ -48,7 +78,7 @@ class DB {
 		{
 			// Skip it if it's a comment
 			if (substr($line, 0, 2) == '--' || $line == '')
-			    continue;
+				continue;
 
 			// Add this line to the current segment
 			$templine .= $line;
@@ -56,11 +86,11 @@ class DB {
 			// If it has a semicolon at the end, it's the end of the query
 			if (substr(trim($line), -1, 1) == ';')
 			{
-			    // Perform the query
-			    mysql_query($templine) or print('Error performing query \'<strong>' . $templine . '\': ' . mysql_error() . '<br /><br />');
+				// Perform the query
+				mysql_query($templine) or print('Error performing query \'<strong>' . $templine . '\': ' . mysql_error() . '<br /><br />');
 
-			    // Reset temp variable to empty
-			    $templine = '';
+				// Reset temp variable to empty
+				$templine = '';
 			}
 		}
 	}

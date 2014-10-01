@@ -8,21 +8,18 @@ class Plugin {
 
         // See if we need to activate. This sometimes get skipped due to migration
         if(!file_exists(HP_PRIVATE_DIR_PATH))
-            $this->activate();
+            self::activate();
 
-        // Routes & Request Vars
-        add_action( 'init', array('\HelperPress\Libs\Controllers\Routes', 'add_rewrite_rules') );  
-        add_action( 'query_vars', array('\HelperPress\Libs\Controllers\Routes', 'add_query_vars') );
-        add_action( 'template_redirect', array('\HelperPress\Libs\Controllers\Routes', 'route_handler') );
+        // Routes & Request Vars 
+        add_action( 'query_vars', array('\HelperPress\Libs\Routes', 'add_query_vars') );
+        add_action( 'template_redirect', array('\HelperPress\Libs\Routes', 'route_handler') );
 
     }
 
     public static function activate () {
-        // This is where you create that private directory for your shiz
+        // Create and protect HP private dir
         mkdir(HP_PRIVATE_DIR_PATH);
-
         \HelperPress\Libs\API::protect_helperpress_directory();
-
     }
 
     public static function deactivate () {
