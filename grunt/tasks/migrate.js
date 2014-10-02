@@ -4,6 +4,8 @@ var _ = require('lodash'),
 
 module.exports = function(grunt){
 
+	var HpWpPlugin = require(__dirname + '/../lib/hp-wp-plugin-api')(grunt);
+
 	function migrate(direction, env){
 
 		// migrate all data
@@ -37,7 +39,7 @@ module.exports = function(grunt){
 
 			}else if(environment === 'local' || environment === grunt.config('helperpress.alias_local_env') ){
 
-				return grunt.log.ok('helperpress.db_master defined as this environement. Skipping migration.');
+				return grunt.log.ok('helperpress.db_master defined as this environment. Skipping migration.');
 
 			}
 
@@ -117,11 +119,9 @@ module.exports = function(grunt){
 
 
 			case 'sftp':
-			default:
 
-				var sshInfo = grunt.config('helperpress.environments.' + environment + '.ssh'),
+				var sftpCredsHelper = require('../lib/sftp-creds-helper')(grunt),
 
-					// paths for transfer		
 					localBasePath = '<%= helperpress.build_dir %>/wp-content/',
 					remoteBasePath = '<%= helperpress.environments.' + environment + '.wp_path %>/wp-content/',
 
@@ -130,29 +130,12 @@ module.exports = function(grunt){
 						createDirectories: true,
 						directoryPermissions: parseInt(777, 8),
 						showProgress: true,
-						host: '<%= helperpress.environments.' + environment + '.ssh.host %>',
 						path: remoteBasePath
 					},
 					sftpFiles = {};
 
-				this.requiresConfig('helperpress.environments.' + environment + '.ssh.host');
+				sftpOpts = sftpCredsHelper(environment, sftpOpts);
 
-				// map HP's SSH settings to ssh task's
-				if(typeof sshInfo.user !== 'undefined'){
-					sftpOpts.username = sshInfo.user;
-				}
-				if(typeof sshInfo.pass !== 'undefined'){
-					sftpOpts.password = sshInfo.pass;
-				}
-				if(typeof sshInfo.keyfile !== 'undefined'){
-					sftpOpts.privateKey = grunt.file.read(sshInfo.keyfile);
-				}
-				if(typeof sshInfo.passphrase !== 'undefined'){
-					sftpOpts.passphrase = sshInfo.passphrase;
-				}
-				if(typeof sshInfo.port !== 'undefined'){
-					sftpOpts.port = sshInfo.port;
-				}
 
 				if(direction === 'pull'){
 
@@ -188,6 +171,9 @@ module.exports = function(grunt){
 				migrateTask = 'sftp:' + environment + '_uploads_migrate';
 
 				break;
+
+			default:
+				grunt.log('This environment\'s migrate_uplaods_method is set to "none" or is not defined. Skipping migration.');
 		}
 
 
@@ -216,7 +202,7 @@ module.exports = function(grunt){
 			// assume helperpress.db_master
 			grunt.log.writeln('Migrating from configured helperpress.db_master');
 
-			environment = grunt.config.process( '<%= helperpress.db_master %>' );
+			environment = grunt.config('helperpress.db_master');
 
 			if(!environment){
 
@@ -224,7 +210,7 @@ module.exports = function(grunt){
 
 			}else if(environment === 'local' || environment === grunt.config('helperpress.alias_local_env') ){
 
-				return grunt.log.ok('helperpress.db_master defined as this environement. Skipping migration.');
+				return grunt.log.ok('helperpress.db_master defined as this environment. Skipping migration.');
 
 			}
 
@@ -232,77 +218,157 @@ module.exports = function(grunt){
 
 		grunt.task.run('notify:migrate_db_start');
 
-		// determine proper ssh host string
-		var sshHost = '<%= helperpress.environments.' + environment + '.ssh.host %>',
-			sshUser = grunt.config.process('<%= helperpress.environments.' + environment + '.ssh.user %>');
+		switch(grunt.config('helperpress.environments.' + environment + '.migrate_db_method' )){
 
-		if(typeof sshUser === 'string'){
-			sshHost = sshUser + '@' + sshHost;
-		}
+			case 'ssh':
+				// determine proper ssh host string
+				var sshHost = '<%= helperpress.environments.' + environment + '.ssh.host %>',
+					sshUser = grunt.config.process('<%= helperpress.environments.' + environment + '.ssh.user %>');
 
-		var remoteConfig = {
-			title: '<%= helperpress.environments.' + environment + '.title %>',
+				if(typeof sshUser === 'string'){
+					sshHost = sshUser + '@' + sshHost;
+				}
 
-			database: '<%= helperpress.environments.' + environment + '.db.database %>',
-			user: '<%= helperpress.environments.' + environment + '.db.user %>',
-			pass: '<%= helperpress.environments.' + environment + '.db.pass %>',
-			host: '<%= helperpress.environments.' + environment + '.db.host %>',
+				var remoteConfig = {
+					title: '<%= helperpress.environments.' + environment + '.title %>',
 
-			ssh_host: sshHost
-		};
-	
-		// are we pulling or pushing?
-		if(direction === 'pull'){
+					database: '<%= helperpress.environments.' + environment + '.db.database %>',
+					user: '<%= helperpress.environments.' + environment + '.db.user %>',
+					pass: '<%= helperpress.environments.' + environment + '.db.pass %>',
+					host: '<%= helperpress.environments.' + environment + '.db.host %>',
+
+					ssh_host: sshHost
+				};
 			
-			var localDumpFile = 'db/backups/<%= grunt.template.today(\'yyyy-mm-dd\') %>_local.sql',
-				envDumpFile = 'db/backups/<%= grunt.template.today(\'yyyy-mm-dd\') %>_' + environment + '.sql',
-				dbName = '<%= helperpress.environments.local.db.database %>';
+				// are we pulling or pushing?
+				if(direction === 'pull'){
+					
+					var localDumpFile = 'db/backups/<%= grunt.template.today(\'yyyy-mm-dd\') %>_local.sql',
+						envDumpFile = 'db/backups/<%= grunt.template.today(\'yyyy-mm-dd\') %>_' + environment + '.sql',
+						dbName = '<%= helperpress.environments.local.db.database %>';
 
-			// dump remote
-			remoteConfig.backup_to = envDumpFile;
-			grunt.config('db_dump.' + environment + '.options', remoteConfig);
-			grunt.task.run('db_dump:' + environment);
+					// dump remote
+					remoteConfig.backup_to = envDumpFile;
+					grunt.config('db_dump.' + environment + '.options', remoteConfig);
+					grunt.task.run('db_dump:' + environment);
 
-			// backup local DB
-			_dumpLocalDB(dbName, localDumpFile);
+					// backup local DB
+					_dumpLocalDB(dbName, localDumpFile);
 
-			// import locally			
-			_importToLocalDB(envDumpFile, dbName);
+					// import locally			
+					_importToLocalDB(envDumpFile, dbName);
 
-			// search & replace
-			_searchAndReplaceDB(environment, 'local', dbName);
+					// search & replace
+					_searchAndReplaceDB(environment, 'local', dbName);
 
-		}else{
+				}else{
 
-			var dumpFile = 'db/backups/<%= grunt.template.today(\'yyyy-mm-dd\') %>_local.sql',
-				dbName = '<%= helperpress.environments.local.db.database %>',
-				migrateDumpFile = 'db/migrate/<%= grunt.template.today(\'yyyy-mm-dd\') %>_' + environment + '.sql',
-				migrateDBName = dbName + '_' + environment
+					// import replaced database to remote
+					var remoteImportConfig = remoteConfig,
+						migrateDumpFile = _prepareLocalDBPush(environment);
 
-			// dump local
-			_dumpLocalDB(dbName, dumpFile);
+					remoteImportConfig.import_from = migrateDumpFile;
+					grunt.config('db_import.migrate_' + environment + '.options', remoteImportConfig);
+					grunt.task.run('db_import:migrate_' + environment);
 
-			// import to temp local db so we can search and replace in it
-			_importToLocalDB(dumpFile, migrateDBName);
+				}
+				break;
 
-			// search and replace
-			_searchAndReplaceDB('local', environment, migrateDBName);
+			case 'plugin':
+				var sftpCredsHelper = require('../lib/sftp-creds-helper')(grunt),
+					wpPlugin = new HpWpPlugin(environment),
+					dbName = '<%= helperpress.environments.local.db.database %>';
 
-			// dump replaced database
-			_dumpLocalDB(migrateDBName, migrateDumpFile);
+				// are we pulling or pushing?
+				if(direction === 'pull'){
 
-			// import replaced database to remote
-			var remoteImportConfig = remoteConfig;
+					// request a dump file path
+					var remoteDumpFile = wpPlugin.getDbDump(),
+						dumpFile = 'db/backups/<%= grunt.template.today(\'yyyy-mm-dd\') %>_' + environment + '.sql',
+						sftpOpts = {
+							srcBasePath: '/',
+							destBasePath: './db/backups/',
+							mode: 'download'
+						};
 
-			remoteImportConfig.import_from = migrateDumpFile;
-			grunt.config('db_import.migrate_' + environment + '.options', remoteImportConfig);
-			grunt.task.run('db_import:migrate_' + environment);
+					// SFTP down the dumpfile
+					sftpOpts = sftpCredsHelper(environment, sftpOpts);
+
+					grunt.config('sftp.' + environment + '_download_dump', {
+						options: sftpOpts,
+						files: { dumpFile: remoteDumpFile }
+					});
+					grunt.task.run('sftp:' + environment + '_download_dump');
+
+					// import the dump
+					_importToLocalDB(dumpFile, dbName);
+
+					// search & replace
+					_searchAndReplaceDB(environment, 'local', dbName);
+
+				}else{
+
+					// get a dump file prepped for the target environment
+					var migrateDumpFile = _prepareLocalDBPush(environment);
+
+					// SFTP up the dumpfile
+					var sftpOpts = {
+							srcBasePath: '/',
+							destBasePath: './db/backups/',
+							mode: 'download'
+						},
+
+					sftpOpts = sftpCredsHelper(environment, sftpOpts);
+
+					grunt.config('sftp.' + environment + '_download_dump', {
+						options: sftpOpts,
+						files: { dumpFile: remoteDumpFile }
+					});
+					grunt.task.run('sftp:' + environment + '_download_dump');
+
+					// import it remotely
+					var resp = wpPlugin.importDb(migrateDumpFile);
+
+					// how'd we do?
+					if(resp === 'success'){
+						grunt.log.ok('')
+					}else{
+						grunt.fatal('Error importing database on remote server: ' + resp);
+					}
+
+				}
+				break;
+
+			default:
+				grunt.log('This environment\'s "migrate_db_method" is set to "none" or is not defined. Skipping migration.');
 
 		}
 
 
 		grunt.task.run('notify:migrate_db_complete');
 
+	}
+
+	function _prepareLocalDBPush(environment){
+
+		var dumpFile = 'db/backups/<%= grunt.template.today(\'yyyy-mm-dd\') %>_local.sql',
+			dbName = '<%= helperpress.environments.local.db.database %>',
+			migrateDumpFile = 'db/migrate/<%= grunt.template.today(\'yyyy-mm-dd\') %>_' + environment + '.sql',
+			migrateDBName = dbName + '_' + environment;
+
+		// dump local
+		_dumpLocalDB(dbName, dumpFile);
+
+		// import to temp local db so we can search and replace in it
+		_importToLocalDB(dumpFile, migrateDBName);
+
+		// search and replace
+		_searchAndReplaceDB('local', environment, migrateDBName);
+
+		// dump replaced database
+		_dumpLocalDB(migrateDBName, migrateDumpFile);
+
+		return migrateDumpFile;
 	}
 
 	function _dumpLocalDB(dbName, dumpFile){

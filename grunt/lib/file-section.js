@@ -1,7 +1,7 @@
 var _ = require('lodash'),
     fs = require('fs');
 
-FileSection = function( options ){
+var FileSection = function( options ){
 
     var defaults = {
         filename: '',
