@@ -49,6 +49,7 @@ Thumbs.db
 
 # Composer
 /vendor
+/custom_plugins/helperpress/vendor
 
 # Bower
 /bower_components

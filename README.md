@@ -106,7 +106,7 @@ General rules:
 			},
 
 			// path to WP install directory
-			"wp_path": "/var/www/vhosts/my-wp",
+			"wp_path": "/var/www/vhosts/my-wp/www",
 
 			// base URL of site without protocol
 			"home_url": "my-wp.dev01.40digits.net",
@@ -129,6 +129,17 @@ General rules:
 			"none": don't allow automatic uploads migration on this environment (e.g. it's handled elsewhere)
 			*/
 			"migrate_uploads_method": "rsync"
+
+			/*
+			how HP should migrate databases
+			"ssh": connect for importing/dumping over SSH
+			"plugin": use a combination of SFTP and WP Plugin to move data
+			"none": don't allow automatic database migration on this environment (e.g. it's handled elsewhere)
+			*/
+			"migrate_db_method": "rsync"
+
+			// API key for communicating with the HelperPress WordPress Plugin. Set automatically.
+			"hp_wp_api_key": "260e31ca38cfaa782666d16293ff9a9845e3a9271666"
 		}
 
 	},
