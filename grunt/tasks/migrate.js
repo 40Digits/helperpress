@@ -4,8 +4,6 @@ var _ = require('lodash'),
 
 module.exports = function(grunt){
 
-	var HpWpPlugin = require(__dirname + '/../lib/hp-wp-plugin-api')(grunt);
-
 	function migrate(direction, env){
 
 		// migrate all data
@@ -126,15 +124,13 @@ module.exports = function(grunt){
 					remoteBasePath = '<%= helperpress.environments.' + environment + '.wp_path %>/wp-content/',
 
 					// args to be passed to sftp task
-					sftpOpts = {
+					sftpFiles = {},
+					sftpOpts = sftpCredsHelper(environment, {
 						createDirectories: true,
 						directoryPermissions: parseInt(777, 8),
 						showProgress: true,
 						path: remoteBasePath
-					},
-					sftpFiles = {};
-
-				sftpOpts = sftpCredsHelper(environment, sftpOpts);
+					});
 
 
 				if(direction === 'pull'){
@@ -267,7 +263,7 @@ module.exports = function(grunt){
 					var remoteImportConfig = remoteConfig,
 						migrateDumpFile = _prepareLocalDBPush(environment);
 
-					remoteImportConfig.import_from = migrateDumpFile;
+					remoteImportConfig.import_from = './db/migrate/' + migrateDumpFile;
 					grunt.config('db_import.migrate_' + environment + '.options', remoteImportConfig);
 					grunt.task.run('db_import:migrate_' + environment);
 
@@ -276,27 +272,39 @@ module.exports = function(grunt){
 
 			case 'plugin':
 				var sftpCredsHelper = require('../lib/sftp-creds-helper')(grunt),
-					wpPlugin = new HpWpPlugin(environment),
 					dbName = '<%= helperpress.environments.local.db.database %>';
 
 				// are we pulling or pushing?
 				if(direction === 'pull'){
 
 					// request a dump file path
-					var remoteDumpFile = wpPlugin.getDbDump(),
-						dumpFile = 'db/backups/<%= grunt.template.today(\'yyyy-mm-dd\') %>_' + environment + '.sql',
-						sftpOpts = {
-							srcBasePath: '/',
-							destBasePath: './db/backups/',
-							mode: 'download'
-						};
+					var	dumpFile = 'db/backups/<%= grunt.template.today(\'yyyy-mm-dd\') %>_' + environment + '.sql';
+
+					// tell the WP plugin to do a dump
+					grunt.config('hp_wp_plugin.' + environment + '_do_dump', {
+						options: {
+							environment: environment,
+							method: 'dump_db'
+						}
+					});
+					grunt.task.run('hp_wp_plugin:' + environment + '_do_dump');
+
+					// that task will save the filename to our config
+					var remoteDumpFile = '<%= helperpress.environments.' + environment + '._db_dump %>';
 
 					// SFTP down the dumpfile
-					sftpOpts = sftpCredsHelper(environment, sftpOpts);
+					var sftpFiles = {},
+						sftpOpts = sftpCredsHelper(environment, {
+							srcBasePath: '/',
+							destBasePath: './',
+							mode: 'download'
+						});
+
+					sftpFiles[dumpFile] = remoteDumpFile;
 
 					grunt.config('sftp.' + environment + '_download_dump', {
 						options: sftpOpts,
-						files: { dumpFile: remoteDumpFile }
+						files: sftpFiles
 					});
 					grunt.task.run('sftp:' + environment + '_download_dump');
 
@@ -312,29 +320,32 @@ module.exports = function(grunt){
 					var migrateDumpFile = _prepareLocalDBPush(environment);
 
 					// SFTP up the dumpfile
-					var sftpOpts = {
-							srcBasePath: '/',
-							destBasePath: './db/backups/',
-							mode: 'download'
-						},
+					var remoteBasePath = '<%= helperpress.environments.' + environment + '.wp_path %>/wp-content/_helperpress/imports/',
+						sftpOpts = sftpCredsHelper(environment, {
+							srcBasePath: './db/migrate/',
+							destBasePath: remoteBasePath,
+							mode: 'upload',
+							path: remoteBasePath
+						});
 
-					sftpOpts = sftpCredsHelper(environment, sftpOpts);
-
-					grunt.config('sftp.' + environment + '_download_dump', {
+					grunt.config('sftp.' + environment + '_upload_dump', {
 						options: sftpOpts,
-						files: { dumpFile: remoteDumpFile }
+						files: [{
+							src: sftpOpts.srcBasePath + migrateDumpFile,
+							dest: sftpOpts.destBasePath + migrateDumpFile
+						}]
 					});
-					grunt.task.run('sftp:' + environment + '_download_dump');
+					grunt.task.run('sftp:' + environment + '_upload_dump');
 
-					// import it remotely
-					var resp = wpPlugin.importDb(migrateDumpFile);
-
-					// how'd we do?
-					if(resp === 'success'){
-						grunt.log.ok('')
-					}else{
-						grunt.fatal('Error importing database on remote server: ' + resp);
-					}
+					// tell the WP plugin to import our dump
+					grunt.config('hp_wp_plugin.' + environment + '_import_dump', {
+						options: {
+							environment: environment,
+							method: 'import_db',
+							file: migrateDumpFile
+						}
+					});
+					grunt.task.run('hp_wp_plugin:' + environment + '_import_dump');
 
 				}
 				break;
@@ -353,7 +364,7 @@ module.exports = function(grunt){
 
 		var dumpFile = 'db/backups/<%= grunt.template.today(\'yyyy-mm-dd\') %>_local.sql',
 			dbName = '<%= helperpress.environments.local.db.database %>',
-			migrateDumpFile = 'db/migrate/<%= grunt.template.today(\'yyyy-mm-dd\') %>_' + environment + '.sql',
+			migrateDumpFile = '<%= grunt.template.today(\'yyyy-mm-dd\') %>_' + environment + '.sql',
 			migrateDBName = dbName + '_' + environment;
 
 		// dump local
@@ -366,7 +377,7 @@ module.exports = function(grunt){
 		_searchAndReplaceDB('local', environment, migrateDBName);
 
 		// dump replaced database
-		_dumpLocalDB(migrateDBName, migrateDumpFile);
+		_dumpLocalDB(migrateDBName, 'db/migrate/' + migrateDumpFile);
 
 		return migrateDumpFile;
 	}

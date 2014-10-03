@@ -12,8 +12,10 @@ class DB {
 		$this->imports_dir = HP_PRIVATE_DIR_PATH . '/imports';
 
 		// make the dirs if they doesn't exist
-		mkdir($this->dumps_dir);
-		mkdir($this->imports_dir);
+		$oldmask = umask(0);
+		@mkdir($this->dumps_dir, 0777);
+		@mkdir($this->imports_dir, 0777);
+		umask($oldmask);
 	}
 
 	public function import_db ($filename) {
@@ -26,10 +28,11 @@ class DB {
 
 			// great success
 			http_response_code(200);
+			exit;
 
-		} catch (Exception $e){
+		} catch (\Exception $e){
 			http_response_code(500);
-			echo $e->getMessage();
+			die($e->getMessage());
 		}
 
 	}
@@ -41,15 +44,19 @@ class DB {
 
 		try {
 			// do the dump
-			$dump = new \Ifsnop\Mysqldump\Mysqldump( DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, 'mysql');
+			$dump_args = array(
+			    'add-drop-table' => true
+			);
+			$dump = new \Ifsnop\Mysqldump\Mysqldump( DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, 'mysql', $dump_args);
 			$dump->start($file_path);
 
 			// great success
 			http_response_code(200);
 			echo $file_path;
-		} catch (Exception $e) {
+			exit;
+		} catch (\Exception $e) {
 			http_response_code(500);
-			echo $e->getMessage();
+			die($e->getMessage());
 		}
 	}
 
@@ -62,16 +69,21 @@ class DB {
 		$mysql_database = DB_NAME;
 
 		// Connect to MySQL server
-		mysql_connect($mysql_host, $mysql_username, $mysql_password) or throw new Exception('Error connecting to MySQL server: ' . mysql_error());
+		if(false === @mysql_connect($mysql_host, $mysql_username, $mysql_password))
+			throw new \Exception('Error connecting to MySQL server: ' . mysql_error());
 
 		// Select database
-		mysql_select_db($mysql_database) or throw new Exception('Error selecting MySQL database: ' . mysql_error());
+		if(false === @mysql_select_db($mysql_database))
+			throw new \Exception('Error selecting MySQL database: ' . mysql_error());
+		
 
 		// Temporary variable, used to store current query
 		$templine = '';
 
 		// Read in entire file
-		$lines = file($filename);
+		$lines = @file($filename);
+		if(false === $lines)
+			throw new \Exception('File "' . $filename . '" could not be opened.');
 
 		// Loop through each line
 		foreach ($lines as $line)
@@ -87,7 +99,8 @@ class DB {
 			if (substr(trim($line), -1, 1) == ';')
 			{
 				// Perform the query
-				mysql_query($templine) or print('Error performing query \'<strong>' . $templine . '\': ' . mysql_error() . '<br /><br />');
+				if(false === mysql_query($templine))
+					throw new \Exception('Error performing query \'<strong>' . $templine . '\': ' . mysql_error() );
 
 				// Reset temp variable to empty
 				$templine = '';
