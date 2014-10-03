@@ -1,8 +1,12 @@
-var fs = require('fs'),
-	sassExt = fs.existsSync('./wp-theme/assets/_src/sass/style.sass') ? 'sass' : 'scss';
+module.exports = function(grunt){
+	var fs = require('fs'),
 
-module.exports = {
-	options: {
-		filename: './wp-theme/assets/_src/sass/style.' + sassExt
-	}
-};
+		assetsDir = grunt.package.config.assets_dir,
+		sassExt = fs.existsSync(assetsDir + '/_src/sass/style.sass') ? 'sass' : 'scss';
+
+	module.exports = {
+		options: {
+			filename: assetsDir + '/_src/sass/style.' + sassExt
+		}
+	};
+}

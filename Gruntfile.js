@@ -152,6 +152,7 @@ module.exports = function (grunt) {
 	// combine all config files
 	gruntConfig.helperpress = _.deepExtend( packageJSON.config, userDefaultsJSON, siteConfigJSON, siteConfigLocalJSON );
 	gruntConfig.pkg = packageJSON;
+	grunt.package = packageJSON;
 
 
 
