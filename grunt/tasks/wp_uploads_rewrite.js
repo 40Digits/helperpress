@@ -1,7 +1,8 @@
 module.exports = function(grunt){
 
 	function setRewriteRules(action){
-		var htaccess = new FileSection({
+		var FileSection = require(__dirname + '/../lib/file-section');
+			htaccess = new FileSection({
 				filename: grunt.config('helperpress.build_dir') + '/.htaccess',
 				marker: {
 					start: '# BEGIN HelperPress',
