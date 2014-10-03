@@ -169,7 +169,7 @@ module.exports = function(grunt){
 				break;
 
 			default:
-				grunt.log('This environment\'s migrate_uplaods_method is set to "none" or is not defined. Skipping migration.');
+				grunt.log.ok('This environment\'s migrate_uplaods_method is set to "none" or is not defined. Skipping migration.');
 		}
 
 
@@ -351,7 +351,7 @@ module.exports = function(grunt){
 				break;
 
 			default:
-				grunt.log('This environment\'s "migrate_db_method" is set to "none" or is not defined. Skipping migration.');
+				grunt.log.ok('This environment\'s "migrate_db_method" is set to "none" or is not defined. Skipping migration.');
 
 		}
 
