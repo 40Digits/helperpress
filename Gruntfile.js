@@ -59,13 +59,13 @@ module.exports = function (grunt) {
 		'wp_default_user_creds',
 		'wp_cli:install_core',
 		'wp_cli:install_plugins',
+		'symlink:custom_plugins',
 
 		// symlink wp-theme into WP installation
 		'symlink:theme',
 
 		// wrap up WP-CLI stuff
 		'wp_cli:remove_plugins',
-		'wp_cli:rewrite_flush',
 		'clean:wp_default_themes',
 
 		// config apache
@@ -73,6 +73,7 @@ module.exports = function (grunt) {
 
 		// pull DB and files from db_master
 		'migrate_db:pull:_master',
+		'wp_cli:rewrite_flush',
 
 		// watch, because we're good to go!
 		'watch'
@@ -97,6 +98,7 @@ module.exports = function (grunt) {
 		'wp_cli:db_create',
 		'wp_cli:install_core',
 		'wp_cli:install_plugins',
+		'copy:custom_plugins',
 
 		// build assets
 		'build_dist_assets',

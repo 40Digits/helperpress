@@ -9,5 +9,15 @@ module.exports = {
 	sites: {
 		src: '<%= helperpress.build_dir %>',
 		dest: '<%= helperpress.apache.sites_dir %>/<%= helperpress.wp.theme.slug %>'
+	},
+	custom_plugins: {
+		files: [{
+			expand: true,
+			overwrite: true,
+			cwd: './custom_plugins',
+			src: '*',
+			dest: '<%= helperpress.build_dir %>/wp-content/plugins',
+			filter: 'isDirectory'
+		}]
 	}
 };
