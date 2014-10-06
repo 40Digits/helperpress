@@ -26,9 +26,8 @@ module.exports = {
 			expand: true,
 			overwrite: true,
 			cwd: './custom_plugins',
-			src: '*',
-			dest: '<%= helperpress.build_dir %>/wp-content/plugins',
-			filter: 'isDirectory'
+			src: '**',
+			dest: '<%= helperpress.build_dir %>/wp-content/plugins'
 		}]
 	}
 }
