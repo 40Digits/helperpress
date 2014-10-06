@@ -9,6 +9,7 @@ License: MIT
 */
 
 require_once('constants.php');
+require_once('helpers/utils.php');
 require_once('autoload.php');
 
 

@@ -27,7 +27,7 @@ class Routes {
 
         // check the key
         if(!$api->verify_key($key)){
-            http_response_code(401);
+            \http_response_code(401);
             die('Bad auth key');
         }
 
@@ -36,7 +36,7 @@ class Routes {
         if (method_exists($db, $action)) {
             call_user_func_array(array($db, $action), array($arg));
         }else{
-            http_response_code(501);
+            \http_response_code(501);
             die('Action does not exist');
         }
         
