@@ -50,6 +50,7 @@ module.exports = function(grunt) {
 
 				break;
 			case 'none':
+			default:
 				grunt.log.ok('deploy_method for "' + environment + '" is set to "none", so we\'ve built it in "' + distDir + '" and that\'s all.');
 				break;
 
@@ -80,7 +81,7 @@ module.exports = function(grunt) {
 		execSync.run(gitCmd + 'commit -m "HelperPress Deploy" --no-verify');
 
 		// git push current branch as master
-		execSync.run(gitCmd + 'push wpe ' + environment + ':master');
+		execSync.run(gitCmd + 'push wpe master:master');
 
 	});
 
