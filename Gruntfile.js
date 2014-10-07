@@ -49,11 +49,13 @@ module.exports = function (grunt) {
 		'composer:install',
 		'bower:install',
 
+		// Get WP files
+		'wp_cli:download_core',
+
 		// setup local config
 		'write_helperpress_config:local',
 
-		// WordPress goodness
-		'wp_cli:download_core',
+		// Install WP
 		'wp_cli:core_config',
 		'wp_cli:db_create',
 		'wp_default_user_creds',
