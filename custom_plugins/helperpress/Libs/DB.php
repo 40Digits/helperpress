@@ -45,14 +45,18 @@ class DB {
 		try {
 			// do the dump
 			$dump_args = array(
-			    'add-drop-table' => true
+			    'add-drop-table' => true,
+			    'single-transaction' => false
 			);
 			$dump = new \Ifsnop\Mysqldump\Mysqldump( DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, 'mysql', $dump_args);
 			$dump->start($file_path);
 
 			// great success
 			http_response_code(200);
-			echo $file_path;
+
+			// get file path relative to WP root dir
+			$rel_file_path = 'wp-content' . substr($file_path, strpos($file_path, WP_CONTENT_DIR) + strlen(WP_CONTENT_DIR)); 
+			echo $rel_file_path;
 			exit;
 		} catch (\Exception $e) {
 			http_response_code(500);

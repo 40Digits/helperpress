@@ -121,7 +121,7 @@ module.exports = function(grunt){
 				var sftpCredsHelper = require('../lib/sftp-creds-helper')(grunt),
 
 					localBasePath = '<%= helperpress.build_dir %>/wp-content/',
-					remoteBasePath = '<%= helperpress.environments.' + environment + '.wp_path %>/wp-content/',
+					remoteBasePath = '<%= helperpress.environments.' + environment + '.ftp_wp_path %>/wp-content/',
 
 					// args to be passed to sftp task
 					sftpFiles = {},
@@ -295,7 +295,7 @@ module.exports = function(grunt){
 					// SFTP down the dumpfile
 					var sftpFiles = {},
 						sftpOpts = sftpCredsHelper(environment, {
-							srcBasePath: '/',
+							srcBasePath: '<%= helperpress.environments.' + environment + '.ftp_wp_path %>/',
 							destBasePath: './',
 							mode: 'download'
 						});
@@ -320,7 +320,7 @@ module.exports = function(grunt){
 					var migrateDumpFile = _prepareLocalDBPush(environment);
 
 					// SFTP up the dumpfile
-					var remoteBasePath = '<%= helperpress.environments.' + environment + '.wp_path %>/wp-content/_helperpress/imports/',
+					var remoteBasePath = '<%= helperpress.environments.' + environment + '.ftp_wp_path %>/wp-content/_helperpress/imports/',
 						sftpOpts = sftpCredsHelper(environment, {
 							srcBasePath: './db/migrate/',
 							destBasePath: remoteBasePath,

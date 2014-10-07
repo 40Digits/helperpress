@@ -19,7 +19,7 @@ module.exports = function(grunt){
 
 		// check config key
 		if(typeof apiKey !== 'string'){
-			_fetchApiKey(options.environment);
+			return _fetchApiKey.call(this, options.environment);
 		}
 
 		// build and execute the request
@@ -33,7 +33,7 @@ module.exports = function(grunt){
 		}
 
 		// connect
-		grunt.log.debug('Connecting to ' + endPoint);
+		grunt.log.verbose('Connecting to ' + endPoint);
 
 		req = httpsync.get(endPoint);
 		resp = req.end();
@@ -42,13 +42,13 @@ module.exports = function(grunt){
 
 			// success
 			case 200:
-				grunt.log.debug('Success. Response: ' + resp.data);
+				grunt.log.verbose('Success. Response: ' + resp.data);
 				break;
 
 			// incorrect key
 			case 401:
-				grunt.log.debug('Incorrect key. Removing saved key and fetching again.');
-				_fetchApiKey(options);
+				grunt.log.verbose('Incorrect key. Removing saved key and fetching again.');
+				return _fetchApiKey.call(this, options.environment);
 				break;
 
 			// incorrect key
@@ -75,9 +75,9 @@ module.exports = function(grunt){
 		}
 	});
 
-	function _fetchApiKey(options){
+	function _fetchApiKey(environment){
 		// let's get it from the server via sftp
-		grunt.task.run('get_hp_wp_plugin_api_key:' + options.environment);
+		grunt.task.run('get_hp_wp_plugin_api_key:' + environment);
 
 		// and try it all again.
 		grunt.task.run(this.nameArgs);

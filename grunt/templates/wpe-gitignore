@@ -96,3 +96,7 @@ wp-content/mysql.sql
 *.asf
 *.wmv
 *.avi
+
+
+# helperpress specific
+/wp-content/_helperpress

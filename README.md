@@ -108,6 +108,9 @@ General rules:
 			// path to WP install directory
 			"wp_path": "/var/www/vhosts/my-wp/www",
 
+			// path to WP install directory via (S)FTP
+			"ftp_wp_path": "htdocs",
+
 			// base URL of site without protocol
 			"home_url": "my-wp.dev01.40digits.net",
 
@@ -117,10 +120,10 @@ General rules:
 			"wpe": WPEngine's Git Deploy
 			"none": don't allow deploy to run on this environment (e.g. it's handled elsewhere)
 			*/
-			"deploy_method": "rsync"
+			"deploy_method": "rsync",
 
 			// Git remote for when using 'wpe' as deploy_method
-			"remote": "git@git.wpengine.com:production/sitename.git"
+			"remote": "git@git.wpengine.com:production/sitename.git",
 
 			/*
 			how HP should migrate wp-uploads
@@ -128,7 +131,7 @@ General rules:
 			"sftp": connect via SFTP and upload/download
 			"none": don't allow automatic uploads migration on this environment (e.g. it's handled elsewhere)
 			*/
-			"migrate_uploads_method": "rsync"
+			"migrate_uploads_method": "rsync",
 
 			/*
 			how HP should migrate databases
@@ -136,7 +139,7 @@ General rules:
 			"plugin": use a combination of SFTP and WP Plugin to move data
 			"none": don't allow automatic database migration on this environment (e.g. it's handled elsewhere)
 			*/
-			"migrate_db_method": "rsync"
+			"migrate_db_method": "ssh",
 
 			// API key for communicating with the HelperPress WordPress Plugin. Set automatically.
 			"hp_wp_api_key": "260e31ca38cfaa782666d16293ff9a9845e3a9271666"
