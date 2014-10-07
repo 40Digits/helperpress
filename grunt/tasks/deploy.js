@@ -60,28 +60,43 @@ module.exports = function(grunt) {
 
 	grunt.registerTask('_deploy_wpe_git', 'Internal helper function for deploy_wpe', function(environment) {
 
+		var wpeDir = './www-wpe';
+
 		this.requiresConfig(
 			'helperpress.environments.' + environment + '.remote'
 		);
 
-		var gitFlag = '--git-dir="' + distDir + '/.git" --work-tree="' + distDir + '"',
+		var gitFlag = '--git-dir="' + wpeDir + '/.git" --work-tree="' + wpeDir + '"',
 			gitCmd = 'git ' + gitFlag + ' ';
 
-		// copy WPE .gitignore
-		execSync.run('cp grunt/templates/wpe-gitignore ' + distDir + '/.gitignore');
+		// clean & create WPE dir
+		execSync.run('rm -rf ' + wpeDir);
+		execSync.run('mkdir ' + wpeDir);
 
-		// git init
+		// copy WPE .gitignore
+		execSync.run('cp grunt/templates/wpe-gitignore ' + wpeDir + '/.gitignore');
+
+		// git init it
 		execSync.run(gitCmd + 'init');
 
 		// add wpe remote
-		execSync.run(gitCmd + 'remote add wpe ' + grunt.config('helperpress.environments.' + environment + '.remote'));
+		execSync.run(gitCmd + 'remote add origin ' + grunt.config('helperpress.environments.' + environment + '.remote'));
+
+		// git pull
+		execSync.run(gitCmd + 'fetch origin master');
+		execSync.run(gitCmd + 'reset --hard origin/master');
+
+		// copy and overwrite, then finish up
+		execSync.run('cp -rf ' + distDir + '/* ' + wpeDir);
 
 		// git add & commit
 		execSync.run(gitCmd + 'add --all');
 		execSync.run(gitCmd + 'commit -m "HelperPress Deploy" --no-verify');
 
-		// git push current branch as master
-		execSync.run(gitCmd + 'push wpe master:master');
+		// git push
+		execSync.run(gitCmd + 'push origin master');
+
+
 
 	});
 
