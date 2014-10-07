@@ -201,11 +201,11 @@ module.exports = function (grunt) {
 
 	// set ftp_wp_path if not defined
 	// TODO - this should be moved into a more robust, complete defaults generator
-	gruntConfig.helperpress.environments.forEach(function(env, key){
-		if(typeof env.ftp_wp_path === 'undefined' && typeof env.wp_path === 'string'){
-			gruntConfig.helperpress.environments[key].ftp_wp_path = env.wp_path;
+	for(var env in gruntConfig.helperpress.environments){
+		if(typeof gruntConfig.helperpress.environments[env].ftp_wp_path === 'undefined' && typeof gruntConfig.helperpress.environments[env].wp_path === 'string'){
+			gruntConfig.helperpress.environments[env].ftp_wp_path = gruntConfig.helperpress.environments[env].wp_path;
 		}
-	});
+	}
 	
 
 
