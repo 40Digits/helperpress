@@ -33,7 +33,7 @@ module.exports = function(grunt){
 		}
 
 		// connect
-		grunt.log.verbose('Connecting to ' + endPoint);
+		grunt.verbose.writeln('Connecting to ' + endPoint);
 
 		req = httpsync.get(endPoint);
 		resp = req.end();
@@ -42,12 +42,12 @@ module.exports = function(grunt){
 
 			// success
 			case 200:
-				grunt.log.verbose('Success. Response: ' + resp.data);
+				grunt.verbose.writeln('Success. Response: ' + resp.data);
 				break;
 
 			// incorrect key
 			case 401:
-				grunt.log.verbose('Incorrect key. Removing saved key and fetching again.');
+				grunt.verbose.writeln('Incorrect key. Removing saved key and fetching again.');
 				return _fetchApiKey.call(this, options.environment);
 				break;
 

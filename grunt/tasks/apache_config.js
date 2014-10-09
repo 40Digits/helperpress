@@ -31,7 +31,7 @@ module.exports = function(grunt) {
 
 			// create the vhost file
 			grunt.log.subhead('Creating virtualhost file...');
-			grunt.file.write(newVhostFile, vhostContents);
+			execSync.run( sudo.apply('echo "' + vhostContents.replace('"', '\"') + '" > ' + newVhostFile ) );
 
 
 			// Point host name to localhost in hosts file
