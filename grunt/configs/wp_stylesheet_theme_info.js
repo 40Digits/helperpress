@@ -4,7 +4,7 @@ module.exports = function(grunt){
 		assetsDir = grunt.package.config.assets_dir,
 		sassExt = fs.existsSync(assetsDir + '/_src/sass/style.sass') ? 'sass' : 'scss';
 
-	module.exports = {
+	return {
 		options: {
 			filename: assetsDir + '/_src/sass/style.' + sassExt
 		}
