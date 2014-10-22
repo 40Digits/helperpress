@@ -1,5 +1,3 @@
-![HELPeR](http://www.40digits.com/wp-content/uploads/2014/09/helperpress-tools.png)
-
 HelperPress
 ======================
 A tool for automating much of the WordPress development workflow.
@@ -11,4 +9,6 @@ A tool for automating much of the WordPress development workflow.
 - **Deployment** - Build & Deploy via rsync or WPE Git Push
 - **Automatic Versioning** - pushes and merges become versioned automatically. (coming soon)
 
-Learn more at the [GitHub Wiki](https://github.com/40Digits/helperpress/wiki)
+##Learn more at the [GitHub Wiki](https://github.com/40Digits/helperpress/wiki)
+
+![HELPeR](http://www.40digits.com/wp-content/uploads/2014/09/helperpress-tools.png)
