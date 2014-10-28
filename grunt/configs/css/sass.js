@@ -4,7 +4,8 @@ module.exports = {
 			style: 'expanded',
 			lineNumbers: true,
 			sourcemap: false, // TODO: add SASS source maps
-			compass: false
+			compass: false,
+			require: ['sass-globbing']
 		},
 		files: [{
 			expand: true,
@@ -17,7 +18,8 @@ module.exports = {
 	dist: {
 		options: {
 			style: 'compressed',
-			compass: false
+			compass: false,
+			require: ['sass-globbing']
 		},
 		files: [{
 			expand: true,
