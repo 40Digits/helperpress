@@ -44,20 +44,7 @@ module.exports = {
 			'<%= helperpress.assets_dir %>/_src/js/**/*.js'
 		],
 		tasks: [
-			'browserifyBower:libs:nowrite',
-			'browserify:dev'
-		],
-		options: {
-			livereload: true,
-			atBegin: false // the browserifyBower target will catch it atBegin.
-		}
-	},
-
-	browserifyBower: {
-		files: ['bower.json'],
-		tasks: [
-			'browserifyBower',
-			'browserify:dev',
+			'browserify'
 		],
 		options: {
 			livereload: true,

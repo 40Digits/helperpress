@@ -23,9 +23,7 @@
     "glob": "~4.0.5",
     "grunt": "~0.4.5",
     "grunt-autoprefixer": "~0.8.2",
-    "grunt-bower-task": "~0.4.0",
     "grunt-browserify": "~2.1.4",
-    "grunt-browserify-bower": "~0.1.4",
     "grunt-combine-media-queries": "~1.0.19",
     "grunt-composer": "~0.4.0",
     "grunt-contrib-clean": "~0.6.0",
@@ -58,7 +56,7 @@
   "config": {
     "assets_dir": "wp-theme/assets",
     "css_dir": "wp-theme",
-    "build_dir": "www"
+    "build_dir": "www-dist2"
   },
   "browserify": {
     "transform": [

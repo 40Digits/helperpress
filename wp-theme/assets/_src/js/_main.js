@@ -42,8 +42,8 @@
 
 
 var config = require('./_config'),
-	$ = require('jquery'),
-
+  $ = window.jQuery,
+  
   toRequire = [],
 	toIgnore = [];
 

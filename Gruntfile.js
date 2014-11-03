@@ -90,7 +90,6 @@ module.exports = function (grunt) {
 
 		// install packages
 		'composer:install',
-		'bower:install',
 
 		// Get WP files
 		'wp_cli:download_core',
@@ -129,7 +128,6 @@ module.exports = function (grunt) {
 		'autoprefixer:cmq',
 
 		// JS
-		'browserifyBower',
 		'browserify',
 		'uglify:browserify',
 
