@@ -47,7 +47,6 @@ module.exports = function (grunt) {
 
 		// install packages
 		'composer:install',
-		'bower:install',
 
 		// Get WP files
 		'wp_cli:download_core',
