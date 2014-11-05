@@ -56,7 +56,7 @@
   "config": {
     "assets_dir": "wp-theme/assets",
     "css_dir": "wp-theme",
-    "build_dir": "www-dist2"
+    "build_dir": "www"
   },
   "browserify": {
     "transform": [
