@@ -21,28 +21,28 @@ var repo_config = {
 	options: {
 		questions: [
 			{
-				config: 'write_helperpress_config.repo_config.options.settings.wp.theme.slug', 
-				type: 'input', 
-				message: 'Enter site slug:', 
+				config: 'write_helperpress_config.repo_config.options.settings.wp.theme.slug',
+				type: 'input',
+				message: 'Enter site slug:',
 				default: repoName,
 				validate: validationFuncs.noSpecialChars
 			},
 			{
-				config: 'write_helperpress_config.repo_config.options.settings.wp.theme.name', 
-				type: 'input', 
+				config: 'write_helperpress_config.repo_config.options.settings.wp.theme.name',
+				type: 'input',
 				message: 'Enter site\'s nice name:',
 				validate: validationFuncs.notBlank
 			},
 			{
-				config: 'write_helperpress_config.repo_config.options.settings.wp.theme.desc', 
-				type: 'input', 
+				config: 'write_helperpress_config.repo_config.options.settings.wp.theme.desc',
+				type: 'input',
 				message: 'Enter site\'s description:',
 				// TODO: it would be nice to generate a default based on the site's nice name
 				default: 'A custom-built WordPress theme.'
 			},
 			{
-				config: '_write_helperpress_config.deep_theme_settings', 
-				type: 'confirm', 
+				config: '_write_helperpress_config.deep_theme_settings',
+				type: 'confirm',
 				message: 'Would you like to setup optional theme settings?',
 				default: false
 			},
@@ -98,8 +98,8 @@ var repo_config = {
 			// plugins
 			// value can be slug (from WP Plugins repo), path to local .zip file, or URL
 			{
-				config: 'write_helperpress_config.repo_config.options.settings.wp.plugins', 
-				type: 'checkbox', 
+				config: 'write_helperpress_config.repo_config.options.settings.wp.plugins',
+				type: 'checkbox',
 				message: 'Select WordPress plugins.',
 				choices: [
 					{
@@ -136,6 +136,26 @@ var repo_config = {
 						name: 'Contact Form 7 DB',
 						value: 'contact-form-7-to-database-extension',
 						checked: false
+					},
+					{
+						name: 'Disable Updates',
+						value: 'disable-wordpress-updates',
+						checked: false
+					},
+					{
+						name: 'Simple Page Ordering',
+						value: 'simple-page-ordering',
+						checked: false
+					},
+					{
+						name: 'Duplicate Post',
+						value: 'duplicate-post',
+						checked: false
+					},
+					{
+						name: 'Regenerate Thumbnails',
+						value: 'regenerate-thumbnails',
+						checked: false
 					}
 				]
 			}
@@ -147,8 +167,8 @@ var sudo_pass = {
 	options: {
 		questions: [
 			{
-				config: 'sudo_pass', 
-				type: 'password', 
+				config: 'sudo_pass',
+				type: 'password',
 				message: 'Some tasks we\'re running need root access. Please enter your sudo password:'
 			}
 		],
