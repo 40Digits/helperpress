@@ -65,7 +65,7 @@ module.exports = function(grunt){
 			files: {
 				'<%= helperpress.assets_dir %>/js/main.js': jsCwd + '/' + srcFiles
 			}
-		}
+		},
 
 		precompiled: {
 			files: {
