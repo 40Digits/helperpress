@@ -44,7 +44,7 @@ module.exports = {
 			'<%= helperpress.assets_dir %>/_src/js/**/*.js'
 		],
 		tasks: [
-			'browserify'
+			'browserify:dev'
 		],
 		options: {
 			livereload: true,

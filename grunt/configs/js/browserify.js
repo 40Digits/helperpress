@@ -61,9 +61,15 @@ module.exports = function(grunt){
 			]
 		},
 
-		browserify: {
+		dev: {
 			files: {
 				'<%= helperpress.assets_dir %>/js/main.js': jsCwd + '/' + srcFiles
+			}
+		}
+
+		precompiled: {
+			files: {
+				'<%= helperpress.assets_dir %>/_precompiled/browserify/main.js': jsCwd + '/' + srcFiles
 			}
 		}
 		
