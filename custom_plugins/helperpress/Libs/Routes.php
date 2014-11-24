@@ -19,6 +19,7 @@ class Routes {
         $action = get_query_var('helperpress_action');
         $api = new \HelperPress\Libs\API();
 
+
         if(empty($action))
             return;
 
@@ -32,9 +33,12 @@ class Routes {
         }
 
         $db = new \HelperPress\Libs\DB();
+        $wp = new \HelperPress\Libs\WP();
 
         if (method_exists($db, $action)) {
             call_user_func_array(array($db, $action), array($arg));
+        }else if (method_exists($wp, $action)) {
+            call_user_func_array(array($wp, $action), array($arg));
         }else{
             \http_response_code(501);
             die('Action does not exist');
