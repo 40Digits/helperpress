@@ -8,15 +8,19 @@ class DB {
 	private $imports_dir;
 
 	public function __construct () {
+		$this->init();
+	}
+
+    public function init () {
 		$this->dumps_dir = HP_PRIVATE_DIR_PATH . '/dumps';
 		$this->imports_dir = HP_PRIVATE_DIR_PATH . '/imports';
 
-		// make the dirs if they doesn't exist
+		// make the dirs if they don't exist
 		$oldmask = umask(0);
 		@mkdir($this->dumps_dir, 0777);
 		@mkdir($this->imports_dir, 0777);
 		umask($oldmask);
-	}
+    }
 
 	public function import_db ($filename) {
 

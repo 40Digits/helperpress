@@ -15,6 +15,11 @@ class API {
 		$this->key_file = HP_PRIVATE_DIR_PATH . '/api_key.txt';
 	}
 
+    public function init () {
+        $this->protect_helperpress_directory();
+        $this->generate_key();
+    }
+
     // get current key
     private function get_key () {
     	if(empty($this->api_key))
@@ -25,7 +30,7 @@ class API {
     
 	// generate random API key
     private function generate_key () {
-    	$new_key = bin2hex(mcrypt_create_iv(22, MCRYPT_DEV_URANDOM));
+    	$new_key = bin2hex(\mcrypt_create_iv(22, MCRYPT_DEV_URANDOM));
 
     	file_put_contents($this->key_file, $new_key);
 
@@ -48,7 +53,7 @@ class API {
     }
 
     // hide uploads helperpress dir from the web
-    public static function protect_helperpress_directory () {
+    private function protect_helperpress_directory () {
 
 		$htaccess_content = <<<EOD
 # BEGIN HelperPress Directory Protection

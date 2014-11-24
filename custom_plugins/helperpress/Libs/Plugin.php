@@ -18,8 +18,13 @@ class Plugin {
 
     public static function activate () {
         // Create and protect HP private dir
-        mkdir(HP_PRIVATE_DIR_PATH);
-        \HelperPress\Libs\API::protect_helperpress_directory();
+        @mkdir(HP_PRIVATE_DIR_PATH);
+        
+        $api = new \HelperPress\Libs\API;
+        $api->init();
+
+        $db = new \HelperPress\Libs\DB;
+        $db->init();
     }
 
     public static function deactivate () {
