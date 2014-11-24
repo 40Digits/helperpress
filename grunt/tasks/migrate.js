@@ -62,6 +62,12 @@ module.exports = function(grunt){
 
 		}
 
+		// warn and skip if there's no local uploads dir yet
+		var localUploadsDir = '<%= helperpress.build_dir %>/wp-content/uploads';
+		if( !fs.existsSync( grunt.config.process(localUploadsDir) ) ){
+			grunt.warn( 'Local WordPress uploads directory does not exist. Cannot migrate uploads.' );
+		}
+
 
 		switch(grunt.config('helperpress.environments.' + environment + '.migrate_uploads_method')){
 
@@ -95,7 +101,7 @@ module.exports = function(grunt){
 
 
 				var remoteDir = sshString + ':<%= helperpress.environments.' + environment + '.wp_path %>/wp-content/uploads/',
-					localDir = '<%= helperpress.build_dir %>/wp-content/uploads/';
+					localDir = localUploadsDir + '/';
 
 				if(direction === 'pull'){
 					rsyncOpts.src = remoteDir;
