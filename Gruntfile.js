@@ -28,6 +28,7 @@ module.exports = function (grunt) {
 		// interactively setup this repo 
 		'prompt:repo_config',
 		'write_helperpress_config:repo_config',
+		'generate_readme',
 		'gitaddcommit:helperpress_config_init',
 
 		// add WP theme definition banner to stylesheet
