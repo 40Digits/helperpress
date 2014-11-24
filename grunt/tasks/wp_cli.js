@@ -47,8 +47,12 @@ module.exports = function(grunt) {
 
   // Core
 
-  function coreDownload(){
-    var cmd = 'core download --force';
+  function coreDownload(opts){
+    var cmd = 'core download --force',
+      version = typeof opts !== 'undefined' ? opts.version : '';
+
+    if(version.length > 0)
+      cmd += ' --version=' + opts.version;
 
     runCmd(cmd);
   }
@@ -72,6 +76,7 @@ module.exports = function(grunt) {
       validFlags = [
         'url',
         'title',
+        'version',
         'admin_user',
         'admin_password',
         'admin_email'

@@ -6,7 +6,9 @@ module.exports = {
 		wpPath: '<%= helperpress.build_dir %>'
 	},
 
-	download_core: true,
+	download_core: {
+		version: '<%= helperpress.wp.version %>'
+	},
 
 	core_config: {
 		dbname: '<%= helperpress.environments.local.db.database %>',
