@@ -8,7 +8,7 @@ module.exports = function(grunt){
 		
 		var options = this.options({
 			method: '',
-			environment: '<%= helperpress.db_master %>',
+			environment: grunt.config('helperpress.db_master'),
 		});
 
 		// base URL for API request
@@ -54,6 +54,11 @@ module.exports = function(grunt){
 			// incorrect key
 			case 500:
 				grunt.fatal('500 Error: ' + resp.data);
+				break;
+
+			// method doesn't exist
+			case 501:
+				grunt.fatal('501 Error: ' + resp.data);
 				break;
 
 			default:

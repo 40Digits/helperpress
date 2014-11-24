@@ -355,6 +355,11 @@ module.exports = function(grunt){
 
 		}
 
+		if(direction == 'push'){
+			// always flush rewrite rules when pushing
+			grunt.task.run('hp_wp_plugin:flush_rewrite_rules');
+		}
+
 
 		grunt.task.run('notify:migrate_db_complete');
 
