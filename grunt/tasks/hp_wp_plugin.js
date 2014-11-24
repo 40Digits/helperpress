@@ -88,7 +88,7 @@ module.exports = function(grunt){
 	grunt.registerTask('get_hp_wp_plugin_api_key', 'Get the HelperPress Wordpress Plugin\'s API Key for the specified environment', function(environment) {
 
 		var sftpOpts = {
-				srcBasePath: '<%= helperpress.environments.' + environment + '.wp_path %>/wp-content/_helperpress/',
+				srcBasePath: '<%= helperpress.environments.' + environment + '.ftp_wp_path %>/wp-content/_helperpress/',
 				destBasePath: './db/',
 				mode: 'download'
 			},
