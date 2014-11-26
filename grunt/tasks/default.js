@@ -10,8 +10,8 @@ module.exports = function(grunt){
 				'init_project',
 				'build_dev'
 			]);
-		}else if( !fs.existsSync('./helperpress.local.json') ){
-			// already initialized project
+		}else if( !fs.existsSync('./helperpress.local.json') || grunt.config('helperpress._build_dev_incomplete')==="true" ){
+			// already initialized project or last setup broke
 			grunt.task.run('build_dev');
 		}else{
 			// all ready to go, watch

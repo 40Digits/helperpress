@@ -55,6 +55,9 @@ module.exports = function (grunt) {
 		// setup local config
 		'write_helperpress_config:local',
 
+		// note that we haven't finished first build yet
+		'write_build_dev_incomplete:true',
+
 		// Install WP
 		'wp_cli:core_config',
 		'wp_cli:db_create',
@@ -76,6 +79,9 @@ module.exports = function (grunt) {
 		// pull DB and files from db_master
 		'migrate_db:pull:_master',
 		'wp_cli:rewrite_flush',
+
+		// note that we finished first build
+		'write_build_dev_incomplete:false',
 
 		// watch, because we're good to go!
 		'watch'
