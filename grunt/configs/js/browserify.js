@@ -1,4 +1,5 @@
 var fs = require('fs'),
+	_ = require('lodash'),
 	through = require('through');
 
 module.exports = function(grunt){
@@ -24,24 +25,15 @@ module.exports = function(grunt){
 
 			if(filename === '_main.js'){
 
-				var codeToInsert = 'return;',
-					allModules = grunt.file.expand(
-						{
-							cwd: grunt.config.process(jsCwd)
-						}, 
-						[
-							srcFiles,
-							'!_main.js',
-							'!_config.js'
-						]
-					);
+				var siteConfig = require(__dirname + '/../../../' + grunt.config.process(jsCwd) + '/_config.js'),
+					selectorsArr = Object.keys(siteConfig.selectors).map(function (key) {
+					    return siteConfig.selectors[key];
+					});
 
+				// flatten the arrays
+				selectorsArr = selectorsArr.reduce(function(a, b) { return a.concat(b); });
 
-				for(var toRequire in allModules){
-					codeToInsert += 'require("./' + allModules[toRequire].replace(/\.[^/.]+$/, '') + '");';
-				}
-
-				data += codeToInsert;
+				data += 'return;require("' + _.uniq(selectorsArr).join('");require("') + '")';
 
 			}
 
