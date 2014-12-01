@@ -64,7 +64,7 @@ module.exports = function(grunt){
 
 		// warn and skip if there's no local uploads dir yet
 		var localUploadsDir = '<%= helperpress.build_dir %>/wp-content/uploads';
-		if( !fs.existsSync( grunt.config.process(localUploadsDir) ) ){
+		if( !fs.existsSync( grunt.config.process(localUploadsDir) ) && direction !== 'pull' ){
 			grunt.warn( 'Local WordPress uploads directory does not exist. Cannot migrate uploads.' );
 		}
 
