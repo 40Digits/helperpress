@@ -73,36 +73,18 @@ module.exports = function(grunt){
 
 			case 'rsync':
 
-				var sshInfo = grunt.config.process('<%= helperpress.environments.' + environment + '.ssh %>'),
-					sshString = '',
-					rsyncOpts = {
+				// creds helper stuff
+				var RsyncCredsHelper = require('../lib/rsync-ssh-creds-helper')(grunt),
+					rsyncHelper = new RsyncCredsHelper(environment);
+
+				// rsync config					
+				var rsyncOpts = {
 						recursive: true
-					};
-
-				this.requiresConfig('helperpress.environments.' + environment + '.ssh');
-
-				// build sshString
-				if(typeof sshInfo.host !== 'undefined'){
-					sshString = sshInfo.user !== 'undefined' ? sshInfo.user + '@' + sshInfo.host : sshInfo.host;
-				}
-
-				// maybe add some more options
-				if(typeof sshInfo.keyfile !== 'undefined'){
-					rsyncOpts.privateKey = sshInfo.keyfile;
-				}
-				if(typeof sshInfo.port !== 'undefined'){
-					rsyncOpts.port = sshInfo.port;
-				}
-
-				// let em know that SSH password auth is for suckas
-				if(typeof sshInfo.password !== 'undefined'){
-					grunt.warn('grunt-rsync only supports passwordless SSH authentication.');
-				}
-
-
-				var remoteDir = sshString + ':<%= helperpress.environments.' + environment + '.wp_path %>/wp-content/uploads/',
+					},
+					remoteDir =  rsyncHelper.getConnectionString() + ':<%= helperpress.environments.' + environment + '.wp_path %>/wp-content/uploads/',
 					localDir = localUploadsDir + '/';
 
+				// setup rsyncOpts.src and rsyncOpts.dest based on direction
 				if(direction === 'pull'){
 					rsyncOpts.src = remoteDir;
 					rsyncOpts.dest = localDir;
@@ -111,6 +93,8 @@ module.exports = function(grunt){
 					rsyncOpts.dest = remoteDir;
 				}
 
+				// add credentials to rsyncOpts
+				rsyncOpts = rsyncHelper.opts(rsyncOpts);
 
 				// Dynamically set rsync config
 				grunt.config('rsync.' + environment + '_uploads_migrate', {
