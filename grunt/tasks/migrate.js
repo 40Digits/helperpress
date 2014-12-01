@@ -4,63 +4,25 @@ var _ = require('lodash'),
 
 module.exports = function(grunt){
 
+	// "migrate" task function
 	function migrate(direction, env){
-
 		// migrate all data
 		db.apply(this, [direction, env]);
 		uploads.apply(this, [direction, env]);
-
 	}
 
-
-
+	// "migrate_uploads" task function
 	function uploads(direction, environment){
 
 		var migrateTask;
 
-		if(typeof direction === 'undefined'){
+		// set defaults if arguments omitted
+		var defaults = _maybeUseDefaults(direction, environment);
+		direction = defaults.direction;
+		environment = defaults.environment;
 
-			direction = 'pull';
-
-		}
-
-		if(typeof environment === 'undefined' || environment === '_master'){
-
-			// assume helperpress.db_master
-			grunt.log.writeln('Migrating from configured helperpress.db_master');
-
-			environment = grunt.config.process( '<%= helperpress.db_master %>' );
-
-			if(!environment){
-
-				return grunt.log.ok('helperpress.db_master not defined. Skipping migration.');
-
-			}else if(environment === 'local' || environment === grunt.config('helperpress.alias_local_env') ){
-
-				return grunt.log.ok('helperpress.db_master defined as this environment. Skipping migration.');
-
-			}
-
-		}
-
-		if(grunt.config('helperpress.uploads_sync') !== 'copy'){
-
-			// if we're currently using the htaccess rewrite method, disable it
-			grunt.task.run('wp_uploads_rewrite:disable');
-
-			// ...and update the config setting
-			grunt.config('write_helperpress_config.migrate_upload', {
-				options:{
-					type: 'local',
-					settings: {
-						uploads_sync: 'copy'
-					}
-				}
-			});
-
-			grunt.task.run('write_helperpress_config:migrate_upload');
-
-		}
+		// if someone migrates uploads while set to rewrite method, switch it
+		_switchToCopyMethod();
 
 		// warn and skip if there's no local uploads dir yet
 		var localUploadsDir = '<%= helperpress.build_dir %>/wp-content/uploads';
@@ -68,7 +30,7 @@ module.exports = function(grunt){
 			grunt.warn( 'Local WordPress uploads directory does not exist. Cannot migrate uploads.' );
 		}
 
-
+		// migrate uploads based on migrate_uploads_method
 		switch(grunt.config('helperpress.environments.' + environment + '.migrate_uploads_method')){
 
 			case 'rsync':
@@ -172,38 +134,17 @@ module.exports = function(grunt){
 
 	}
 
-
+	// "migrate_db" task function
 	function db(direction, environment){
 
-
-
-		if(typeof direction === 'undefined'){
-
-			direction = 'pull';
-
-		}
-
-		if(typeof environment === 'undefined' || environment === '_master'){
-
-			// assume helperpress.db_master
-			grunt.log.writeln('Migrating from configured helperpress.db_master');
-
-			environment = grunt.config('helperpress.db_master');
-
-			if(!environment){
-
-				return grunt.log.ok('helperpress.db_master not defined. Skipping migration.');
-
-			}else if(environment === 'local' || environment === grunt.config('helperpress.alias_local_env') ){
-
-				return grunt.log.ok('helperpress.db_master defined as this environment. Skipping migration.');
-
-			}
-
-		}
+		// set defaults if arguments omitted
+		var defaults = _maybeUseDefaults(direction, environment);
+		direction = defaults.direction;
+		environment = defaults.environment;
 
 		grunt.task.run('notify:migrate_db_start');
 
+		// migrate DB based on migrate_db_method
 		switch(grunt.config('helperpress.environments.' + environment + '.migrate_db_method' )){
 
 			case 'ssh':
@@ -355,6 +296,7 @@ module.exports = function(grunt){
 
 	}
 
+	// runs a bunch of functions to prepare the local DB for environment
 	function _prepareLocalDBPush(environment){
 
 		var dumpFile = 'db/backups/<%= grunt.template.today(\'yyyy-mm-dd\') %>_local.sql',
@@ -377,6 +319,7 @@ module.exports = function(grunt){
 		return migrateDumpFile;
 	}
 
+	// dumps local database specified by dbName to dumpFile
 	function _dumpLocalDB(dbName, dumpFile){
 
 		// process args
@@ -402,6 +345,7 @@ module.exports = function(grunt){
 
 	}
 
+	// import dumpFile locally as dbName
 	function _importToLocalDB(dumpFile, dbName){
 
 		// process args
@@ -425,6 +369,7 @@ module.exports = function(grunt){
 
 	}
 
+	// searches dbName and replacing environment specifics in fromEnv with toEnv
 	function _searchAndReplaceDB(fromEnv, toEnv, dbName){
 
 		// process args
@@ -456,6 +401,53 @@ module.exports = function(grunt){
 
 		grunt.config( 'search_replace_db', searchReplaceOpts );
 		grunt.task.run('search_replace_db');
+	}
+
+	// sets default direction and environment if not specified
+	function _maybeUseDefaults(direction, environment){
+
+		if(typeof direction === 'undefined'){
+			direction = 'pull';
+		}
+
+		if(typeof environment === 'undefined' || environment === '_master'){
+			// assume helperpress.db_master
+			grunt.log.writeln('Migrating from configured helperpress.db_master');
+			environment = grunt.config.process( '<%= helperpress.db_master %>' );
+
+			if(!environment){
+				return grunt.warn('helperpress.db_master not defined. Aborting migration.');
+			}else if(environment === 'local' || environment === grunt.config('helperpress.alias_local_env') ){
+				return grunt.warn('helperpress.db_master defined as current environment. Aborting migration.');
+			}
+		}
+
+		return {
+			direction: direction,
+			environment: environment
+		}
+	}
+
+	// disables htaccess rewrite and updates config to use copy migrate method
+	function _switchToCopyMethod(){
+		if(grunt.config('helperpress.uploads_sync') !== 'copy'){
+
+			// if we're currently using the htaccess rewrite method, disable it
+			grunt.task.run('wp_uploads_rewrite:disable');
+
+			// ...and update the config setting
+			grunt.config('write_helperpress_config.migrate_upload', {
+				options:{
+					type: 'local',
+					settings: {
+						uploads_sync: 'copy'
+					}
+				}
+			});
+
+			grunt.task.run('write_helperpress_config:migrate_upload');
+
+		}
 	}
 
 
