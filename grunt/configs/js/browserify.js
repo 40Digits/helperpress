@@ -30,10 +30,12 @@ module.exports = function(grunt){
 					    return siteConfig.selectors[key];
 					});
 
-				// flatten the arrays
-				selectorsArr = selectorsArr.reduce(function(a, b) { return a.concat(b); });
+				if(selectorsArr.length > 0){
+					// flatten the arrays
+					selectorsArr = selectorsArr.reduce(function(a, b) { return a.concat(b); });
 
-				data += 'return;require("' + _.uniq(selectorsArr).join('");require("') + '")';
+					data += 'return;require("' + _.uniq(selectorsArr).join('");require("') + '")';
+				}
 
 			}
 
