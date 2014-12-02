@@ -43,9 +43,9 @@
 
 var config = require('./_config'),
   $ = window.jQuery,
-  
+
   toRequire = [],
-	toIgnore = [];
+  toIgnore = [];
 
 // Shims
 // TODO: pull these in via browserify or bower or something
@@ -60,7 +60,7 @@ if(!Object.keys){Object.keys=function(){"use strict";var e=Object.prototype.hasO
 
 
 
-function queueFiles(file){
+function queueFiles(i, file){
   if( file.charAt(0) === '!' ){
     toIgnore.push(file);
   } else {
@@ -74,19 +74,17 @@ for(var sel in config.selectors){
   if( $(sel).length === 0 )
     continue;
 
-  config.selectors[sel].forEach(queueFiles);
+  $.each(config.selectors[sel], queueFiles);
 
 }
 
 // require the files if not in toIgnore
-toRequire.forEach(function(moduleId){
-
+$.each(toRequire, function (i, moduleId) {
   if($.inArray('!' + module, toIgnore) === -1){
     var module = require(moduleId);
-   
+
     if( $.isFunction(module) ){
       module();
     }
   }
-
 });
