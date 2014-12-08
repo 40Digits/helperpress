@@ -11,7 +11,7 @@ module.exports = function (grunt) {
 	// initialize _deepExtend into _ object
 	_.mixin({deepExtend: _deepExtend(_)});
 
-	
+
 
 
 
@@ -20,12 +20,12 @@ module.exports = function (grunt) {
 	////////////
 
 	// run this task first after forking
-	grunt.registerTask( 'init_project', [	
+	grunt.registerTask( 'init_project', [
 
 		// initialize subtrees
-		'gitsubtrees',	
+		'gitsubtrees',
 
-		// interactively setup this repo 
+		// interactively setup this repo
 		'prompt:repo_config',
 		'write_helperpress_config:repo_config',
 		'generate_readme',
@@ -131,7 +131,8 @@ module.exports = function (grunt) {
 		// CSS
 		'sass:dist',
 		'cmq:sass',
-		'autoprefixer:cmq',
+		'autoprefixer:min',
+		'cssmin:combine',
 
 		// JS
 		'browserify',
@@ -139,7 +140,7 @@ module.exports = function (grunt) {
 
 		// Images
 		'imagemin:assets_dist'
-		
+
 	]);
 
 
@@ -183,7 +184,7 @@ module.exports = function (grunt) {
 
 		// remove any directories
 		key = key.substr( key.lastIndexOf('/') + 1 );
-		
+
 		configExports = require(configPath + option);
 
 		if(typeof configExports === 'function'){
@@ -215,13 +216,13 @@ module.exports = function (grunt) {
 			gruntConfig.helperpress.environments[env].ftp_wp_path = gruntConfig.helperpress.environments[env].wp_path;
 		}
 	}
-	
+
 
 
 
 	// TODO: check confs and permissions
 	//	- not running as root
-	//	- write perms on all conf dirs 
+	//	- write perms on all conf dirs
 	//	- ~/.helperpress created
 	//	- required configs set: apache, local db
 

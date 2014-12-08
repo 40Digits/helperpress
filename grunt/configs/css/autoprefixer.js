@@ -9,6 +9,13 @@ module.exports = {
 		src: '*.css',
 		dest: '<%= helperpress.css_dir %>'
 	},
+	min: {
+		expand: true,
+		flatten: true,
+		cwd: '<%= helperpress.assets_dir %>/_precompiled/cmq/',
+		src: '*.css',
+		dest: '<%= helperpress.assets_dir %>/_precompiled/cssmin/'
+	},
 	sass: {
 		expand: true,
 		flatten: true,
