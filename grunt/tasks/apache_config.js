@@ -17,6 +17,8 @@ module.exports = function(grunt) {
 		this.requires(['prompt:sudo_pass']);
 
 		if(options.apache_scheme === 'vhost'){
+			// create vhost directory if it doesn't exist
+			execSync.run( sudo.apply('mkdir -p ' + options.vhost_dir ) );
 
 			// vhost setting
 			var vhostTemplate = grunt.file.read(__dirname + '/../templates/vhost.ejs'),
