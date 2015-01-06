@@ -2,7 +2,76 @@ var _ = require('lodash'),
 	fs = require('fs'),
 	FileSection = require(__dirname + '/../lib/file-section');
 
-module.exports = function(grunt){
+module.exports = function(grunt) {
+
+	// tasks
+	grunt.registerTask(
+		'push',
+		'Pushes WP uploads and/or data to another environment',
+		function(type, env){
+			taskPicker.apply(this, [ 'push', type, env ]);
+		}
+	);
+	grunt.registerTask(
+		'pull',
+		'Pulls WP uploads and/or data to another environment',
+		function(type, env){
+			taskPicker.apply(this, [ 'pull', type, env ]);
+		}
+	);
+
+	// legacy tasks
+	grunt.registerTask(
+		'migrate_uploads',
+		'(deprecated) Migrates WP uploads',
+		function(dir, env){
+			taskPicker.apply(this, [ dir, 'uploads', env ]);
+		}
+	);
+	grunt.registerTask(
+		'migrate_db',
+		'(deprecated) Migrates DB and does an intelligent search and replace.',
+		function(dir, env){
+			taskPicker.apply(this, [ dir, 'db', env ]);
+		}
+	);
+	grunt.registerTask(
+		'migrate',
+		'(deprecated) Migrates all data from one WP install to another',
+		function(dir, env){
+			taskPicker.apply(this, [ dir, 'both', env ]);
+		}
+	);
+
+	function taskPicker(dir, type, env){
+
+		// set defaults
+		if(typeof dir === 'undefined')
+			dir = 'pull';
+
+		if(typeof env === 'undefined' || env === '_master'){
+			// assume helperpress.db_master
+			grunt.log.writeln('Migrating from configured helperpress.db_master');
+			env = grunt.config.process( '<%= helperpress.db_master %>' );
+
+			if(!env){
+				return grunt.warn('helperpress.db_master not defined. Aborting migration.');
+			}else if(env === 'local' || env === grunt.config('helperpress.alias_local_env') ){
+				return grunt.warn('helperpress.db_master defined as current environment. Aborting migration.');
+			}
+		}
+
+		// which function should we use?
+		if(typeof type === 'undefined' || type == 'both')
+			return migrate.apply(this, [ dir, env ]);
+
+		if(type == 'uploads')
+			return uploads.apply(this, [ dir, env ]);
+
+		if(type == 'db')
+			return db.apply(this, [ dir, env ]);
+
+	}
 
 	// "migrate" task function
 	function migrate(direction, env){
@@ -16,18 +85,14 @@ module.exports = function(grunt){
 
 		var migrateTask;
 
-		// set defaults if arguments omitted
-		var defaults = _maybeUseDefaults(direction, environment);
-		direction = defaults.direction;
-		environment = defaults.environment;
-
 		// if someone migrates uploads while set to rewrite method, switch it
 		_switchToCopyMethod();
 
 		// warn and skip if there's no local uploads dir yet
 		var localUploadsDir = '<%= helperpress.build_dir %>/wp-content/uploads';
 		if( !fs.existsSync( grunt.config.process(localUploadsDir) ) && direction !== 'pull' ){
-			grunt.warn( 'Local WordPress uploads directory does not exist. Cannot migrate uploads.' );
+			//make the dir
+			fs.mkdirSync( grunt.config.process(localUploadsDir) );
 		}
 
 		// migrate uploads based on migrate_uploads_method
@@ -136,11 +201,6 @@ module.exports = function(grunt){
 
 	// "migrate_db" task function
 	function db(direction, environment){
-
-		// set defaults if arguments omitted
-		var defaults = _maybeUseDefaults(direction, environment);
-		direction = defaults.direction;
-		environment = defaults.environment;
 
 		grunt.task.run('notify:migrate_db_start');
 
@@ -403,31 +463,6 @@ module.exports = function(grunt){
 		grunt.task.run('search_replace_db');
 	}
 
-	// sets default direction and environment if not specified
-	function _maybeUseDefaults(direction, environment){
-
-		if(typeof direction === 'undefined'){
-			direction = 'pull';
-		}
-
-		if(typeof environment === 'undefined' || environment === '_master'){
-			// assume helperpress.db_master
-			grunt.log.writeln('Migrating from configured helperpress.db_master');
-			environment = grunt.config.process( '<%= helperpress.db_master %>' );
-
-			if(!environment){
-				return grunt.warn('helperpress.db_master not defined. Aborting migration.');
-			}else if(environment === 'local' || environment === grunt.config('helperpress.alias_local_env') ){
-				return grunt.warn('helperpress.db_master defined as current environment. Aborting migration.');
-			}
-		}
-
-		return {
-			direction: direction,
-			environment: environment
-		}
-	}
-
 	// disables htaccess rewrite and updates config to use copy migrate method
 	function _switchToCopyMethod(){
 		if(grunt.config('helperpress.uploads_sync') !== 'copy'){
@@ -449,11 +484,5 @@ module.exports = function(grunt){
 
 		}
 	}
-
-
-
-	grunt.registerTask('migrate_uploads', 'Migrates WP uploads', uploads);
-	grunt.registerTask('migrate_db', 'Migrates DB and does an intelligent search and replace.', db);
-	grunt.registerTask('migrate', 'Migrates all data from one WP install to another', migrate);
 
 };
