@@ -1,6 +1,6 @@
 {
   "name": "helperpress",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "An environment manager for WordPress projects",
   "main": "Gruntfile.js",
   "scripts": {
