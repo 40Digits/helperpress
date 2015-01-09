@@ -36,10 +36,6 @@ Thumbs.db
 # SASS
 .sass-cache
 
-# WordPress Core, Uploads & Plugins
-/www
-/www*
-
 # Sublime, because people forget this in their global .gitignore
 *.sublime-*
 
@@ -50,13 +46,3 @@ Thumbs.db
 # Composer
 /vendor
 /custom_plugins/helperpress/vendor
-
-# Bower
-/bower_components
-/lib
-
-# DB Dumps
-/db
-
-# wp-content/uploads
-/uploads
