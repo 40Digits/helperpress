@@ -8,14 +8,14 @@ module.exports = function(grunt){
 			dest: grunt.option('projectdir') + '/<%= helperpress.build_dir %>/wp-content/themes/<%= helperpress.wp.theme.slug %>'
 		},
 		sites: {
-			src: grunt.option('projectdir') + '<%= helperpress.build_dir %>',
+			src: grunt.option('projectdir') + grunt.option('projectdir') + '/<%= helperpress.build_dir %>',
 			dest: '<%= helperpress.apache.sites_dir %>/<%= helperpress.wp.theme.slug %>'
 		},
 		custom_plugins: {
 			files: [{
 				expand: true,
 				overwrite: true,
-				cwd: './custom_plugins',
+				cwd: grunt.option('projectdir') + './custom_plugins',
 				src: '*',
 				dest: grunt.option('projectdir') + '/<%= helperpress.build_dir %>/wp-content/plugins',
 				filter: 'isDirectory'

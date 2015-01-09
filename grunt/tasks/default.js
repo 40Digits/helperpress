@@ -13,9 +13,6 @@ module.exports = function(grunt){
 		}else if( !fs.existsSync('./helperpress.local.json') || grunt.config('helperpress._build_dev_incomplete')==="true" ){
 			// already initialized project or last setup broke
 			grunt.task.run('build_dev');
-		}else{
-			// all ready to go, watch
-			grunt.task.run('watch');
 		}
 
 	});

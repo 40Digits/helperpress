@@ -1,56 +1,41 @@
-module.exports = {
+module.exports = function(grunt){
+	return {
+		// packages and assets
+		built: [
 
-	// packages and assets
-	built: [
-		// bower
-		'bower_components',
-		'lib',
+			// composer
+			'vendor',
 
-		// composer
-		'vendor',
-
-		// assets
-		'<%= helperpress.assets_dir %>/_precompiled',
-		'<%= helperpress.assets_dir %>/images',
-		'<%= helperpress.assets_dir %>/js',
+			// wp dir
+			grunt.option('projectdir') + '/<%= helperpress.build_dir %>'
+		],
 
 		// wp dir
-		'<%= helperpress.build_dir %>'
-	],
+		build_dir: [
+			grunt.option('projectdir') + '/<%= helperpress.build_dir %>'
+		],
 
-	// wp dir
-	build_dir: [
-		'<%= helperpress.build_dir %>'
-	],
+		// clean every WP default theme for the next 10000 years
+		wp_default_themes: [
+			grunt.option('projectdir') + '/<%= helperpress.build_dir %>/wp-content/themes/twenty*'
+		],
 
-	// compiled assets
-	assets: [
-		'<%= helperpress.assets_dir %>/_precompiled',
-		'<%= helperpress.assets_dir %>/images',
-		'<%= helperpress.assets_dir %>/js',
-		'.sass-cache'
-	],
+		// WP stuff
+		wp: [
+			grunt.option('projectdir') + '/<%= helperpress.build_dir %>',
+			grunt.option('projectdir') + 'db',
+			grunt.option('projectdir') + 'uploads'
+		],
 
-	// clean every WP default theme for the next 1000 years
-	wp_default_themes: [
-		'<%= helperpress.build_dir %>/wp-content/themes/twenty*'
-	],
+		// reset local config
+		reset: [
+			grunt.option('projectdir') + 'helperpress.local.json'
+		],
 
-	// WP stuff
-	wp: [
-		'<%= helperpress.build_dir %>',
-		'db',
-		'uploads'
-	],
-
-	// reset local config
-	reset: [
-		'helperpress.local.json'
-	],
-
-	// clean the non-distrubutable stuff in the build dir. BE CAREFUL HERE
-	non_dist: [
-		'<%= helperpress.build_dir %>/wp-content/themes/<%= helperpress.wp.theme.slug %>/assets/_src',
-		'<%= helperpress.build_dir %>/wp-content/themes/<%= helperpress.wp.theme.slug %>/assets/_precompiled'
-	]
+		// clean the non-distrubutable stuff in the build dir. BE CAREFUL HERE
+		non_dist: [
+			grunt.option('projectdir') + '/<%= helperpress.build_dir %>/wp-content/themes/<%= helperpress.wp.theme.slug %>/assets/_src',
+			grunt.option('projectdir') + '/<%= helperpress.build_dir %>/wp-content/themes/<%= helperpress.wp.theme.slug %>/assets/_precompiled'
+		]
+	};
 };

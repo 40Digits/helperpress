@@ -13,14 +13,12 @@
 	"require": {
 	    "php": ">=5.3",
 	    "mnsami/composer-custom-directory-installer": "1.0.*",
-		"gabrielgil/timthumb": "2.*",
 		"wp-cli/wp-cli": "0.16.*",
 		"interconnectit/Search-Replace-DB": "@dev",
 		"ifsnop/mysqldump-php":"1.*"
 	},
 	"extra": {
 		"installer-paths": {
-			"./wp-theme/assets/scripts/timthumb": ["gabrielgil/timthumb"],
 			"./custom_plugins/helperpress/vendor/mysqldump-php": ["ifsnop/mysqldump-php"]
 		}
 	}

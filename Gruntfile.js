@@ -61,6 +61,7 @@ module.exports = function (grunt) {
 		'wp_cli:install_core',
 		'wp_cli:install_plugins',
 		'symlink:custom_plugins',
+		'symlink:hp_plugins',
 
 		// symlink wp-theme into WP installation
 		'symlink:theme',
@@ -102,6 +103,7 @@ module.exports = function (grunt) {
 		'wp_cli:install_core',
 		'wp_cli:install_plugins',
 		'copy:custom_plugins',
+		'copy:hp_plugins',
 
 		// build assets
 		'shell:build_dist_assets',
