@@ -1,10 +1,9 @@
 HelperPress
 ======================
-A tool for automating much of the WordPress development workflow.
+A tool for automating & simplifying much of the WordPress development workflow.
 
+- **Simplified Project Organization** - Only track your theme's source. Use config files for everything else.
 - **Environment Management** - Manages syncing data & wp-content between environments
-- **Asset Optimization** - Comes loaded with Grunt tasks that optimize CSS, Javascript, and Images.
-- **Dependency Management** - Automates working with WP-CLI and pacakge managers to minimize extraneous committed code and simplify update process
 - **Automatically Configure Apache & Hosts** Automagically configures Apache virtualhosts and hosts for local development
 - **Deployment** - Build & Deploy via rsync or WPE Git Push
 

@@ -5,7 +5,7 @@ module.exports = function (grunt) {
 		glob = require('glob'),
 		_ = require('lodash'),
 		_deepExtend = require('underscore-deep-extend'),
-		loadGruntTasks = require('load-grunt-tasks'),
+		loadGruntTasks = require('smartload-grunt-tasks'),
 		userhome = require('userhome');
 
 	// initialize _deepExtend into _ object
