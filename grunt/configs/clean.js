@@ -1,5 +1,9 @@
 module.exports = function(grunt){
 	return {
+		options: {
+			force: true // for the love of god, don't delete /
+		},
+
 		// packages and assets
 		built: [
 
