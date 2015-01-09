@@ -1,6 +1,5 @@
 module.exports = function(grunt){
-	var repoName = process.cwd().substr(process.cwd().lastIndexOf('/') + 1),
-		validationFuncs = {},
+	var validationFuncs = {},
 
 		sudo = require(__dirname + '/../lib/apply-sudo');
 
@@ -49,21 +48,22 @@ module.exports = function(grunt){
 					config: 'write_helperpress_config.repo_config.options.settings.wp.theme.slug',
 					type: 'input',
 					message: 'Enter site slug:',
-					default: repoName,
+					default: '<%= pkg.name %>',
 					validate: validationFuncs.noSpecialChars
 				},
 				{
 					config: 'write_helperpress_config.repo_config.options.settings.wp.theme.name',
 					type: 'input',
 					message: 'Enter site\'s nice name:',
-					validate: validationFuncs.notBlank
+					validate: validationFuncs.notBlank,
+					default: '<%= helperpress.wp.theme.name %>'
 				},
 				{
 					config: 'write_helperpress_config.repo_config.options.settings.wp.theme.desc',
 					type: 'input',
 					message: 'Enter site\'s description:',
 					// TODO: it would be nice to generate a default based on the site's nice name
-					default: 'A custom-built WordPress theme.'
+					default: '<%= helperpress.wp.theme.desc %>'
 				},
 				{
 					config: '_write_helperpress_config.deep_theme_settings',

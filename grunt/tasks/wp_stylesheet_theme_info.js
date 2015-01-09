@@ -5,9 +5,6 @@ module.exports = function (grunt) {
 
     grunt.registerTask('wp_stylesheet_theme_info', "Defines the theme in style.css", function () {
 
-        if(!options.filename){
-            return grunt.log.write('Path to stylesheet source not provided, skipping automatic theme definition.');
-        }
 
         var options = this.options({
             marker: {
@@ -16,6 +13,10 @@ module.exports = function (grunt) {
             },
             tabString: '\t'
         });
+        
+        if(!options.filename){
+            return grunt.log.write('Path to stylesheet source not provided, skipping automatic theme definition.');
+        }
 
         var newLines = [],
             themeConfig = grunt.config('helperpress.wp.theme'),

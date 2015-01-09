@@ -88,6 +88,11 @@
         "value": "regenerate-thumbnails",
         "checked": false
       }
-    ]
+    ],
+    "wp": {
+      "theme": {
+        "desc": "A custom-built WordPress theme."
+      }
+    }
   }
 }
