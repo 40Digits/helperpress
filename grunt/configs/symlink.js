@@ -4,11 +4,11 @@ module.exports = function(grunt){
 			overwrite: false
 		},
 		theme: {
-			src: './wp-theme',
+			src: grunt.option('projectdir') + '/<%= helperpress.theme_path %>',
 			dest: grunt.option('projectdir') + '/<%= helperpress.build_dir %>/wp-content/themes/<%= helperpress.wp.theme.slug %>'
 		},
 		sites: {
-			src: grunt.option('projectdir') + grunt.option('projectdir') + '/<%= helperpress.build_dir %>',
+			src: grunt.option('projectdir') + '/<%= helperpress.build_dir %>',
 			dest: '<%= helperpress.apache.sites_dir %>/<%= helperpress.wp.theme.slug %>'
 		},
 		custom_plugins: {

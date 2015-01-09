@@ -74,7 +74,7 @@ module.exports = function (grunt) {
 		'apache_config',
 
 		// pull DB and files from db_master
-		'migrate_db:pull:_master',
+		'pull:db:_master',
 		'wp_cli:rewrite_flush',
 
 		// note that we finished first build

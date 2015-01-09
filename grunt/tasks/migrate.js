@@ -55,7 +55,7 @@ module.exports = function(grunt) {
 			env = grunt.config.process( '<%= helperpress.db_master %>' );
 
 			if(!env){
-				return grunt.warn('helperpress.db_master not defined. Aborting migration.');
+				return grunt.log.writeln('helperpress.db_master not defined.');
 			}else if(env === 'local' || env === grunt.config('helperpress.alias_local_env') ){
 				return grunt.warn('helperpress.db_master defined as current environment. Aborting migration.');
 			}

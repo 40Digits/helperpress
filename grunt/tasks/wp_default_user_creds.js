@@ -3,7 +3,7 @@ var fs = require('fs');
 module.exports = function(grunt){
 
 	function writeUserCredsFile(){
-		var filename = 'wp-default-user-creds.txt',
+		var filename = grunt.option('projectdir') + '/wp-default-user-creds.txt',
 			fileContents = {
 				user: grunt.config('wp_cli.install_core.admin_user'),
 				password: grunt.config('wp_cli.install_core.admin_password'),
