@@ -1,7 +1,7 @@
 {
   "name": "helperpress",
-  "version": "0.1.0",
-  "description": "A starting point for WordPress projects",
+  "version": "0.3.0",
+  "description": "An environment manager for WordPress projects",
   "main": "Gruntfile.js",
   "scripts": {
     "test": "echo \"TODO: Add tests \" && exit 1"
@@ -12,57 +12,82 @@
   },
   "author": "40Digits Interactive, LLC <hello@40digits.com> (http://www.40digits.com)",
   "contributors": [
-    "Charlie Rosenbury <charlie@40digits.com> (http://rosenbury.com)"
+    "Charlie Rosenbury <gmail@rosenbury.com> (http://rosenbury.com)"
   ],
   "license": "BSD-2-Clause",
   "dependencies": {
-    "browserify-shim": "~3.6.0",
-    "deamdify": "~0.1.1",
     "ejs": "~1.0.0",
     "execSync": "~1.0.1-pre",
     "glob": "~4.0.5",
     "grunt": "~0.4.5",
-    "grunt-autoprefixer": "~0.8.2",
     "grunt-browserify": "~2.1.4",
     "grunt-combine-media-queries": "~1.0.19",
     "grunt-composer": "~0.4.0",
     "grunt-contrib-clean": "~0.6.0",
-    "grunt-contrib-concat": "~0.5.0",
     "grunt-contrib-copy": "~0.5.0",
-    "grunt-contrib-imagemin": "~0.8.0",
-    "grunt-contrib-sass": "~0.7.3",
-    "grunt-contrib-cssmin": "~0.10.0",
     "grunt-contrib-symlink": "~0.3.0",
-    "grunt-contrib-uglify": "~0.5.0",
     "grunt-mysql-dump-import": "git+https://github.com/40Digits/grunt-mysql-dump-import.git",
     "grunt-newer": "~0.7.0",
+    "grunt-notify": "~0.3.0",
+    "grunt-prompt": "~1.1.0",
+    "grunt-rsync": "~0.6.2",
+    "grunt-shell": "^1.1.1",
     "grunt-ssh": "git+https://github.com/40Digits/grunt-ssh",
     "httpsync": "0.0.8",
-    "imagemin-jpeg-recompress": "~0.5.0",
     "load-grunt-tasks": "git+https://github.com/40Digits/load-grunt-tasks.git",
     "lodash": "~2.4.1",
+    "randomstring": "~1.0.3",
     "through": "~2.3.6",
     "underscore-deep-extend": "0.0.5",
     "userhome": "~0.1.0"
   },
-  "devDependencies": {
-    "grunt-contrib-watch": "~0.6.1",
-    "grunt-githooks": "~0.3.1",
-    "grunt-phplint": "0.0.5",
-    "randomstring": "~1.0.3",
-    "grunt-prompt": "~1.1.0",
-    "grunt-notify": "~0.3.0",
-    "grunt-rsync": "~0.6.2"
-  },
   "config": {
-    "assets_dir": "wp-theme/assets",
-    "css_dir": "wp-theme",
-    "build_dir": "www"
-  },
-  "browserify": {
-    "transform": [
-      "browserify-shim"
+    "theme_path": false,
+    "css_path": false,
+    "build_cmd": false,
+    "build_cmd_dir": "./",
+    "build_dir": "www",
+    "default_plugins": [
+      {
+        "name": "WordPress SEO",
+        "value": "wordpress-seo",
+        "checked": true
+      },
+      {
+        "name": "Contact Form 7",
+        "value": "contact-form-7",
+        "checked": false
+      },
+      {
+        "name": "Really Simple Captcha",
+        "value": "really-simple-captcha",
+        "checked": false
+      },
+      {
+        "name": "Contact Form 7 DB",
+        "value": "contact-form-7-to-database-extension",
+        "checked": false
+      },
+      {
+        "name": "Disable Updates",
+        "value": "disable-wordpress-updates",
+        "checked": false
+      },
+      {
+        "name": "Simple Page Ordering",
+        "value": "simple-page-ordering",
+        "checked": false
+      },
+      {
+        "name": "Duplicate Post",
+        "value": "duplicate-post",
+        "checked": false
+      },
+      {
+        "name": "Regenerate Thumbnails",
+        "value": "regenerate-thumbnails",
+        "checked": false
+      }
     ]
-  },
-  "browserify-shim": "grunt/configs/js/browserifyShim.js"
+  }
 }

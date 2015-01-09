@@ -1,0 +1,19 @@
+##### BEGIN HelperPress Files #####
+
+# WordPress Core, Uploads & Plugins
+/www
+/www*
+
+# DB Dumps
+/db
+
+# wp-content/uploads
+/uploads
+
+# default user credentials file
+/wp-default-user-creds.txt
+
+# Local site config
+/helperpress.local.json
+
+##### END HelperPress Files #####

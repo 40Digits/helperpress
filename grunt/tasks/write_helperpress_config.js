@@ -69,7 +69,7 @@ module.exports = function(grunt) {
 			toSave = _.deepExtend(curConfig, newConfig);
 
 		// create helperpress.json
-		grunt.file.write( './helperpress.json', prettyJSON(toSave) );
+		grunt.file.write( grunt.option('projectdir') + '/helperpress.json', prettyJSON(toSave) );
 
 		if( typeof objHasKeys(toSave, [ 'wp', 'theme' ]) !== 'undefined' ){
 
@@ -93,7 +93,7 @@ module.exports = function(grunt) {
 			}
 
 			// update package.json
-			grunt.file.write( './package.json', prettyJSON(pkgSrc) );
+			grunt.file.write( grunt.option('projectdir') + '/package.json', prettyJSON(pkgSrc) );
 
 		}
 
@@ -184,7 +184,7 @@ module.exports = function(grunt) {
 		var toSave = _.deepExtend(curConfig, newConfig);
 
 		// write it to the file
-		grunt.file.write( 'helperpress.local.json', prettyJSON(toSave) );
+		grunt.file.write( grunt.option('projectdir') + 'helperpress.local.json', prettyJSON(toSave) );
 
 		updatedLoadedConfig(newConfig);
 

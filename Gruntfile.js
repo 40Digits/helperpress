@@ -22,13 +22,9 @@ module.exports = function (grunt) {
 	// run this task first after forking
 	grunt.registerTask( 'init_project', [
 
-		// initialize subtrees
-		'gitsubtrees',
-
 		// interactively setup this repo
 		'prompt:repo_config',
 		'write_helperpress_config:repo_config',
-		'generate_readme',
 		'gitaddcommit:helperpress_config_init',
 
 		// add WP theme definition banner to stylesheet
@@ -81,10 +77,7 @@ module.exports = function (grunt) {
 		'wp_cli:rewrite_flush',
 
 		// note that we finished first build
-		'write_build_dev_incomplete:false',
-
-		// watch, because we're good to go!
-		'watch'
+		'write_build_dev_incomplete:false'
 
 	]);
 
@@ -111,7 +104,7 @@ module.exports = function (grunt) {
 		'copy:custom_plugins',
 
 		// build assets
-		'build_dist_assets',
+		'shell:build_dist_assets',
 
 		// copy theme into build dir
 		'copy:theme',
@@ -123,23 +116,6 @@ module.exports = function (grunt) {
 
 		// clean copied theme
 		'clean:non_dist'
-
-	]);
-
-	grunt.registerTask( 'build_dist_assets', [
-
-		// CSS
-		'sass:dist',
-		'cmq:sass',
-		'autoprefixer:min',
-		'cssmin:combine',
-
-		// JS
-		'browserify',
-		'uglify:browserify',
-
-		// Images
-		'imagemin:assets_dist'
 
 	]);
 
@@ -155,16 +131,26 @@ module.exports = function (grunt) {
 	/////////////////////////////
 	// Load site/package config
 	/////////////////////////////
+	
+	var projectDir = grunt.option('projectdir');
 
-	var packageJSON = grunt.file.readJSON('package.json'),
+	var HpPackageJSON = grunt.file.readJSON('./package.json'),
+		packageJSON = grunt.file.exists( projectDir + '/package.json' ) ? grunt.file.readJSON(projectDir + '/package.json') : {},
 		userDefaultsJSON = grunt.file.exists( userhome('.helperpress') ) ? grunt.file.readJSON( userhome('.helperpress') ) : {},
-		siteConfigJSON = grunt.file.exists('helperpress.json') ? grunt.file.readJSON('helperpress.json') : {},
-		siteConfigLocalJSON = grunt.file.exists('helperpress.local.json') ? grunt.file.readJSON('helperpress.local.json') : {};
+		siteConfigJSON = grunt.file.exists(projectDir + '/helperpress.json') ? grunt.file.readJSON(projectDir + '/helperpress.json') : {},
+		siteConfigLocalJSON = grunt.file.exists(projectDir + '/helperpress.local.json') ? grunt.file.readJSON(projectDir + '/helperpress.local.json') : {};
 
 	// combine all config files
-	gruntConfig.helperpress = _.deepExtend( packageJSON.config, userDefaultsJSON, siteConfigJSON, siteConfigLocalJSON );
+	gruntConfig.helperpress = _.deepExtend(
+		HpPackageJSON.config,
+		typeof(packageJSON.config) !== 'undefined' ? packageJSON.config : {},
+		userDefaultsJSON,
+		siteConfigJSON,
+		siteConfigLocalJSON
+	);
+
 	gruntConfig.pkg = packageJSON;
-	grunt.package = packageJSON;
+	grunt.package = HpPackageJSON;
 
 
 
@@ -209,11 +195,13 @@ module.exports = function (grunt) {
 
 	}
 
-	// set ftp_wp_path if not defined
-	// TODO - this should be moved into a more robust, complete defaults generator
-	for(var env in gruntConfig.helperpress.environments){
-		if(typeof gruntConfig.helperpress.environments[env].ftp_wp_path === 'undefined' && typeof gruntConfig.helperpress.environments[env].wp_path === 'string'){
-			gruntConfig.helperpress.environments[env].ftp_wp_path = gruntConfig.helperpress.environments[env].wp_path;
+	if(typeof gruntConfig.helperpress.environments !== 'undefined'){
+		// set ftp_wp_path if not defined
+		// TODO - this should be moved into a more robust, complete defaults generator
+		for(var env in gruntConfig.helperpress.environments){
+			if(typeof gruntConfig.helperpress.environments[env].ftp_wp_path === 'undefined' && typeof gruntConfig.helperpress.environments[env].wp_path === 'string'){
+				gruntConfig.helperpress.environments[env].ftp_wp_path = gruntConfig.helperpress.environments[env].wp_path;
+			}
 		}
 	}
 
@@ -225,7 +213,6 @@ module.exports = function (grunt) {
 	//	- write perms on all conf dirs
 	//	- ~/.helperpress created
 	//	- required configs set: apache, local db
-
 
 
 

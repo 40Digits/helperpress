@@ -60,17 +60,3 @@ Thumbs.db
 
 # wp-content/uploads
 /uploads
-
-# Compiled Assets & such
-/wp-theme/assets/_precompiled
-/wp-theme/assets/css
-/wp-theme/assets/js/main.js
-/wp-theme/assets/scripts
-/wp-theme/assets/images
-/wp-theme/*.css
-
-# default user credentials file
-/wp-default-user-creds.txt
-
-# Local site config
-/helperpress.local.json

@@ -467,10 +467,10 @@ module.exports = function(grunt) {
 	function _switchToCopyMethod(){
 		if(grunt.config('helperpress.uploads_sync') !== 'copy'){
 
-			// if we're currently using the htaccess rewrite method, disable it
+			// if we're using the htaccess rewrite method, disable it
 			grunt.task.run('wp_uploads_rewrite:disable');
 
-			// ...and update the config setting
+			// ...and update the active setting
 			grunt.config('write_helperpress_config.migrate_upload', {
 				options:{
 					type: 'local',
