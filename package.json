@@ -2,7 +2,11 @@
   "name": "helperpress",
   "version": "0.4.1",
   "description": "An environment manager for WordPress projects",
-  "main": "Gruntfile.js",
+  "main": "cli/bin/hp",
+  "preferGlobal": "true",
+  "bin": {
+    "hp": "./cli/bin/hp.js"
+  },
   "scripts": {
     "test": "echo \"TODO: Add tests \" && exit 1"
   },
@@ -16,8 +20,10 @@
   ],
   "license": "BSD-2-Clause",
   "dependencies": {
+    "commander": "^2.6.0",
     "ejs": "~1.0.0",
     "execSync": "~1.0.1-pre",
+    "findup-sync": "^0.2.1",
     "glob": "~4.0.5",
     "grunt": "~0.4.5",
     "grunt-browserify": "~2.1.4",
@@ -34,9 +40,9 @@
     "grunt-shell": "^1.1.1",
     "grunt-ssh": "git+https://github.com/40Digits/grunt-ssh",
     "httpsync": "0.0.8",
-    "smartload-grunt-tasks": "~0.1",
     "lodash": "~2.4.1",
     "randomstring": "~1.0.3",
+    "smartload-grunt-tasks": "~0.1",
     "through": "~2.3.6",
     "underscore-deep-extend": "0.0.5",
     "userhome": "~0.1.0"
