@@ -24,6 +24,14 @@
   "homepage": {
     "url": "https://github.com/40digits/helperpress"
   },
+  "keywords": [
+    "WordPress",
+    "composer",
+    "wp-cli",
+    "cli",
+    "php",
+    "apache"
+  ],
   "license": "BSD-2-Clause",
   "dependencies": {
     "commander": "^2.6.0",
