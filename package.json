@@ -1,6 +1,6 @@
 {
   "name": "helperpress",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "An environment manager for WordPress projects",
   "main": "cli/bin/hp",
   "preferGlobal": "true",
