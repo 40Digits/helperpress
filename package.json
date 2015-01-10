@@ -18,6 +18,12 @@
   "contributors": [
     "Charlie Rosenbury <gmail@rosenbury.com> (http://rosenbury.com)"
   ],
+  "bugs": {
+    "url": "https://github.com/40digits/helperpress/issues"
+  },
+  "homepage": {
+    "url": "https://github.com/40digits/helperpress"
+  },
   "license": "BSD-2-Clause",
   "dependencies": {
     "commander": "^2.6.0",
