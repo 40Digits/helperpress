@@ -225,7 +225,7 @@ module.exports = function (grunt) {
 
 	loadGruntTasks(grunt, {
 		dir: 'grunt/tasks/',
-		pkgScope: 'dependencies',
+		pkgScope: grunt.option('no_dev_deps') ? 'dependencies' : ['dependencies', 'devDependencies'],
 		smartLoad: {
 			'sass:dev': ['grunt-contrib-sass'],
 			'autoprefixer:sass': ['grunt-autoprefixer'],

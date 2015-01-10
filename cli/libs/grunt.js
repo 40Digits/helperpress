@@ -10,6 +10,7 @@ module.exports = function(task, options, path){
 	// add some options we'll always need
 	options.gruntfile = hpPath + '/Gruntfile.js';
 	options.projectdir = path;
+	options.no_dev_deps = true;
 
 	// load Grunt
 	require(gruntPath).tasks(task, options);
