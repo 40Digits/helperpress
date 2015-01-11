@@ -2,8 +2,6 @@ var fs = require('fs');
 
 module.exports = function(grunt){
 
-	return;
-
 	grunt.registerTask('default', 'Determines what to do based on state of repo configs', function(){
 
 		if( !fs.existsSync('./helperpress.json') ){
