@@ -66,14 +66,15 @@ module.exports = function(grunt) {
 
 	function repo(newConfig){
 		var curConfig = fs.existsSync('helperpress.json') ? grunt.file.readJSON('helperpress.json') : {},
-			toSave = _.deepExtend(curConfig, newConfig);
+			toSave = _.deepExtend(curConfig, newConfig),
+			projPkg = grunt.option('projectdir') + '/package.json';
 
 		// create helperpress.json
 		grunt.file.write( grunt.option('projectdir') + '/helperpress.json', prettyJSON(toSave) );
 
-		if( typeof objHasKeys(toSave, [ 'wp', 'theme' ]) !== 'undefined' ){
+		// update project's package.json if it exists
+		if( fs.existsSync(projPkg) && typeof objHasKeys(toSave, [ 'wp', 'theme' ]) !== 'undefined' ){
 
-			// update package.json
 			// map write_helperpress_config.repo.wp.theme vals to package.json vals
 			var pkgKeyMap = {
 					slug: 'name',
@@ -82,10 +83,10 @@ module.exports = function(grunt) {
 					license: 'license'
 				},
 
-				pkgSrc = grunt.file.readJSON('./package.json');
+				pkgSrc = grunt.file.readJSON();
 
 			for( var key in pkgKeyMap ){
-				if( typeof toSave.wp.theme[key] !== 'string' || toSave.wp.theme[key].length == 0 ){
+				if( typeof toSave.wp.theme[key] !== 'string' || toSave.wp.theme[key].length === 0 ){
 					continue;
 				}
 
@@ -93,7 +94,7 @@ module.exports = function(grunt) {
 			}
 
 			// update package.json
-			grunt.file.write( grunt.option('projectdir') + '/package.json', prettyJSON(pkgSrc) );
+			grunt.file.write( projPkg, prettyJSON(pkgSrc) );
 
 		}
 

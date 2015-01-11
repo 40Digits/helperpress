@@ -23,8 +23,7 @@ if(!projectPath){
 // mapping of HelperPress's Grunt tasks to commands we'll accept
 var taskWhitelist = {
 	'init': {
-		desc: 'Initialize a HelperPress project in the current directory.',
-		gruntTask: 'init_project'
+		desc: 'Initialize a HelperPress project in the current directory.'
 	},
 	'build [build-type]': {
 		desc: 'Build a full WordPress install based on build type (dev or dist) in current project. [dist]'
@@ -122,19 +121,15 @@ function getActionHandler(cmd){
 	return function(){
 	  	var gruntTasks = [];
 
-	  	if(typeof taskWhitelist[cmd].gruntTask == 'string')
-	  		gruntTasks.push(taskWhitelist[cmd].gruntTasks);
-	  	else{
-	  		// loop through args and build grunt task arr
-	  		for(var arg in arguments){
-	  			if(typeof arguments[arg] == 'string' ){
-	  				gruntTasks.push(arguments[arg]);
-	  			} else if (typeof arguments[arg] == 'object'){
-	  				// unshift the name of the main command
-	  				gruntTasks.unshift(arguments[arg]._name);
-	  			}
-	  		}
-	  	}
+  		// loop through args and build grunt task arr
+  		for(var arg in arguments){
+  			if(typeof arguments[arg] == 'string' ){
+  				gruntTasks.push(arguments[arg]);
+  			} else if (typeof arguments[arg] == 'object'){
+  				// unshift the name of the main command
+  				gruntTasks.unshift(arguments[arg]._name);
+  			}
+  		}
 
 		runGrunt(gruntTasks.join(':'), gruntOpts, projectPath);
 	};

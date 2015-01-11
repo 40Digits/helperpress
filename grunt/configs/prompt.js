@@ -1,5 +1,6 @@
 module.exports = function(grunt){
-	var validationFuncs = {},
+	var validationFuncs = {}, 
+		exposedAsAsked = {},
 
 		sudo = require(__dirname + '/../lib/apply-sudo');
 
@@ -17,6 +18,20 @@ module.exports = function(grunt){
 		return answers['_write_helperpress_config.deep_theme_settings'];
 	}
 
+	function exposeAsAsked(value, index){
+		exposedAsAsked[index] = value;
+	}
+
+	function themeNameFromPath(themePath){
+		var lastIndexSlash = themePath.lastIndexOf('\\'),
+			themeName = themePath;
+
+		if(lastIndexSlash > -1)
+			themeName = themePath.substr(0, lastIndexSlash + 0);
+
+		return themeName;
+	}
+
 	var repo_config = {
 		options: {
 			questions: [
@@ -24,6 +39,12 @@ module.exports = function(grunt){
 					config: 'write_helperpress_config.repo_config.options.settings.theme_path',
 					type: 'input',
 					message: 'Relative path to distributable WordPress Theme',
+					filter: function(val){
+						// since prompt doesn't let you access responses til everything has
+						// been asked, we have to expose the response ourselves
+						exposeAsAsked(val, 'theme_path');
+						return val;
+					},
 					default: '<%= helperpress.theme_path %>'
 				},
 				{
@@ -48,8 +69,10 @@ module.exports = function(grunt){
 					config: 'write_helperpress_config.repo_config.options.settings.wp.theme.slug',
 					type: 'input',
 					message: 'Enter site slug:',
-					default: '<%= pkg.name %>',
-					validate: validationFuncs.noSpecialChars
+					validate: validationFuncs.noSpecialChars,
+					default: function(){
+						return themeNameFromPath(exposedAsAsked.theme_path);
+					}
 				},
 				{
 					config: 'write_helperpress_config.repo_config.options.settings.wp.theme.name',

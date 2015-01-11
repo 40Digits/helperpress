@@ -31,35 +31,43 @@ module.exports = function (grunt) {
                 author: {
                     wpKey: 'Author',
                     default: function(){
-                        var pkgAuthor = grunt.config('pkg.author'),
-                            emailPos = pkgAuthor.indexOf('<'),
-                            urlPos = pkgAuthor.indexOf('('),
+                        try {
+                            var pkgAuthor = grunt.config('pkg.author'),
+                                emailPos = pkgAuthor.indexOf('<'),
+                                urlPos = pkgAuthor.indexOf('('),
 
-                            endPos;
+                                endPos;
 
-                            if( emailPos > -1 ){
-                                endPos = emailPos;
-                            } else if( urlPos > -1 ){
-                                endPos = urlPos;
-                            } else {
-                                endPos = pkgAuthor.length
-                            }
+                                if( emailPos > -1 ){
+                                    endPos = emailPos;
+                                } else if( urlPos > -1 ){
+                                    endPos = urlPos;
+                                } else {
+                                    endPos = pkgAuthor.length
+                                }
 
-                        return pkgAuthor.substring( 0, endPos );
+                            return pkgAuthor.substring( 0, endPos );
+                        } catch (e) {
+                            return '';
+                        }
                     }
                 },
                 author_uri: {
                     wpKey: 'Author URI',
                     default: function(){
-                        var pkgAuthor = grunt.config('pkg.author'),
-                            urlPos = pkgAuthor.indexOf('('),
-                            urlEndPos = pkgAuthor.indexOf(')');
+                        try {
+                            var pkgAuthor = grunt.config('pkg.author'),
+                                urlPos = pkgAuthor.indexOf('('),
+                                urlEndPos = pkgAuthor.indexOf(')');
 
-                            if( urlPos === -1 ){
-                                return '';
-                            }
+                                if( urlPos === -1 ){
+                                    return '';
+                                }
 
-                        return pkgAuthor.substring( urlPos + 1, urlEndPos );
+                            return pkgAuthor.substring( urlPos + 1, urlEndPos );
+                        } catch(e){
+                            return '';
+                        }
                     }
                 },
                 description: {
