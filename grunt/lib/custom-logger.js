@@ -3,7 +3,7 @@
 module.exports = function(grunt){
 
 	// if we're verbose or debuggin, treat hpLog as an alias
-	if(grunt.option('verbose') || grunt.option('debug')){
+	if(grunt.option('verbose') || grunt.option('debug') || !grunt.option('no_dev_deps')){
 		grunt.hpLog = grunt.log;
 		return grunt;
 	}
