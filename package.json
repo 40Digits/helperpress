@@ -38,7 +38,7 @@
     "ejs": "~1.0.0",
     "execSync": "~1.0.1-pre",
     "findup-sync": "^0.2.1",
-    "glob": "^4.3.2",
+    "glob": "~4.0.6",
     "grunt": "~0.4.5",
     "grunt-combine-media-queries": "~1.0.19",
     "grunt-composer": "~0.4.0",
