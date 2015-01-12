@@ -8,7 +8,10 @@ module.exports = function(grunt){
 			'write_helperpress_config:repo_config',
 
 			// add WP theme definition banner to stylesheet
-			'wp_stylesheet_theme_info'
+			'wp_stylesheet_theme_info',
+
+			// add gitignore rules
+			'hp_gitignore_rules'
 		]);
 
 		if(grunt.option('skip-build'))

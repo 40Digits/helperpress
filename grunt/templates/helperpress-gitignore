@@ -1,5 +1,3 @@
-##### BEGIN HelperPress Files #####
-
 # WordPress Core, Uploads & Plugins
 /www
 /www*
@@ -15,5 +13,3 @@
 
 # Local site config
 /helperpress.local.json
-
-##### END HelperPress Files #####
