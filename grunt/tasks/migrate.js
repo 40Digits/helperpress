@@ -89,7 +89,7 @@ module.exports = function(grunt) {
 		_switchToCopyMethod();
 
 		// warn and skip if there's no local uploads dir yet
-		var localUploadsDir = grunt.option('projectdir') + '/<%= helperpress.build_dir %>/wp-content/uploads';
+		var localUploadsDir = grunt.option('projectdir') + '<%= helperpress.build_dir %>/wp-content/uploads';
 		if( !fs.existsSync( grunt.config.process(localUploadsDir) ) && direction !== 'pull' ){
 			//make the dir
 			fs.mkdirSync( grunt.config.process(localUploadsDir) );
@@ -137,7 +137,7 @@ module.exports = function(grunt) {
 
 				var sftpCredsHelper = require('../lib/sftp-creds-helper')(grunt),
 
-					localBasePath = grunt.option('projectdir') + '/<%= helperpress.build_dir %>/wp-content/',
+					localBasePath = grunt.option('projectdir') + '<%= helperpress.build_dir %>/wp-content/',
 					remoteBasePath = '<%= helperpress.environments.' + environment + '.ftp_wp_path %>/wp-content/',
 
 					// args to be passed to sftp task

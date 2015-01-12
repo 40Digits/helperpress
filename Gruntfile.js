@@ -11,7 +11,11 @@ module.exports = function (grunt) {
 	// initialize _deepExtend into _ object
 	_.mixin({deepExtend: _deepExtend(_)});
 
+	// ensure trailing slash on projectdir option if it's set
+	if(grunt.option('projectdir'))
+		grunt.option('projectdir', grunt.option('projectdir').replace(/\/?$/, '/'));
 
+	
 
 
 	/////////////////////////////
@@ -21,10 +25,10 @@ module.exports = function (grunt) {
 	var projectDir = grunt.option('projectdir');
 
 	var HpPackageJSON = grunt.file.readJSON('./package.json'),
-		packageJSON = grunt.file.exists( projectDir + '/package.json' ) ? grunt.file.readJSON(projectDir + '/package.json') : {},
+		packageJSON = grunt.file.exists( projectDir + 'package.json' ) ? grunt.file.readJSON(projectDir + 'package.json') : {},
 		userDefaultsJSON = grunt.file.exists( userhome('.helperpress') ) ? grunt.file.readJSON( userhome('.helperpress') ) : {},
-		siteConfigJSON = grunt.file.exists(projectDir + '/helperpress.json') ? grunt.file.readJSON(projectDir + '/helperpress.json') : {},
-		siteConfigLocalJSON = grunt.file.exists(projectDir + '/helperpress.local.json') ? grunt.file.readJSON(projectDir + '/helperpress.local.json') : {};
+		siteConfigJSON = grunt.file.exists(projectDir + 'helperpress.json') ? grunt.file.readJSON(projectDir + 'helperpress.json') : {},
+		siteConfigLocalJSON = grunt.file.exists(projectDir + 'helperpress.local.json') ? grunt.file.readJSON(projectDir + 'helperpress.local.json') : {};
 
 	// combine all config files
 	gruntConfig.helperpress = _.deepExtend(

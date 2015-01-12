@@ -4,7 +4,7 @@ module.exports = function(grunt){
 	return {
 		options: {
 			cmdPath: './vendor/bin/wp',
-			wpPath: grunt.option('projectdir') + '/<%= helperpress.build_dir %>'
+			wpPath: grunt.option('projectdir') + '<%= helperpress.build_dir %>'
 		},
 
 		download_core: {

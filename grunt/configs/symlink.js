@@ -4,11 +4,11 @@ module.exports = function(grunt){
 			overwrite: false
 		},
 		theme: {
-			src: grunt.option('projectdir') + '/<%= helperpress.theme_path %>',
-			dest: grunt.option('projectdir') + '/<%= helperpress.build_dir %>/wp-content/themes/<%= helperpress.wp.theme.slug %>'
+			src: grunt.option('projectdir') + '<%= helperpress.theme_path %>',
+			dest: grunt.option('projectdir') + '<%= helperpress.build_dir %>/wp-content/themes/<%= helperpress.wp.theme.slug %>'
 		},
 		sites: {
-			src: grunt.option('projectdir') + '/<%= helperpress.build_dir %>',
+			src: grunt.option('projectdir') + '<%= helperpress.build_dir %>',
 			dest: '<%= helperpress.apache.sites_dir %>/<%= helperpress.wp.theme.slug %>'
 		},
 		custom_plugins: {
@@ -17,7 +17,7 @@ module.exports = function(grunt){
 				overwrite: true,
 				cwd: grunt.option('projectdir') + './custom_plugins',
 				src: '*',
-				dest: grunt.option('projectdir') + '/<%= helperpress.build_dir %>/wp-content/plugins',
+				dest: grunt.option('projectdir') + '<%= helperpress.build_dir %>/wp-content/plugins',
 				filter: 'isDirectory'
 			}]
 		},
@@ -27,7 +27,7 @@ module.exports = function(grunt){
 				overwrite: true,
 				cwd: './custom_plugins',
 				src: '*',
-				dest: grunt.option('projectdir') + '/<%= helperpress.build_dir %>/wp-content/plugins',
+				dest: grunt.option('projectdir') + '<%= helperpress.build_dir %>/wp-content/plugins',
 				filter: 'isDirectory'
 			}]
 		}

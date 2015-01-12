@@ -9,9 +9,11 @@ _.mixin({deepExtend: _deepExtend(_)});
 module.exports = function(grunt) {
 
 	var configFileFuncs = {
-		repo: repo,
-		local: local
-	};
+			repo: repo,
+			local: local
+		},
+		hpConfigLocalPath = grunt.option('projectdir') + 'helperpress.local.json',
+		hpConfigRepoPath = grunt.option('projectdir') + 'helperpress.json';
 
 
 	grunt.registerMultiTask('write_helperpress_config', 'Generates config files', function(){
@@ -65,12 +67,12 @@ module.exports = function(grunt) {
 	////////////////////
 
 	function repo(newConfig){
-		var curConfig = fs.existsSync('helperpress.json') ? grunt.file.readJSON('helperpress.json') : {},
+		var curConfig = fs.existsSync(hpConfigRepoPath) ? grunt.file.readJSON(hpConfigRepoPath) : {},
 			toSave = _.deepExtend(curConfig, newConfig),
-			projPkg = grunt.option('projectdir') + '/package.json';
+			projPkg = grunt.option('projectdir') + 'package.json';
 
 		// create helperpress.json
-		grunt.file.write( grunt.option('projectdir') + '/helperpress.json', prettyJSON(toSave) );
+		grunt.file.write( hpConfigRepoPath, prettyJSON(toSave) );
 
 		// update project's package.json if it exists
 		if( fs.existsSync(projPkg) && typeof objHasKeys(toSave, [ 'wp', 'theme' ]) !== 'undefined' ){
@@ -102,7 +104,7 @@ module.exports = function(grunt) {
 	}
 
 	function local(newConfig){
-		var curConfig = fs.existsSync('helperpress.local.json') ? grunt.file.readJSON('helperpress.local.json') : {};
+		var curConfig = fs.existsSync(hpConfigLocalPath) ? grunt.file.readJSON(hpConfigLocalPath) : {};
 
 		if( typeof newConfig === 'undefined' ){
 			newConfig = {};
@@ -130,20 +132,19 @@ module.exports = function(grunt) {
 			};
 
 		}
-		
-
 		// Local wp_path
-		if( typeof curConfig.wp_path === 'undefined' ){
+		if( typeof objHasKeys(curConfig, [ 'environments', 'local', 'wp_path' ]) === 'undefined' ){
 
 			// let's infer it... probably CWD
-			newConfig.environments.local.wp_path = process.cwd() + '/' + grunt.config('helperpress.build_dir');
+			newConfig.environments.local.wp_path = grunt.option('projectdir') + '' + grunt.config('helperpress.build_dir');
+
 
 		}
 			
 
 		// Local home_url
 		var apache_url_scheme = grunt.config('helperpress.apache.url_scheme');
-		if( typeof curConfig.home_url === 'undefined' && typeof apache_url_scheme !== 'undefined' ){
+		if( typeof objHasKeys(curConfig, [ 'environments', 'local', 'home_url' ]) === 'undefined' && typeof apache_url_scheme !== 'undefined' ){
 
 			// let's infer it based on apache config
 			newConfig.environments.local.home_url = apache_url_scheme.replace('*', wpSlug);
@@ -185,7 +186,7 @@ module.exports = function(grunt) {
 		var toSave = _.deepExtend(curConfig, newConfig);
 
 		// write it to the file
-		grunt.file.write( grunt.option('projectdir') + 'helperpress.local.json', prettyJSON(toSave) );
+		grunt.file.write( hpConfigLocalPath, prettyJSON(toSave) );
 
 		updatedLoadedConfig(newConfig);
 
