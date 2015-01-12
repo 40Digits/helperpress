@@ -13,7 +13,7 @@ module.exports = function(grunt){
 
 		if(typeof sshInfo.host === 'undefined'){
 			// we need a host defined at minimum
-			grunt.fatal('No SSH host defined for "' + environment + '"');
+			grunt.hpLog.fatal('No SSH host defined for "' + environment + '"');
 		}else{
 			sftpOpts.host = sshInfo.host;
 		}
