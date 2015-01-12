@@ -30,21 +30,21 @@ module.exports = function(grunt) {
 				vhostContents = ejs.render(vhostTemplate, vhostData);
 
 			// create the vhost file
-			grunt.log.subhead('Creating virtualhost file...');
+			grunt.hpLog.subhead('Creating virtualhost file...');
 			execSync.run( sudo.apply('echo "' + vhostContents.replace('"', '\"') + '" > ' + newVhostFile ) );
 
 
 			// Point host name to localhost in hosts file
-			grunt.log.subhead('Defining "' + hostName + '" in hosts file...');
+			grunt.hpLog.subhead('Defining "' + hostName + '" in hosts file...');
 
 			if( hostExists(hostName, '127.0.0.1') ){
-				grunt.log.ok('Host already defined.');
+				grunt.hpLog.ok('Host already defined.');
 			}else{
 
 				var lhLine = '\n127.0.0.1	' + hostName;
 				execSync.run( sudo.apply('echo "' + lhLine + '" >> /etc/hosts') );
 
-				grunt.log.ok('Host defined.');
+				grunt.hpLog.ok('Host defined.');
 
 			}
 
@@ -55,7 +55,7 @@ module.exports = function(grunt) {
 			}
 
 			// restart apache
-			grunt.log.subhead('Restarting Apache...');
+			grunt.hpLog.subhead('Restarting Apache...');
 			if(options.as_service){
 				execSync.run( sudo.apply('service apache2 reload') );
 			} else {

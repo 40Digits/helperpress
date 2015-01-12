@@ -8,7 +8,7 @@ module.exports = function(grunt){
 		if(type == "dist" || type == "dev"){
 			grunt.task.run("build_" + type);
 		}else{
-			grunt.log.error('"' + type + '" is not a vaild argument for "build". Use "dist" or "dev"');
+			grunt.hpLog.error('"' + type + '" is not a vaild argument for "build". Use "dist" or "dev"');
 		}
 
 	});

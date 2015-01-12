@@ -23,14 +23,14 @@ module.exports = function(grunt) {
 			if(typeof configFileFuncs[this.target] === 'function'){
 				options.type = this.target;
 			} else {
-				return grunt.warn('"write_helperpress_config" requires a "type" setting. None defined in "' + this.target + '" target.');
+				return grunt.hpLog.warn('"write_helperpress_config" requires a "type" setting. None defined in "' + this.target + '" target.');
 			}
 		}
 
 		var type = options.type;
 
 		if(typeof configFileFuncs[type] !== 'function'){
-			return grunt.warn('"write_helperpress_config.type" must be either "repo" or "local".');
+			return grunt.hpLog.warn('"write_helperpress_config.type" must be either "repo" or "local".');
 		}
 
 		configFileFuncs[type]( grunt.config.process(options.settings) );
@@ -124,7 +124,7 @@ module.exports = function(grunt) {
 
 		if( wpSlug.length > 0 && typeof objHasKeys(curConfig, [ 'environments', 'local', 'db' , 'database' ]) === 'undefined' ) {
 
-			// if we have a wp slug and there is no currently configured db, use that.
+			// if we have a wp slug and there is no configured db, use that.
 			newConfig.environments.local.db = {
 				database: wpSlug
 			};
@@ -191,4 +191,4 @@ module.exports = function(grunt) {
 
 	}
 
-}
+};

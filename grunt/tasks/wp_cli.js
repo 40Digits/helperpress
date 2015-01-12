@@ -35,9 +35,9 @@ module.exports = function(grunt) {
    
     if(!silent){
       if(result.code === 0){
-        grunt.log.ok(result.stdout)
+        grunt.hpLog.ok(result.stdout)
       }else{
-        grunt.fatal(result.stdout)
+        grunt.hpLog.fatal(result.stdout)
       }
     }
 
@@ -87,7 +87,7 @@ module.exports = function(grunt) {
     for(var el in flags){
 
       if( _.indexOf(validFlags, el) === -1 ){
-        return grunt.warn('"' + el + '" is not a valid "wp core install" flag');
+        return grunt.hpLog.warn('"' + el + '" is not a valid "wp core install" flag');
       }
 
       flagVal = grunt.config.process(flags[el]);
@@ -125,7 +125,7 @@ module.exports = function(grunt) {
     for(var el in flags){
 
       if( _.indexOf(validFlags, el) === -1 )
-        return grunt.warn('"' + el + '" is not a valid "wp core config" flag');
+        return grunt.hpLog.warn('"' + el + '" is not a valid "wp core config" flag');
 
       flagVal = grunt.config.process(flags[el]);
 
@@ -145,9 +145,9 @@ module.exports = function(grunt) {
 
     // abort if DB already exists & is not WP install
     if(listResult.code === 1 && listResult.stdout.indexOf('Can’t select database') === -1){
-      return grunt.fatal('Database exists but is not a WP install. Aborting to be safe.');
+      return grunt.hpLog.fatal('Database exists but is not a WP install. Aborting to be safe.');
     }else if(listResult.code === 0){
-      return grunt.log.ok('Database exists and is a WP install.');
+      return grunt.hpLog.ok('Database exists and is a WP install.');
     }
 
     runCmd(cmd);
@@ -180,7 +180,7 @@ module.exports = function(grunt) {
     var cmd = 'plugin install';
 
     if(typeof plugin === 'undefined')
-      return grunt.warn('No plugin specified.');
+      return grunt.hpLog.warn('No plugin specified.');
 
     cmd += ' ' + plugin;
 
@@ -195,7 +195,7 @@ module.exports = function(grunt) {
     var cmd = 'plugin uninstall';
 
     if(typeof plugin === 'undefined')
-      return grunt.warn('No plugin specified.');
+      return grunt.hpLog.warn('No plugin specified.');
 
     cmd += ' ' + plugin;
 
@@ -207,7 +207,7 @@ module.exports = function(grunt) {
     var cmd = 'plugin activate';
 
     if(typeof plugin === 'undefined')
-      return grunt.warn('No plugin specified.');
+      return grunt.hpLog.warn('No plugin specified.');
 
     cmd += ' ' + plugin;
 
@@ -243,7 +243,7 @@ module.exports = function(grunt) {
 
 
     if(typeof wp[this.target] !== 'function')
-      grunt.warn('"' + this.target + '" is not a valid wp-cli command.');
+      grunt.hpLog.warn('"' + this.target + '" is not a valid wp-cli command.');
 
     wp[this.target]( grunt.config.process(this.data) );
 

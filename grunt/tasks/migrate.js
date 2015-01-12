@@ -51,13 +51,13 @@ module.exports = function(grunt) {
 
 		if(typeof env === 'undefined' || env === '_master'){
 			// assume helperpress.db_master
-			grunt.log.writeln('Migrating from configured helperpress.db_master');
+			grunt.hpLog.writeln('Migrating from configured helperpress.db_master');
 			env = grunt.config.process( '<%= helperpress.db_master %>' );
 
 			if(!env){
-				return grunt.log.writeln('helperpress.db_master not defined.');
+				return grunt.hpLog.writeln('helperpress.db_master not defined.');
 			}else if(env === 'local' || env === grunt.config('helperpress.alias_local_env') ){
-				return grunt.warn('helperpress.db_master defined as current environment. Aborting migration.');
+				return grunt.hpLog.warn('helperpress.db_master defined as current environment. Aborting migration.');
 			}
 		}
 
@@ -186,7 +186,7 @@ module.exports = function(grunt) {
 				break;
 
 			default:
-				grunt.log.ok('This environment\'s migrate_uplaods_method is set to "none" or is not defined. Skipping migration.');
+				grunt.hpLog.ok('This environment\'s migrate_uplaods_method is set to "none" or is not defined. Skipping migration.');
 		}
 
 
@@ -342,7 +342,7 @@ module.exports = function(grunt) {
 				break;
 
 			default:
-				grunt.log.ok('This environment\'s "migrate_db_method" is set to "none" or is not defined. Skipping migration.');
+				grunt.hpLog.ok('This environment\'s "migrate_db_method" is set to "none" or is not defined. Skipping migration.');
 
 		}
 

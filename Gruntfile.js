@@ -92,15 +92,8 @@ module.exports = function (grunt) {
 	}
 
 
-
-
-	// TODO: check confs and permissions
-	//	- not running as root
-	//	- write perms on all conf dirs
-	//	- ~/.helperpress created
-	//	- required configs set: apache, local db
-
-
+	// use our own logging so we can make Grunt less verbose
+	grunt = require('./grunt/lib/custom-logger.js')(grunt);
 
 
 	////////////////

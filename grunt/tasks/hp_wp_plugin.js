@@ -49,20 +49,19 @@ module.exports = function(grunt){
 			case 401:
 				grunt.verbose.writeln('Incorrect key. Removing saved key and fetching again.');
 				return _fetchApiKey.call(this, options.environment);
-				break;
 
 			// incorrect key
 			case 500:
-				grunt.fatal('500 Error: ' + resp.data);
+				grunt.hpLog.fatal('500 Error: ' + resp.data);
 				break;
 
 			// method doesn't exist
 			case 501:
-				grunt.fatal('501 Error: ' + resp.data);
+				grunt.hpLog.fatal('501 Error: ' + resp.data);
 				break;
 
 			default:
-				grunt.fatal(resp.statusCode + ' Error. HelperPress WP Plugin is probably either not activated or not installed.');
+				grunt.hpLog.fatal(resp.statusCode + ' Error. HelperPress WP Plugin is probably either not activated or not installed.');
 				break;
 
 		}
@@ -75,7 +74,7 @@ module.exports = function(grunt){
 
 			case 'import_db':
 				// report success
-				grunt.log.ok('Successfully imported database dump!');
+				grunt.hpLog.ok('Successfully imported database dump!');
 				break;
 		}
 	});

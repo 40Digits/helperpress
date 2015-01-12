@@ -11,7 +11,7 @@ module.exports = function(grunt){
 			};
 
 		if( fs.existsSync(filename) ){
-			return grunt.log.ok('User credentials file exists, assuming WP DB has already been initialized. Skipping write.');
+			return grunt.hpLog.ok('User credentials file exists, assuming WP DB has already been initialized. Skipping write.');
 		}
 
 		grunt.file.write(filename, JSON.stringify(fileContents) );

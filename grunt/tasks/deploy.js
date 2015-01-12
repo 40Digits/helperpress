@@ -1,7 +1,7 @@
+'use strict';
+
 var execSync = require('execSync'),
 	_ = require('lodash');
-
-'use strict';
 
 module.exports = function(grunt) {
 
@@ -18,7 +18,7 @@ module.exports = function(grunt) {
 
 			// make sure that the current branch has an associated config
 			if( _.indexOf(Object.keys(envConfig), curBranch) === -1 ){
-				grunt.fatal('Looks like there is no environment configured for git branch "' + curBranch + '"');
+				grunt.hpLog.fatal('Looks like there is no environment configured for git branch "' + curBranch + '"');
 			}
 
 			environment = curBranch;
@@ -26,7 +26,7 @@ module.exports = function(grunt) {
 
 		// warn if they're trying to deploy to an env that is not the current branch
 		if(environment !== curBranch ){
-			grunt.warn('Deploying current branch "' + curBranch + '" to environment "' + environment + '" is probably not want you wanted to do. If it is, then --force it.');
+			grunt.hpLog.warn('Deploying current branch "' + curBranch + '" to environment "' + environment + '" is probably not want you wanted to do. If it is, then --force it.');
 		}
 
 		this.requiresConfig(
@@ -51,7 +51,7 @@ module.exports = function(grunt) {
 				break;
 			case 'none':
 			default:
-				grunt.log.ok('deploy_method for "' + environment + '" is set to "none", so we\'ve built it in "' + distDir + '" and that\'s all.');
+				grunt.hpLog.ok('deploy_method for "' + environment + '" is set to "none", so we\'ve built it in "' + distDir + '" and that\'s all.');
 				break;
 
 		}

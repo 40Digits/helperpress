@@ -15,7 +15,7 @@ module.exports = function (grunt) {
         });
         
         if(!options.filename){
-            return grunt.log.write('Path to stylesheet source not provided, skipping automatic theme definition.');
+            return grunt.hpLog.write('Path to stylesheet source not provided, skipping automatic theme definition.');
         }
 
         var newLines = [],
