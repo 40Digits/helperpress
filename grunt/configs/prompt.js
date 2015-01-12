@@ -14,6 +14,13 @@ module.exports = function(grunt){
 		return valid ? true : 'This may only contains numbers, letters, underscores, and dashes.';
 	}
 
+	function dontReturnFalseyHandler(config){
+		return function(){
+			var confVal = grunt.config(config);
+			return !confVal ? null : confVal;
+		}
+	}
+
 	function setExtendedThemeSettings(answers){
 		return answers['_write_helperpress_config.deep_theme_settings'];
 	}
@@ -45,19 +52,19 @@ module.exports = function(grunt){
 						exposeAsAsked(val, 'theme_path');
 						return val;
 					},
-					default: '<%= helperpress.theme_path %>'
+					default: dontReturnFalseyHandler('helperpress.theme_path')
 				},
 				{
 					config: 'write_helperpress_config.repo_config.options.settings.css_path',
 					type: 'input',
 					message: 'Relative path to primary CSS source',
-					default: '<%= helperpress.css_path %>'
+					default: dontReturnFalseyHandler('helperpress.css_path')
 				},
 				{
 					config: 'write_helperpress_config.repo_config.options.settings.build_cmd',
 					type: 'input',
 					message: 'CLI command to build for distribution',
-					default: '<%= helperpress.build_cmd %>'
+					default: dontReturnFalseyHandler('helperpress.build_cmd')
 				},
 				{
 					config: 'write_helperpress_config.repo_config.options.settings.build_cmd_dir',
