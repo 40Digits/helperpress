@@ -38,28 +38,25 @@
     "ejs": "~1.0.0",
     "execSync": "~1.0.1-pre",
     "findup-sync": "^0.2.1",
-    "glob": "~4.0.5",
+    "glob": "^4.3.2",
     "grunt": "~0.4.5",
-    "grunt-browserify": "~2.1.4",
     "grunt-combine-media-queries": "~1.0.19",
     "grunt-composer": "~0.4.0",
     "grunt-contrib-clean": "~0.6.0",
-    "grunt-contrib-copy": "~0.5.0",
+    "grunt-contrib-copy": "^0.7.0",
     "grunt-contrib-symlink": "~0.3.0",
-    "grunt-mysql-dump-import": "git+https://github.com/40Digits/grunt-mysql-dump-import.git",
-    "grunt-newer": "~0.7.0",
-    "grunt-notify": "~0.3.0",
-    "grunt-prompt": "~1.1.0",
+    "grunt-mysql-dump-import": "^1.0.1",
+    "grunt-notify": "^0.4.1",
+    "grunt-prompt": "^1.3.0",
     "grunt-rsync": "~0.6.2",
     "grunt-shell": "^1.1.1",
     "grunt-ssh": "git+https://github.com/40Digits/grunt-ssh",
     "httpsync": "0.0.8",
     "lodash": "~2.4.1",
     "randomstring": "~1.0.3",
-    "smartload-grunt-tasks": "~0.1",
-    "through": "~2.3.6",
+    "smartload-grunt-tasks": "^0.1.2",
     "underscore-deep-extend": "0.0.5",
-    "userhome": "~0.1.0"
+    "userhome": "^1.0.0"
   },
   "config": {
     "theme_path": false,
@@ -116,6 +113,6 @@
     }
   },
   "devDependencies": {
-    "grunt-release": "^0.9.0"
+    "grunt-release": "^0.10.0"
   }
 }
