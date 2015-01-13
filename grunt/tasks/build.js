@@ -15,52 +15,50 @@ module.exports = function(grunt){
 
 
 	// run this task to setup things for local development
-	grunt.registerTask( 'build_dev', [
+	grunt.registerTask( 'build_dev', function(){
 
-		'prompt:sudo_pass', // needed for apache_config
+		var fs = require('fs'),
+			hpLocalConfig = grunt.option('projectdir') + 'helperpress.local.json';
 
-		// clean previous build
-		'clean:build_dir',
+		// make sure helperpress.local.json exists first
+		if(!fs.existsSync(hpLocalConfig))
+			grunt.fatal('No local configuration exists. Run `hp install` instead.');
 
-		// install packages
-		'composer:install',
+		grunt.task.run([
 
-		// Get WP files
-		'wp_cli:download_core',
+			// note that we haven't finished build yet
+			'write_build_dev_incomplete:true',
 
-		// setup local config
-		'write_helperpress_config:local',
+			// clean previous build
+			'clean:build_dir',
 
-		// note that we haven't finished first build yet
-		'write_build_dev_incomplete:true',
+			// install packages
+			'composer:install',
 
-		// Install WP
-		'wp_cli:core_config',
-		'wp_cli:db_create',
-		'wp_default_user_creds',
-		'wp_cli:install_core',
-		'wp_cli:install_plugins',
-		'symlink:custom_plugins',
-		'symlink:hp_plugins',
+			// Get WP files
+			'wp_cli:download_core',
 
-		// symlink wp-theme into WP installation
-		'symlink:theme',
+			// Install WP
+			'wp_cli:core_config',
+			'wp_cli:db_create',
+			'wp_default_user_creds',
+			'wp_cli:install_core',
+			'wp_cli:install_plugins',
+			'symlink:custom_plugins',
+			'symlink:hp_plugins',
 
-		// wrap up WP-CLI stuff
-		'wp_cli:remove_plugins',
-		'clean:wp_default_themes',
+			// symlink wp-theme into WP installation
+			'symlink:theme',
 
-		// config apache
-		'apache_config',
+			// wrap up WP-CLI stuff
+			'wp_cli:remove_plugins',
+			'clean:wp_default_themes',
 
-		// pull DB and files from db_master
-		'pull:db:_master',
-		'wp_cli:rewrite_flush',
+			// note that we finished first build
+			'write_build_dev_incomplete:false'
 
-		// note that we finished first build
-		'write_build_dev_incomplete:false'
-
-	]);
+		]);
+	});
 
 	
 

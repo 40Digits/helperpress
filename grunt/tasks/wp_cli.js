@@ -37,7 +37,7 @@ module.exports = function(grunt) {
       if(result.code === 0){
         grunt.hpLog.ok(result.stdout)
       }else{
-        grunt.hpLog.fatal(result.stdout)
+        grunt.fatal(result.stdout)
       }
     }
 
@@ -145,7 +145,7 @@ module.exports = function(grunt) {
 
     // abort if DB already exists & is not WP install
     if(listResult.code === 1 && listResult.stdout.indexOf('Can’t select database') === -1){
-      return grunt.hpLog.fatal('Database exists but is not a WP install. Aborting to be safe.');
+      return grunt.fatal('Database exists but is not a WP install. Aborting to be safe.');
     }else if(listResult.code === 0){
       return grunt.hpLog.ok('Database exists and is a WP install.');
     }

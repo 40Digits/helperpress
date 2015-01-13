@@ -52,16 +52,16 @@ module.exports = function(grunt){
 
 			// incorrect key
 			case 500:
-				grunt.hpLog.fatal('500 Error: ' + resp.data);
+				grunt.fatal('500 Error: ' + resp.data);
 				break;
 
 			// method doesn't exist
 			case 501:
-				grunt.hpLog.fatal('501 Error: ' + resp.data);
+				grunt.fatal('501 Error: ' + resp.data);
 				break;
 
 			default:
-				grunt.hpLog.fatal(resp.statusCode + ' Error. HelperPress WP Plugin is probably either not activated or not installed.');
+				grunt.fatal(resp.statusCode + ' Error. HelperPress WP Plugin is probably either not activated or not installed.');
 				break;
 
 		}

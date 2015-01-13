@@ -9,14 +9,14 @@ module.exports = function(grunt){
 	function RsyncCredsHelper(environment){
 
 		if(typeof environment === 'undefined'){
-			return grunt.hpLog.fatal('RsyncCredsHelper requires an environment to be specified');
+			return grunt.fatal('RsyncCredsHelper requires an environment to be specified');
 		}
 
 		this.environment = environment;
 		this.sshInfo = grunt.config('helperpress.environments.' + this.environment + '.ssh');
 
 		if(typeof this.sshInfo === 'undefined'){
-			grunt.hpLog.fatal('Remote server access via rsync requires SSH credentials to be defined. None found for "' + this.environment + '" environment.');
+			grunt.fatal('Remote server access via rsync requires SSH credentials to be defined. None found for "' + this.environment + '" environment.');
 		}
 		
 		// build sshString
@@ -24,7 +24,7 @@ module.exports = function(grunt){
 			// we build this dynamically in case they want the SSH user inferred
 			this.sshString = this.sshInfo.user !== 'undefined' ? this.sshInfo.user + '@' + this.sshInfo.host : this.sshInfo.host;
 		}else{
-			grunt.hpLog.fatal('Remote server access via rsync requires the SSH host to be defined. "ssh.host" found in "' + this.environment + '" environment\'s configuration.');
+			grunt.fatal('Remote server access via rsync requires the SSH host to be defined. "ssh.host" found in "' + this.environment + '" environment\'s configuration.');
 		}
 
 	}

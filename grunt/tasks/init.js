@@ -14,10 +14,10 @@ module.exports = function(grunt){
 			'hp_gitignore_rules'
 		]);
 
-		if(grunt.option('skip-build'))
+		if(grunt.option('skip-install'))
 			return;
 
-		grunt.task.run('build_dev');
+		grunt.task.run('install');
 
 	});
 	grunt.registerTask( 'init_project', ['init'] );

@@ -18,7 +18,7 @@ module.exports = function(grunt) {
 
 			// make sure that the current branch has an associated config
 			if( _.indexOf(Object.keys(envConfig), curBranch) === -1 ){
-				grunt.hpLog.fatal('Looks like there is no environment configured for git branch "' + curBranch + '"');
+				grunt.fatal('Looks like there is no environment configured for git branch "' + curBranch + '"');
 			}
 
 			environment = curBranch;
