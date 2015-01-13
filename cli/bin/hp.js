@@ -23,7 +23,7 @@ if(!projectPath){
 // mapping of HelperPress's Grunt tasks to commands we'll accept
 var taskWhitelist = {
 	'init': {
-		desc: 'Initialize a HelperPress project in the current directory.',
+		desc: 'Initialize a HelperPress project in the current directory & install it.',
 		options: [
 			{
 				opt: 'skip-install',

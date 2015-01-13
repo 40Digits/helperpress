@@ -20,5 +20,6 @@ module.exports = function(grunt){
 		grunt.task.run('install');
 
 	});
+	
 	grunt.registerTask( 'init_project', ['init'] );
 };
